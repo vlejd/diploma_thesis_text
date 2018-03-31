@@ -3,34 +3,65 @@
 
 
 \chapter{Document Classification}
-    \section{Word vectors}
-        \subsection{distributed vs local representation, count based, prediction based}
-
 
     \section{Machine learning}
         \subsection{Supervised machine learning}
+        \cite{Goodfellow-et-al-2016} % softmax, kuk majka
+        \cite{rumelhart1986david} % backprobagation
+        \cite{bottou-bousquet-2008} % gradient descent. kuk majka
         \subsection{Neural networks}
-
-    \section{Word2Vec}
-        \subsection{Word vectors}
-
-    \section{LSA}
-        \subsection{SVD}
-        {\tiny \input{lsa.tex}}
-        \subsection{Truncated SVD}
-        \subsection{Iterated svd}
-        \subsection{Relationship to Word2Vec}
         
+        
+    \section{Word vectors}
+        \subsection{distributed vs local representation, count based, prediction based}
+        \cite{Rubenstein:1965:CCS:365628.365657} % distributional hyphotesis. 
+        \cite{maas2011learning} % lda, vector space model
+
+    \section{Prediction based word vectors}
+        \subsection{Word vectors}
+        \cite{DBLP:journals/corr/MikolovSCCD13} % podvzorkovanie.
+        \cite{DBLP:conf/icml/LeM14} % slovne vektory
+        \cite{rong2014word2vec} % some word2vec shit
+        \cite{pennington2014glove} % glove word vectors
+
+
+    \section{Count based word vectors}
+        \cite{wiemer2004latent} % Latent semantic analysis
+        \subsection{SVD}
+        {\input{svd_math.tex}}
+        \subsection{Truncated SVD}
+        \subsection{Iterated SVD}
+            \cite{brand2006fast} % incremental svd
+        \subsection{Relationship to Word2Vec}
+            \cite{naili2017comparative} % wrf is this? some comparison
+            \cite{levy2014neural} % word2vec as matrix factorization
+            \cite{altszyler2016comparative} % lsa vs word2vec on samall corpora
+            \cite{levy2015improving} % word2vec hacks in lsi
+
+
     \section{Weight schemes}
+        \cite{wu2017balancing} % word weights
 
 
-\chapter{Similar work}
-    \section{Old school LSA}
-    \section{SVD in }
-    \section{Supervised SVD}
-        \subsection{For text}
-        \subsection{For images}
+\chapter{Related work}
+    \section{Class knowledge into LSI}
+        \subsection{Supervised LSI}
+            \cite{sun2004supervised} %supervised lsi, discriminative basis
 
+        \subsection{Sprinkling}
+            \cite{chakraborti2007supervised} % Sprinkling
+        
+        \subsection{Supervised weights}
+            \cite{ji2013discriminative} % TF KLD
+            \cite{deng2014study} % supervised weights
+            \cite{lan2009supervised} % supervised weights for text categorization
+
+    
+    \section{SVD in neural networks}
+        \subsection{SVD as structured layer} 
+            \cite{ionescu2015training} % svd in neural networks
+
+    
 \chapter{Model design}
     \section{Goals and motivation}
     \section{Design}
@@ -41,6 +72,13 @@
 \chapter{Experiments}
     \section{Classification datasets}
         \subsection{all datasets}
+            \cite{conneau2017supervised} % datasets, benchmarks
+
+    \section{Interpretability}
+        \cite{ribeiro2016should} % explainability
+
+
+
 
     Performace
     Result analysis
