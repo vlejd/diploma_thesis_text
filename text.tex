@@ -4,8 +4,50 @@
 
 \chapter{Document Classification}
     In this chapter we introduce a problem of document classification and commonly used approaches to this problem.
+    \* % define what is document classification
+    
+    \section{Notation}
+        This section provides a concise reference describing the notation and terms used in this chapter. 
+        \* %add ore or move elsewhere
+        
+        \begin{table}[]
+            \centering
+            \begin{tabular}{c c}
+                $D$ & Vocabulary. Denotes set (dictionary) of all used words in our dataset. \\
+                $|D|$ & Size of the vocabulary. \\
+                $tf_{w,s}$ & Number of times word $w$ appears in sentence $s$. \\
+                $n_w$ & Number of times word $w$ appears in the whole corpus. \\
+                $N$ & Number of documents in the corpus.
+            \end{tabular}
+        \end{table}
+        
+        Throughout this section we try to illustrate most things with examples. 
+        For consistency, we will use following sample corpus of sentences and labels:
+        
+        \begin{table}[]
+            \centering
+            \begin{tabular}{c|c}
+            \hline
+                charlie is a good dog & 1 \\
+                tiger is a bad cat & 0 \\
+                oscar is a nice cat & 1 \\
+                max is a bad dog & 0 \\
+            \end{tabular}
+            \caption{Example dataset}
+            \label{tab:example:dataset}
+
+        \end{table}
+        
+
+        This is an example pet sentiment dataset. Labels denote, if the statement was positive ($1$) or not ($0$).
+        
+        There are $1Q$ distinct words in the vocabulary $D$ of this corpus: 
+        \begin{verbatim} a, bad, cat, charlie, dog, good, is, max, nice, oscar, tiger \end{verbatim}
+        
+        Later we will refer to them in this ordering, indexing from $1$. Hence $D_4=\mathrm{charlie}$.
     
     \section{Machine learning}
+    
         \subsection{Supervised machine learning}
         Supervised learning is a standard approach in machine learning. 
         Supervised algorithms learn to predict the best outputs for a given input.
@@ -116,9 +158,9 @@
         and function applications. 
         It also relies on the fact, that functions used in the units are differentiable (almost everywhere).
         
-        Backpropagation works in two parts, forward pass and backward pass.
-        In the forward pass we feed to input to the network, compute acctivations of each layer and compute the final output.
-        In the seccont pass, we make use of the chain rule and incrementally compute gradient with respect to each layer of the network.
+        \textit{Back propagation} works in two parts, forward pass and backward pass.
+        In the forward pass we feed to input to the network, compute activations of each layer and compute the final output.
+        In the second pass, we make use of the chain rule and incrementally compute gradient with respect to each layer of the network.
         Then we use the gradient descent and optimize the parameters \cite{rumelhart1986david}.
         
         \* %example
@@ -129,53 +171,138 @@
         %$\frac{E_y(g(h_1 W_2))}{\partial W_2} = 
         %\frac{\partial E_y(\hat{y})}{\partial \hat{y}}\frac{\partial \hat{y}}{\partial W_2}$
         
+    \section{Word and sentence representation}
+
+        \subsection{Motivation}
+        In order to apply machine learning techniques to a text classification, 
+        we need to represent the text in a machine learning friendly way.
+        Most machine learning algorithms expect the  input in a form of vectors of number. 
         
+        Because of this, we need a system to translate string sentences $s$ into vectors $e$ of numbers. 
+        Such vector is usually called an embedding. 
         
+        In  other words, we need to project words and sentences into a vector space.
         
+        \* % fix, that it is supervised vs unsupervised
         
-    \section{Word vectors}
-        \subsection{distributed vs local representation, count based, prediction based}
+        \subsection{Local representation}
+        
+        The simplest vector space is based on a local representation.
+        In this representation, we use a vector space with $|D|$ dimensions, one for each word in the vocabulary.
+        Value at the $i$-th position of the vector $v_i$ corresponds to a presence or an absence of the $i$-th words from the vocabulary, $D_i$.
+        
+        One of the simplest local representation is called a \textit{bag of words} (BOW). 
+        In this representation, values in vectors are binary, where $1$ means that the word was present in the sentence and $0$ means it was not.
+        Optionally we can extend this to a term vector, hence the number is not binary, but express the real count of given word in the sentence.
+        
+        Let's look at our example corpus. 
+        Our vector space would have $10$ dimensions and the first sentence would be represented as a vector 
+        $e = (1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0)$.
+        
+        This representation allows for simple sentence comparison. 
+        Two sentences $s_1$ and $s_2$ can be compared via comparing cosine similarity of their BOW embeddings $e_1$ and $e_2$ as $\mathrm{sim}(s_1, s_2) = \mathrm{sim}(e_1, e_2) = \frac{e_1 e_2}{||e_1||.||e_2||}$.
+        
+        For technical reasons we can also define a cosine distance as 
+        $$\mathrm{dist}(s_1, s_2) = \mathrm{dist}(e_1, e_2) = 1- \mathrm{sim}(e_1, e_2) = 1 - \frac{e_1 e_2}{||e_1||.||e_2||}$$.
+        
+        However this representation does not consider, that two words can be similar, even though they are not the same.
+        For example words \texttt{nice} and \texttt{good} are consider completely different, even though they are not. 
+        
+        Second problem is, that this representation forgets the initial ordering of the words.
+        This can be solved by using bigrams.
+        
+        Third problem is, that this representation assigns the same weight to each word.
+        The fact that two sentences both has a meaningless word \texttt{a} has the same effect on the similarity as 
+        if they both have word \texttt{good}. 
+        This problem is partially solved by introducing term weights.
+        
+        \subsubsection{Term-weighting schemes}
+        To emphasize that some words in the corpus are more important than other we introduce a weight Term-weighting schemes. 
+        The idea is, that words like prepositions (\texttt{a}, \texttt{an}) and other words that are not very informative or redundant  (\texttt{is}, \texttt{do}, \texttt{by}) should should have smaller weights. 
+        In practice, a list of \textit{stop words} is used to completely filter such words.
+        
+        Also words, that are to common in the dataset should have lower weight.
+        If each sample is about a dog, we probably do not care about the word \texttt{dog}, because it is somehow redundant.
+        
+        However words, that appear multiple times in a sentence are probably important for this sentence and should have higher weights.
+        
+        Based on these two observations, a number of Term-weighting schemes was proposed \cite{salton1988term}.
+        A Term-weighting schemes assign a weight to a word $w$ in a sentence $s$ as term weight $t_{w,s}$.
+        These weights usually consists of two parts, \emph{term frequency} and \emph{inverse document frequency}. 
+        
+        \emph{Term frequency}, $\mathrm{TF}_{w,s}$, part reflects how important is word $w$ for sentence $s$.
+        Common choices are:
+        \begin{itemize}
+            \item $\mathrm{sign}(\mathrm{tf}_{w,s})$, binary presence of the word in sentence. Also known as BOW.
+            \item $\mathrm{tf}_{w,s}$, row number of appearances.
+            \item $\frac{\mathrm{tf}_{w,s}}{|s|}$, number of appearances normalized by length of the sentence.
+            \item $1+\log(\mathrm{tf}_{w,s})$
+        \end{itemize}
+        
+        \emph{Inverse document frequency}, $\mathrm{IDF_w}$, part reflects how important is the word $w$ for the whole corpus.
+        Common choices are:
+        \begin{itemize}
+            \item $1$, unary.
+            \item $\log \left(\frac{N}{n_w} \right)$, inverse document frequency.
+            \item $\log \left( 1+\frac{N}{n_w} \right)$, smoothed inverse document frequency.
+            \item $\log \left( \frac{max_{w'} n_{w'}}{n_w} \right)$, max inverse document frequency.
+            \item $\log \left(\frac{N-n_w}{n_w} \right)$, probabilistic inverse document frequency.
+        \end{itemize}
+
+        Note, that these choices for $\mathrm{TF}_{w,s}$ and $\mathrm{IDF}_{w,s}$ have probabilistically grounded \cite{aizawa2003information}. %information perspective on tfidf
+        
+        Another popular weighting scheme that is usually used in document retrieval is $\mathrm{BM_{25}}$. 
+        
+        $$\mathrm{BM}_{25~w,s} = \log \left(\frac{N-n_w+0.5}{n_w + 0.5}\right)    \frac{\mathrm{tf}_{w,s} (1.2 + 1)}{\mathrm{tf}_{w,s} + 1.2  \left(1 - 0.75 + 0.75 \cdot \frac{N}{\text{avgdl}}\right)}$$
+        
+
+        \subsection{Distributed representation}
+        \cite{le2014distributed}
+
+
+        \subsection{Prediction based distributedrepresentation}
         \cite{Rubenstein:1965:CCS:365628.365657} % distributional hyphotesis. 
+        
         \cite{maas2011learning} % lda, vector space model
 
-    \section{Prediction based word vectors}
-        \subsection{Word vectors}
         \cite{DBLP:journals/corr/MikolovSCCD13} % podvzorkovanie.
         \cite{DBLP:conf/icml/LeM14} % slovne vektory
         \cite{rong2014word2vec} % some word2vec shit
         \cite{pennington2014glove} % glove word vectors
 
 
-
-
-    \section{Count based word vectors}
+        \subsection{Count based distributedrepresentation}
         \cite{wiemer2004latent} % Latent semantic analysis
+        \cite{landauer1998introduction} % introduction to lsa
         Latent Dirichlet allocation
         Explicit semantic analysis
         Latent semantic analysis
         Hierarchical Dirichlet process
         Non-negative matrix factorization
-        \subsection{SVD}
+        \subsubsection{SVD}
         {\input{svd_math.tex}}
-        \subsection{Truncated SVD}
-        \subsection{Iterated SVD}
+        \subsubsection{Truncated SVD}
+        \subsubsection{Iterated SVD}
             \cite{brand2006fast} % incremental svd
-        \subsection{Relationship to Word2Vec}
+
+        
+        \subsection{Relationship of prediction and count based representations}
             \cite{naili2017comparative} % wrf is this? some comparison
             \cite{levy2014neural} % word2vec as matrix factorization
             \cite{altszyler2016comparative} % lsa vs word2vec on samall corpora
             \cite{levy2015improving} % word2vec hacks in lsi
+    
+        \subsection{Making the prediction}
+            \* % cite something
+    
+    \section{Other approached for document classification}
+        Recurrent neurl networks,
+        Character based recurent neural networs, 
 
-
-    \section{Weight schemes}
-        \cite{wu2017balancing} % word weights
-            weight schemes
-            Supervised weight scheme
-
-
+\* %\cite{manning2008introduction} introduction to information retrieval
 
 \chapter{Related work}
-    \section{Class knowledge into LSI}
+    \section{LSI with class knowledge}
         \subsection{Supervised LSI}
             \cite{sun2004supervised} %supervised lsi, discriminative basis
 
@@ -183,6 +310,7 @@
             \cite{chakraborti2007supervised} % Sprinkling
         
         \subsection{Supervised weights}
+            \cite{wu2017balancing} % word weights, TODO read
             \cite{ji2013discriminative} % TF KLD
             \cite{deng2014study} % supervised weights
             \cite{lan2009supervised} % supervised weights for text categorization
@@ -193,13 +321,15 @@
             \cite{ionescu2015training} % svd in neural networks
 
     
-\chapter{Model design}
+\chapter{Our approach}
     \section{Goals and motivation}
     \section{Design}
     \section{Implementation}
+        \cite{bird2009natural} % nlp in python
         \subsection{gensim lsa}
         \subsection{tensorflow for clasifier?}
     \*
+
 \chapter{Experiments and evaluation}
 
     Performance
