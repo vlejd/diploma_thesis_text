@@ -3,28 +3,28 @@
 
 
 \chapter{Document Classification}
-    In this chapter we introduce a problem of document classification and commonly used approaches to this problem.
+    In this chapter we introduce a problem of document classification and commonly used approaches that are used to solve this problem.
     \* % define what is document classification
     
     \section{Notation}
-        This section provides a concise reference describing the notation and terms used in this chapter. 
-        \* %add ore or move elsewhere
+        This section provides a concise reference describing the notation and terms used in this chapter.
         
-        \begin{table}[]
+        \begin{table}[h]
             \centering
             \begin{tabular}{c c}
                 $D$ & Vocabulary. Denotes set (dictionary) of all used words in our dataset. \\
                 $|D|$ & Size of the vocabulary. \\
                 $tf_{w,s}$ & Number of times word $w$ appears in sentence $s$. \\
                 $n_w$ & Number of times word $w$ appears in the whole corpus. \\
-                $N$ & Number of documents in the corpus.
+                $N$ & Number of documents in the corpus. \\
+                $\alpha$ & Learning rate.
             \end{tabular}
         \end{table}
         
         Throughout this section we try to illustrate most things with examples. 
         For consistency, we will use following sample corpus of sentences and labels:
         
-        \begin{table}[]
+        \begin{table}[h]
             \centering
             \begin{tabular}{c|c}
             \hline
@@ -41,25 +41,36 @@
 
         This is an example pet sentiment dataset. Labels denote, if the statement was positive ($1$) or not ($0$).
         
-        There are $1Q$ distinct words in the vocabulary $D$ of this corpus: 
+        There are $|D|=11$ distinct words in the vocabulary $D$ of this corpus: 
         \begin{verbatim} a, bad, cat, charlie, dog, good, is, max, nice, oscar, tiger \end{verbatim}
         
-        Later we will refer to them in this ordering, indexing from $1$. Hence $D_4=\mathrm{charlie}$.
+        Later we will refer to them in this ordering, indexing from $1$. Hence $D_4=\mathtt{charlie}$.
     
     \section{Machine learning}
-    
+        \* % ML is popular approach to solve great variaty of problems.
+        % To use ML in context of document classification, we need to adjust our problem
+        % so the machines can understand it. how to frame it in that way,
+        % ho to represent the input and the output we have
+        
         \subsection{Supervised machine learning}
+        
         Supervised learning is a standard approach in machine learning. 
         Supervised algorithms learn to predict the best outputs for a given input.
         We denote the collection of input data, features, as $X$ and the corresponding expected outputs, labels, as $Y$.
         $X$ is usually a matrix of real values where rows of this matrix are individual samples.
         $Y$ is usually a vector of real values or integers. 
+        Inside mathematical expression we usually denote labels as $y$,
         We refer to the pair of features and labels $(X, Y)$ as a dataset.
         
-        Learning is usually done by optimizing parameters $\Theta$ of a parametrized function $f_\Theta$,
+        In machine learning, we want to find a function $f$ such that for given sample $x_i$
+        the function's output $\hat{y_i} = f(x_i)$ if very close to the the real label $y_i$.
+        
+        This is usually done by optimizing parameters $\Theta$ of a parametrized function $f_\Theta$,
         with regards to a loss function $E_y(\hat{y})$. 
         We refer to function $f_\theta$ as a \textit{model}.
-        Common loss is an $L2$ loss function $$E_y(\hat{y}) = \frac{1}{2}(y - \hat{y})^2 = \frac{1}{2}\sum_{i=1}^n (y_i - \hat{y})^2$$.  
+        Common loss is an $L2$ loss function 
+        $$E_y(\hat{y}) = \frac{1}{2}(y - \hat{y})^2 = \frac{1}{2}\sum_{i=1}^n (y_i - \hat{y_i})^2= \frac{1}{2}\sum_{i=1}^n (y_i - f_\Theta(x))^2$$  
+        
         Formally we want to find parameter $\hat{\Theta}$ such that $\hat{\Theta} = argmin_\Theta \left(E_y(f_\Theta(x) \right)$. 
         This equation is usually not solved directly, but through an optimization process called learning \cite{Goodfellow-et-al-2016}. % deep learning book
         
@@ -69,10 +80,13 @@
         This is a well suited approach to use in context of supervised machine learning. 
         
         We use an observation, that if we follow the opposite direction of the function in a given point, 
-        we arrive in a local minima. Example is on the picture \* %\ref{obr:gradient}.
+        we arrive in a local minima. Example is on the picture \ref{obr:gradient}.
         
-        In a context of machine learning, we optimize a cost function $Q$ of parameters $\Theta$, 
-        $$Q(\Theta) = E_y(f_\Theta(x))$$. We follow the opposite direction of gradient of the cost function $Q$ in respect to parameters $\Theta$. We initialize $\Theta_0$ to small random numbers and we perform an gradient descent step
+        In the context of machine learning, we optimize a cost function $Q$ of parameters $\Theta$, 
+        $$Q(\Theta) = E_y(f_\Theta(x))$$
+        
+        We follow the opposite direction of gradient of the cost function $Q$ in respect to parameters $\Theta$. 
+        We initialize $\Theta_0$ to small random numbers and we perform a gradient descent step
         
         $$\Theta^{t+1} = \Theta^t - \alpha \frac{\partial Q(\Theta^t)}{\partial \Theta^t} = \Theta^t - \alpha \nabla Q(\Theta^t)$$
         
@@ -80,31 +94,31 @@
         We perform the gradient descent step until we are not improving enough any more. 
         Formally we stop, when $|\Theta^{t+1} - \Theta^t| < \epsilon$ for a given $\epsilon$ \cite{bottou-bousquet-2008}.
         
-        This process is also sometimes refered to as a batch gradient descent.
+        This process is also sometimes referred to as a batch gradient descent.
 
         \begin{figure}
         \centerline{\includegraphics[width=0.4\textwidth]{images/gradient_descent}}
-        \caption[Gradient descent]{Gradient descent \cite{pict} \*}
+        \caption[Gradient descent]{Gradient descent \cite{pict}}
         \label{obr:gradient}
         \end{figure}
         
         
         \subsubsection{Stochastic gradient descent}
         
-        During each gradient descent step, we need to go evaluate the gradient of the loss function over the whole dataset. 
+        During each gradient descent step, we need to go evaluate the gradient of the loss function over the whole dataset.
         This is usually not feasible for larger datasets. 
         
-        We can exploit the usual the cost function $Q$ can be rewritten as a sum of costs for each data point.
+        We can exploit that usually the cost function $Q$ can be rewritten as a sum of costs for each data point.
         
         $$Q(\Theta) = \sum_{i=1}^n Q_i(\Theta)$$
         
         $Q_i(\Theta)$ denotes the cost function computed on only the $i$-th element. 
-        Finally we perform the gradient step for each example. 
-        
+        Instead of performing the gradient step on the whole $Q$, 
+        we can perform a gradient step for each $Q_i$. 
+
         $$\Theta^{t+1} = \Theta^t - \alpha \frac{\partial Q_i(\Theta^t)}{\partial \Theta^t} = \Theta^t - \alpha \nabla Q_(\Theta^t)$$
         
-        \* 
-        For apropriate $\alpha$ we usually see a much faster convergence than for gradient descent.
+        For appropriate $\alpha$ we usually see a much faster convergence than for gradient descent.
         
         
         \subsection{Feed forward neural network}
@@ -120,42 +134,47 @@
         
         Simple neural network can be seen on an image \ref{obr:siet}.
         
-        \begin{figure}
-        \centerline{\includegraphics[width=0.4\textwidth]{images/siet}}
+        \begin{figure}[h]
+        \centerline{\includegraphics[width=0.4\textwidth]{images/neural_network}}
         \caption[Simple neural network with 2 layers, 3 inputs, 4 neurons and 2 outputs]{Simple neural network with 2 layers, 3 inputs, 4 neurons and 2 outputs\*} % redraw
         \label{obr:siet}
         \end{figure}
         
-        The simplest model for a unit is weighted sum and application of some function. 
+        The simplest realization of an unit is weighted sum and application of some function. 
         Formally the unit receives a vector of inputs $x$ and computes output $g(\sum_{i=1}^n w_i x_i)$, 
         where $w_i$ is a connection strength to the $i$-th input.
         This one unit can be viewed as a simple one layer neural network with one output.
         
-        Common realizations of function $g$ are: logistic function $g(x) = \frac{1}{1+e^{-x}}$, 
-        hyperbolic tangent $g(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}$, relu $g(x) = \max(0,x)$ or leaky relu $g(x)=\log(1+\exp(x))$
+        Common realizations of function $g$ are: 
+        \begin{itemize}
+            \item logistic function $g(x) = \frac{1}{1+e^{-x}}$
+            \item hyperbolic tangent $g(x)=\frac{e^x-e^{-x}}{e^x+e^{-x}}$
+            \item relu $g(x) = \max(0,x)$ 
+            \item leaky relu $g(x)=\log(1+\exp(x))$
+        \end{itemize}
         
         One layer of such units can be compactly described thanks to matrix notation as
         $$y=g(X W)$$
         
         $X$ represents the input matrix (number of samples $n$ times number of features $k$) and $W$ is the matrix of weights (number of features $k$ times number of units $u$). Note that function $g$ is applied element-wise.
         
-        The important observation is, that we can chain such layers to from deeper neural networks.
+        The important observation is, that we can chain such layers to form a deeper neural network.
+        
         $$y=g(g(X W_1) W_2)$$
         
-        $W_1$ are weight of hidden neurons and $W_2$ are weight of output neurons.
+        $W_1$ are weight of hidden neurons (first layer) and $W_2$ are weight of output neurons (second layer).
         There is no consensus in the community about how to count the layers. 
         For example the simple network on picture \ref{obr:siet} could be seen as a $3$ layer neural network,
         because it has input units, hidden units and output units.
         In this thesis we will use the number of matrices $W$ that crates the model.
         
-        This family of functions is very broad and can in fact approximate any function \cite{cybenko1989approximation}.
+        Neural networks represent very broad family of functions that can in fact approximate any other function \cite{cybenko1989approximation}.
         However, we need to train them first.
         
         \subsubsection{Back propagation}
         
-        Back propagation is a method for effective computation of the gradient of a neural network.
-        It relies on the the fact, that neural networks are just a simple compositions of matrix multiplications 
-        and function applications. 
+        Back propagation is a method for efficient computation of the gradient of a neural network.
+        It relies on the the fact, that neural networks are just a simple compositions of matrix multiplications and function applications. 
         It also relies on the fact, that functions used in the units are differentiable (almost everywhere).
         
         \textit{Back propagation} works in two parts, forward pass and backward pass.
@@ -176,52 +195,54 @@
         \subsection{Motivation}
         In order to apply machine learning techniques to a text classification, 
         we need to represent the text in a machine learning friendly way.
-        Most machine learning algorithms expect the  input in a form of vectors of number. 
+        Most machine learning algorithms expect the input in a form of vectors of numbers. 
         
-        Because of this, we need a system to translate string sentences $s$ into vectors $e$ of numbers. 
+        Because of this, we need a system to translate string sentences $s$ into vectors of numbers $e$.
         Such vector is usually called an embedding. 
         
         In  other words, we need to project words and sentences into a vector space.
-        
-        \* % fix, that it is supervised vs unsupervised
         
         \subsection{Local representation}
         
         The simplest vector space is based on a local representation.
         In this representation, we use a vector space with $|D|$ dimensions, one for each word in the vocabulary.
-        Value at the $i$-th position of the vector $v_i$ corresponds to a presence or an absence of the $i$-th words from the vocabulary, $D_i$.
+        Value $v_i$ at the $i$-th position of the vector $v$ corresponds to a presence or an absence of the $i$-th words from the vocabulary, $D_i$.
+        Note, that $|D|$ in real applications easily exceeds $100\,000$ or even $1\,000\,000$.
+        This may make this representation unusable for some applications (classification with SVM).
         
         One of the simplest local representation is called a \textit{bag of words} (BOW). 
         In this representation, values in vectors are binary, where $1$ means that the word was present in the sentence and $0$ means it was not.
-        Optionally we can extend this to a term vector, hence the number is not binary, but express the real count of given word in the sentence.
+        This can also be viewed as a simple one hot encoding.
+        Optionally we can extend this to a term vector, where the number is not binary, but it express the real count of given word in the sentence.
         
         Let's look at our example corpus. 
-        Our vector space would have $10$ dimensions and the first sentence would be represented as a vector 
+        Our vector space would have $11$ dimensions and the first sentence would be represented as a vector
         $e = (1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0)$.
         
         This representation allows for simple sentence comparison. 
-        Two sentences $s_1$ and $s_2$ can be compared via comparing cosine similarity of their BOW embeddings $e_1$ and $e_2$ as $\mathrm{sim}(s_1, s_2) = \mathrm{sim}(e_1, e_2) = \frac{e_1 e_2}{||e_1||.||e_2||}$.
+        Two sentences $s_1$ and $s_2$ can be compared via comparing cosine similarity of their BOW embeddings $e_1$ and $e_2$.
+        $$\mathrm{sim}(s_1, s_2) = \mathrm{sim}(e_1, e_2) = \frac{e_1 e_2}{||e_1||.||e_2||}$$
         
-        For technical reasons we can also define a cosine distance as 
-        $$\mathrm{dist}(s_1, s_2) = \mathrm{dist}(e_1, e_2) = 1- \mathrm{sim}(e_1, e_2) = 1 - \frac{e_1 e_2}{||e_1||.||e_2||}$$.
+        For technical reasons we can also define a cosine distance. 
+        $$\mathrm{dist}(s_1, s_2) = \mathrm{dist}(e_1, e_2) = 1- \mathrm{sim}(e_1, e_2) = 1 - \frac{e_1 e_2}{||e_1||.||e_2||}$$
         
         However this representation does not consider, that two words can be similar, even though they are not the same.
         For example words \texttt{nice} and \texttt{good} are consider completely different, even though they are not. 
         
         Second problem is, that this representation forgets the initial ordering of the words.
-        This can be solved by using bigrams.
+        This can be partially solved by using bigrams.
         
         Third problem is, that this representation assigns the same weight to each word.
         The fact that two sentences both has a meaningless word \texttt{a} has the same effect on the similarity as 
-        if they both have word \texttt{good}. 
+        if they both have word \texttt{bad}. 
         This problem is partially solved by introducing term weights.
         
         \subsubsection{Term-weighting schemes}
-        To emphasize that some words in the corpus are more important than other we introduce a weight Term-weighting schemes. 
-        The idea is, that words like prepositions (\texttt{a}, \texttt{an}) and other words that are not very informative or redundant  (\texttt{is}, \texttt{do}, \texttt{by}) should should have smaller weights. 
+        To emphasize that some words in the corpus are more important than other we introduce a term-weighting schemes. 
+        The idea is, that words like prepositions (\texttt{a}, \texttt{an}) and other words that are not very informative or redundant (\texttt{is}, \texttt{do}, \texttt{by}) should have smaller weights. 
         In practice, a list of \textit{stop words} is used to completely filter such words.
         
-        Also words, that are to common in the dataset should have lower weight.
+        Also words, that are to common in the dataset should have lower weights.
         If each sample is about a dog, we probably do not care about the word \texttt{dog}, because it is somehow redundant.
         
         However words, that appear multiple times in a sentence are probably important for this sentence and should have higher weights.
@@ -234,9 +255,9 @@
         Common choices are:
         \begin{itemize}
             \item $\mathrm{sign}(\mathrm{tf}_{w,s})$, binary presence of the word in sentence. Also known as BOW.
-            \item $\mathrm{tf}_{w,s}$, row number of appearances.
+            \item $\mathrm{tf}_{w,s}$, number of appearances.
             \item $\frac{\mathrm{tf}_{w,s}}{|s|}$, number of appearances normalized by length of the sentence.
-            \item $1+\log(\mathrm{tf}_{w,s})$
+            \item $1+\log(\mathrm{tf}_{w,s})$.
         \end{itemize}
         
         \emph{Inverse document frequency}, $\mathrm{IDF_w}$, part reflects how important is the word $w$ for the whole corpus.
@@ -255,45 +276,160 @@
         
         $$\mathrm{BM}_{25~w,s} = \log \left(\frac{N-n_w+0.5}{n_w + 0.5}\right)    \frac{\mathrm{tf}_{w,s} (1.2 + 1)}{\mathrm{tf}_{w,s} + 1.2  \left(1 - 0.75 + 0.75 \cdot \frac{N}{\text{avgdl}}\right)}$$
         
-
-        \subsection{Distributed representation}
-        \cite{le2014distributed}
-
-
-        \subsection{Prediction based distributedrepresentation}
-        \cite{Rubenstein:1965:CCS:365628.365657} % distributional hyphotesis. 
+        This representation performs better than BOW and usually works the best for large documents in document retrieval \cite{li2014semantic}.
         
-        \cite{maas2011learning} % lda, vector space model
+        Term weight can help to describe that different words, have different importance.
+        However, they still can not take into account, that two different words should have similar representation.
+        
+        \subsection{Distributed representation}
+        To address the problem of high dimensionality and to allow different words to have high cosine similarity, we employ distributed representation.
+        In this representation, dimensions do not correspond directly to words, but rather to some features of these words.
+        In this representation the ''meaning`` of the word is split across multiple dimensions.
+        We can view each dimension as if it holds some form of an abstract meaning \cite{le2014distributed}. 
+        
+        Simple but unrelated example of distributed representation is a binary representation of a number.
+        
+        To acquire a distributed representation, algorithms often make use of the Distributional hypothesis.
+        \* % fix, that it is supervised vs unsupervised
 
-        \cite{DBLP:journals/corr/MikolovSCCD13} % podvzorkovanie.
-        \cite{DBLP:conf/icml/LeM14} % slovne vektory
-        \cite{rong2014word2vec} % some word2vec shit
-        \cite{pennington2014glove} % glove word vectors
+        \subsubsection{Distributional hypothesis}
+        Distributional hypothesis states, that words that appear in similar contexts tend to have similar meaning,
+        even though they do not appear directly together \cite{harris1954distributional} \cite{Rubenstein:1965:CCS:365628.365657}. % distributional hypothesis 
+        For example we can exchange words \texttt{dog} and \texttt{cat} in each sentence in our example corpus \ref{tab:example:dataset}
+        and all sentences will still make sense. 
+        The positive correlation between the words appeared in similar contexts and words having similar meaning was in fact empirically confirmed.
+        
+        Because of this, distributional hypothesis is used as a foundation for a lot of methods that try to capture the word semantic similarity \cite{rubenstein1965contextual}. 
 
+        \subsection{Prediction based distributed representation}
+        Number of researchers used neural networks to create a good, dense, distributed word representations \cite{pennington2014glove} \cite{DBLP:conf/icml/LeM14} \cite{rong2014word2vec}. % slovne vektory, some word2vec shit, glove word vectors
+        These representations are also commonly called \emph{neural embeddings}.
+        We will call these representations as \emph{word vectors}.
+        Word vectors proved to be very useful in broad range of natural language processing tasks. 
+        
+        Moreover, they manifest interesting algebraic properties. 
+        
+        $$v(king) - v(man) + v(woman) = v(queen)$$
+        $$v(better) - v(good) + v(small) = v(smaller)$$
+        
+        $v$ denotes a the word vector for given word.
+        
+        There are two main approaches for training word vectors with neural networks: skip-gram model and continuous bag of words model.
+        
+        Based on an embedding of an input word $x$, the \textit{skip-gram model} predicts words from $x$'s context.
+        
+        On the other hand, the \textit{continuous bag of words model} tries to predict the word based on it's context.
+        
+        These methods can be computationally intensive, and they require a lot of training data. 
+        Moreover their training usually requires a lot of well chosen hyper-parameters ind tricks \cite{DBLP:journals/corr/MikolovSCCD13}. % podvzorkovanie
+        
 
-        \subsection{Count based distributedrepresentation}
-        \cite{wiemer2004latent} % Latent semantic analysis
-        \cite{landauer1998introduction} % introduction to lsa
-        Latent Dirichlet allocation
+        \subsection{Count based distributed representation}
+        \* % TODO write this better, find citations.
+        
+        Count based methods create coocurence matrix and factorize it it to eliminate noise, 
+        what is left should reflect the meaning. 
+        
+        Different approach is a latent dirichlet allocation.
+        
         Explicit semantic analysis
         Latent semantic analysis
         Hierarchical Dirichlet process
         Non-negative matrix factorization
-        \subsubsection{SVD}
-        {\input{svd_math.tex}}
-        \subsubsection{Truncated SVD}
-        \subsubsection{Iterated SVD}
-            \cite{brand2006fast} % incremental svd
+        
+        
+        \subsubsection{Latent semantic analysis}
+        
+        The purpose of LSI is to extract a smaller number of dimensions that are more robust indicators of meaning than individual terms.  
+        
+        LSI uses the Singular Value Decomposition (SVD) to arrive at these latent dimensions. In principle, SVD achieves a two-mode factor analysis and positions both terms and documents in a single space defined over the extracted dimensions. 
+        SVD breaks down the original term document matrix into three matrices, two of which show the revised representations of words and documents in terms of the new dimensions, 
+        and the third associates “weights” to these dimensions. 
+        
+        The thesis behind LSI is that less important dimensions correspond to “noise” due to word-choice variability.
+        
+        A reduced rank approximation to the original matrix is constructed by dropping these noisy dimensions. 
+        This approximation is a smoothed (blurred) version of the original, 
+        and is expected to model associations between terms and documents in terms of the underlying concepts more accurately.
+         
+        An interesting property of SVD is that the generated approximation is the closest matrix of its rank to the original in the least-squares sense.
+        
+        While LSI has been shown to be successful in retrieval applications, 
+        it has certain limitations when applied to classification tasks. 
+        As noted earlier, since LSI is blind to class labels of training documents, 
+        the extracted dimensions are not necessarily the best in terms of discriminating between classes.
+        
+        Also, infrequent words with high discriminatory power may be filtered out by LSI. 
+        
+        % TODOSVD Forsythe, Malcolm, Moller 1997  SVD 
+        
+        
+        \cite{papadimitriou2000latent} % interpretation of lsa, steal some introduction 
+        \cite{deerwester1990indexing} % first lsi/lsa?
+
+        \cite{maas2011learning} % lda, vector space model
+        \cite{baroni2014don} % do not count, predict
+        \cite{wiemer2004latent} % Latent semantic analysis
+        \cite{landauer1998introduction} % introduction to lsa
+
 
         
+        {\input{svd_math.tex}}
+        
+        
+        \cite{halko2011finding} %fast svd
+        \cite{brand2006fast} % incremental svd
+        incremental svd could in theory be used in the stochastic gradient descent setting.
+
+
         \subsection{Relationship of prediction and count based representations}
-            \cite{naili2017comparative} % wrf is this? some comparison
-            \cite{levy2014neural} % word2vec as matrix factorization
-            \cite{altszyler2016comparative} % lsa vs word2vec on samall corpora
-            \cite{levy2015improving} % word2vec hacks in lsi
+            
+            LSA and other count based techniques used to be very popular alternative to local representations.
+            However after the raise of neural networks, they were soon overshadowed by neural word embeddings.
+            
+            Prediction based models achieved much better performance across multiple word relatedness tasks, categorization tasks, synonyms tasks and analogy tasks \cite{baroni2014don}. % do not count, predict
+            
+            During these evaluations, they obtained the word representations by training on a big monolingual dataset, like wikipedia.
+            Then they used a prepared pairs of related words (synonyms or words from the same category) and tested,
+            how similar are the vector representations of related words. 
+            In other words, how well the word vector similarity correlates with the actual relatedness. 
+            Count based methods achieved Pearson correlation coefficient $0.74$ and were outperformed by prediction based methods which achieved $0.84$ \cite{baroni2014don}.
+            
+            This, and the hype around neural network lead to recent extreme popularity of prediction based embeddings,
+            even though they were much less understood and less ''mathematically grounded``.
+            
+            However, later it was shown, that these two approaches are in fact very similar.
+            It was proven, that a prediction based model skip-gram with negative-sampling (SGNS) 
+            is implicitly factorizing a word-context matrix,
+            whose cells are the point-wise mutual information (PMI) of the respective word and context pairs, 
+            shifted by a global constant \cite{levy2014neural}. % word2vec as matrix factorization 
+            \* % TODO add pmi to weights 
+            These results suggest, that these two approaches are somehow equivalent and with proper weights the LSA should achieve similar results as skip-gram model. 
+            However in practice, this was not the case.
+            
+            Soon it was found, that the effectiveness of the neural embeddings is due to their numerous hyperparameters.
+            These models require a lot of hyperparameters, that can not be learned and need to be set up manually,
+            or through excessive search.
+            On the other hand, count based models usually do not require a lot of parameters, besides the number of dimensions of the resulting embedding. 
+            
+            Levy et al. \cite{levy2015improving} % word2vec hacks in lsi
+            showed, that much  of  the  performance  gains  of  neural embeddings  are  due  to  certain  system design  choices and hyperparameters, rather than the embedding algorithms themselves. 
+            Furthermore they showed that traditional (count based) distributional models, 
+            can also benefit from such hyperparameters and design choices.
+            
+            After incorporating these insights into the count based methods, 
+            they observed mostly local or insignificant performance differences between these approaches.
+            
+            Note, that these experiments were done on a large bodies of text like English Wikipedia.   
+            On small datasets it was empirically shown, that count based methods actually outperform the neural networks.\cite{altszyler2016comparative}. % lsa vs word2vec on samall corpora
+            
+            \* \cite{naili2017comparative} % wrf is this? some comparison
+            
     
-        \subsection{Making the prediction}
+    \section{Classification}
+        \subsection{SVM}
             \* % cite something
+        \subsection{Neural networks}
     
     \section{Other approached for document classification}
         Recurrent neurl networks,
@@ -326,8 +462,8 @@
     \section{Design}
     \section{Implementation}
         \cite{bird2009natural} % nlp in python
-        \subsection{gensim lsa}
-        \subsection{tensorflow for clasifier?}
+        \subsection{Gensim lsa}
+        \subsection{Tensorflow for clasifier?}
     \*
 
 \chapter{Experiments and evaluation}
@@ -341,7 +477,7 @@
     Transfer learning?
 
     \section{Classification datasets}
-        \subsection{all datasets}
+        \subsection{Datasets}
             \cite{conneau2017supervised} % datasets, benchmarks
 
     \section{Interpretability}
