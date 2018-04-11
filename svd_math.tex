@@ -1,37 +1,36 @@
 $$
 \begin{matrix} 
  M &  ~~ U & \Sigma & V^T \\
- \textbf{t}_j^T &  & &  \\
+ \textbf{d}_i^T &  & &  \\
  \downarrow &  & &  \\
-(\textbf{d}_i) \rightarrow 
 \begin{bmatrix}
-x_{1,1} \dots  x_{1,n} \\
+x_{1,1} \dots  x_{1,N} \\
 \vdots ~~~  \ddots ~~~ \vdots \\
-x_{i,1} \dots  x_{i,n} \\
+x_{i,1} \dots  x_{i,N} \\
 \vdots ~~~ \ddots ~~~ \vdots \\
-x_{m,1} \dots  x_{m,n} \\
+x_{|D|,1} \dots  x_{|D|,N} \\
 \end{bmatrix}
 =
 &
-\textbf{u}_i \rightarrow
+\textbf{u}_j \rightarrow
 \begin{bmatrix} 
 \begin{bmatrix} & \textbf{u}_1 & \end{bmatrix} \\
 \vdots \\
-\begin{bmatrix} & \textbf{u}_m & \end{bmatrix}
+\begin{bmatrix} & \textbf{u}_{|D|} & \end{bmatrix}
 \end{bmatrix}
 &
 \cdot
 \begin{bmatrix} 
 \sigma_1 \dots ~~~ 0 \\
 \vdots ~~~ \ddots  \vdots \\
-0  \dots  \sigma_l \\
+0  \dots  \sigma_k \\
 \end{bmatrix}
 &
 \cdot
 \begin{bmatrix} 
-\begin{bmatrix} \, \\ \, \\ \textbf{v}_1 \\ \, \\ \,\end{bmatrix} 
+\begin{bmatrix} \, \\ \, \\ \textbf{v}_1^T \\ \, \\ \,\end{bmatrix} 
 \dots
-\begin{bmatrix} \, \\ \, \\ \textbf{v}_n \\ \, \\ \, \end{bmatrix}
+\begin{bmatrix} \, \\ \, \\ \textbf{v}_N^T \\ \, \\ \, \end{bmatrix}
 \end{bmatrix}
 \end{matrix}
 $$

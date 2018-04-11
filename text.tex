@@ -12,6 +12,7 @@
         \begin{table}[h]
             \centering
             \begin{tabular}{c c}
+                $d_j$ & $j$-th document in our corpus.\\
                 $D$ & Vocabulary. Denotes set (dictionary) of all used words in our dataset. \\
                 $|D|$ & Size of the vocabulary. \\
                 $tf_{w,s}$ & Number of times word $w$ appears in sentence $s$. \\
@@ -61,6 +62,8 @@
         $Y$ is usually a vector of real values or integers. 
         Inside mathematical expression we usually denote labels as $y$,
         We refer to the pair of features and labels $(X, Y)$ as a dataset.
+        
+        \* %todo train test split
         
         In machine learning, we want to find a function $f$ such that for given sample $x_i$
         the function's output $\hat{y_i} = f(x_i)$ if very close to the the real label $y_i$.
@@ -190,6 +193,17 @@
         %$\frac{E_y(g(h_1 W_2))}{\partial W_2} = 
         %\frac{\partial E_y(\hat{y})}{\partial \hat{y}}\frac{\partial \hat{y}}{\partial W_2}$
         
+    \section{Classification}
+        \subsection{SVM}
+            \* % cite something
+            Some basics of svm, example of classifier that does not use backprop.
+        \subsection{Linear regression}
+            simple example of neural network that is not trained with backprob, but with normal equations,  
+            but can still be used to do backprob with regards to the input.
+        \subsection{Neural networks}
+            some more information about neural network training for classification
+
+        
     \section{Word and sentence representation}
 
         \subsection{Motivation}
@@ -270,6 +284,7 @@
             \item $\log \left(\frac{N-n_w}{n_w} \right)$, probabilistic inverse document frequency.
         \end{itemize}
 
+        Combination of such weight is called TFIDF.
         Note, that these choices for $\mathrm{TF}_{w,s}$ and $\mathrm{IDF}_{w,s}$ have probabilistically grounded \cite{aizawa2003information}. %information perspective on tfidf
         
         Another popular weighting scheme that is usually used in document retrieval is $\mathrm{BM_{25}}$. 
@@ -327,6 +342,8 @@
         \subsection{Count based distributed representation}
         \* % TODO write this better, find citations.
         
+        
+        
         Count based methods create coocurence matrix and factorize it it to eliminate noise, 
         what is left should reflect the meaning. 
         
@@ -340,48 +357,102 @@
         
         \subsubsection{Latent semantic analysis}
         
-        The purpose of LSI is to extract a smaller number of dimensions that are more robust indicators of meaning than individual terms.  
+        During this thesis we consider the \emph{latent semantic indexing} (LSI) to be the same as \emph{latent semantic analysis} (LSA).
+        For simplicity, we will refer only to the LSA.
         
-        LSI uses the Singular Value Decomposition (SVD) to arrive at these latent dimensions. In principle, SVD achieves a two-mode factor analysis and positions both terms and documents in a single space defined over the extracted dimensions. 
-        SVD breaks down the original term document matrix into three matrices, two of which show the revised representations of words and documents in terms of the new dimensions, 
-        and the third associates “weights” to these dimensions. 
+        \emph{Latent semantic analysis} is one of the standard approaches to identify hidden variables describing the data.
         
-        The thesis behind LSI is that less important dimensions correspond to “noise” due to word-choice variability.
+        In the context of natural language classification it extracts and infers relations of expected contextual usage of words in documents.
+        It does so without any humanly constructed dictionaries, knowledge bases, semantic networks, grammars or syntactic parsers.
         
-        A reduced rank approximation to the original matrix is constructed by dropping these noisy dimensions. 
-        This approximation is a smoothed (blurred) version of the original, 
-        and is expected to model associations between terms and documents in terms of the underlying concepts more accurately.
-         
-        An interesting property of SVD is that the generated approximation is the closest matrix of its rank to the original in the least-squares sense.
+        LSA starts with a coocurence matrix $M'$. 
+        Each cell $M'_{i,j}$ of this matrix contains number representing the frequency with  which  the  word $D_i$ appears in the document $d_j$.
+        Afterwards each cell entry is weighted by a function that expresses both the word's importance in the particular document and the word importance in the general corpus.
+        A weighting scheme such as TFIDF can be used.
+        We denote the reweighted matrix $M$. 
         
-        While LSI has been shown to be successful in retrieval applications, 
-        it has certain limitations when applied to classification tasks. 
-        As noted earlier, since LSI is blind to class labels of training documents, 
-        the extracted dimensions are not necessarily the best in terms of discriminating between classes.
+        Next, LSA applies singular value decomposition (SVD) to the matrix.
+        In principle, SVD achieves a two-mode factor analysis and positions both terms and documents in a single space defined over the extracted dimensions.
+        In case a different matrix factorization is used such as non negative matrix factorization, we would arrive to probabilistic latent semantic analysis.
         
-        Also, infrequent words with high discriminatory power may be filtered out by LSI. 
-        
-        % TODOSVD Forsythe, Malcolm, Moller 1997  SVD 
-        
-        
-        \cite{papadimitriou2000latent} % interpretation of lsa, steal some introduction 
+        SVD breaks down the document matrix $M$ into three matrices $U$, $\Sigma$, $V$, 
+        such that $M=U \Sigma V^T$ \cite{papadimitriou2000latent} % interpretation of lsa, steal some introduction 
         \cite{deerwester1990indexing} % first lsi/lsa?
-
         \cite{maas2011learning} % lda, vector space model
-        \cite{baroni2014don} % do not count, predict
         \cite{wiemer2004latent} % Latent semantic analysis
-        \cite{landauer1998introduction} % introduction to lsa
+        \cite{landauer1998introduction}. % introduction to lsa
 
-
+        $U$ and $V$ are orthogonal matrices and $\Sigma$ is a diagonal matrix.
         
         {\input{svd_math.tex}}
-        
-        
-        \cite{halko2011finding} %fast svd
-        \cite{brand2006fast} % incremental svd
-        incremental svd could in theory be used in the stochastic gradient descent setting.
 
+        $U$ describes the original row entities (words) as vectors of derived orthogonal  factor values. 
+        $V$ describes the original column entities (documents) in the same way.
+        $\Sigma$ containing scaling values such that when the three components are matrix multiplied, the original matrix is reconstructed.
 
+        It was shown that any matrix can be decomposed perfectly in a such way, using no more factors than the smallest dimension of the original matrix.
+        
+        Moreover we can construct a reduced rand approximation by setting all but the $k$ biggest entries in $\Sigma$ to zero. 
+        This effectively reduces the number of columns of $U$ to $k$ and similarly number of rows of $V^T$.
+        The thesis behind LSI is that those less important dimensions correspond to “noise” due to word-choice variability.
+    
+        An interesting property of SVD is that the generated approximation is the closest matrix of its rank to the original in the least-squares sense.
+
+        In practice we computing the full SVD decomposition would be time an memory unfeasible.
+        Because of that, we directly compute the lower rank approximation with $k$ dimensions,
+        such that $M \simeq U_k \Sigma V_k^T$ \cite{halko2011finding}. %fast svd
+        Moreover, we do not even need to have access to the full matrix $M$ and we can compute the decomposition in an incremental manner \cite{brand2006fast}. % incremental svd
+        
+        Not only we can add incrementally adjust the decomposition when adding a new document into the corpus, we can remove the document as well.
+        Incremental SVD could in theory be used in the stochastic gradient descent setting.
+        
+        From now on, we drop the subscript $k$ and matrices $U$, $\Sigma$ and $V$ in the later text are assumed to have only $k$ dimensions.
+        
+        \subsubsection{LSA for classification}
+        
+        In context of document classification, we first construct our vocabulary $D$ from our training data. 
+        We can filter out words that we know, are not relevant, or that have only a few appearances in the corpus.
+        
+        Now we can transform sentences into their BOW representation.
+        Afterwards, we compute all necessary statistics required by our chosen weighting scheme. 
+        In case of TFIDF, we compute the number of appearances of each word in our text $n_w$. 
+        This can be done efficiently by making use of fast matrix operations and libraries implementing linear algebra.
+        
+        Having these statistics, we can reweigh all words in sentences according to them and construct the term matrix $M$.
+        
+        Then we factorize $M$ an compute the matrices $U_k$, $\Sigma$, $V_k$. 
+        In theory, we could directly read the document embeddings $v$ from the matrix $V$.
+        For practical purposes, the matrix $V_k$ is usually not stored and sometimes not even computed. 
+        
+        To compute the embedding, we take the document term vector $d_i$ and employ a relationship $$d_i^T = U \Sigma v_i^T$$
+        
+        Because $U$ is orthogonal and $\Sigma$ is diagonal, we get
+        
+        $$\Sigma^{-1} U^T d_i^T = v_i^T $$
+
+        $$v_i = d_i U \Sigma^{-1} $$
+        
+        Matrix of such $v_i$ are then considered to be document features and are used as an input (X) to some classifier.
+        
+        Important part is, that we can we can compute the such embedding even for unseen documents.
+        The problem is, that we have to filter all words that are not present in $D$. 
+        However, because this method is fully unsupervised, we can make use of any unlabeled data (documents, that do no have known label).
+        
+        \subsubsection{LSA pitfalls}
+
+        Even though LSA was shown to perform well in document retrieval applications and it can capture some basic semantic properties of words,
+        it has certain limitations when applied to classification tasks. 
+        
+        The problem is, that LSA does not incorporate the the information about document classes. 
+        It finds the most representative features and not the most discriminative ones.
+        In other words, it finds embedding that is the best for reconstructing the documents.
+        Because of that, infrequent words that have high discriminatory power (are important for the task), may be filtered out.
+        
+        For example, LSA computed on our example corpus \ref{tab:example:dataset} would focus on capturing the words \texttt{a}, \texttt{is}, \texttt{dog} and \texttt{cat},
+        event htough they are completely irrelevant to our prediction task.
+        
+        \* % TODO SVD Forsythe, Malcolm, Moller 1997  SVD 
+        
         \subsection{Relationship of prediction and count based representations}
             
             LSA and other count based techniques used to be very popular alternative to local representations.
@@ -403,7 +474,7 @@
             is implicitly factorizing a word-context matrix,
             whose cells are the point-wise mutual information (PMI) of the respective word and context pairs, 
             shifted by a global constant \cite{levy2014neural}. % word2vec as matrix factorization 
-            \* % TODO add pmi to weights 
+            
             These results suggest, that these two approaches are somehow equivalent and with proper weights the LSA should achieve similar results as skip-gram model. 
             However in practice, this was not the case.
             
@@ -424,15 +495,9 @@
             On small datasets it was empirically shown, that count based methods actually outperform the neural networks.\cite{altszyler2016comparative}. % lsa vs word2vec on samall corpora
             
             \* \cite{naili2017comparative} % wrf is this? some comparison
-            
-    
-    \section{Classification}
-        \subsection{SVM}
-            \* % cite something
-        \subsection{Neural networks}
-    
+        
     \section{Other approached for document classification}
-        Recurrent neurl networks,
+        Recurrent neural networks,
         Character based recurent neural networs, 
 
 \* %\cite{manning2008introduction} introduction to information retrieval
