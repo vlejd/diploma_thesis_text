@@ -17,9 +17,13 @@
             $tf_{w,s}$ & Number of times word $w$ appears in sentence $s$. \\
             $n_w$ & Number of times word $w$ appears in the whole corpus. \\
             $N$ & Number of documents in the corpus. \\
+            $\circ$ & Hadamard product. \\
             $\alpha$ & Learning rate.
         \end{tabular}
     \end{table}
+    
+    \* %TODO note about vectors, and that everything is a row vector.
+    \* % TODO note about matrix multiplications and habits from numpy
     
     Throughout this section we try to illustrate most things with examples. 
     For consistency, we will use following sample corpus of sentences and labels:
@@ -174,7 +178,7 @@
     Neural networks represent very broad family of functions that can in fact approximate any other function \cite{cybenko1989approximation}.
     However, we need to train them first.
     
-    \subsubsection{Back propagation}
+    \subsubsection{Back propagation} \label{sec:backprop}
     
     Back propagation is a method for efficient computation of the gradient of a neural network.
     It relies on the the fact, that neural networks are just a simple compositions of matrix multiplications and function applications. 
@@ -448,13 +452,21 @@
 
     $$v_i = d_i U \Sigma^{-1} $$
     
-    Note, that $\Sigma^-1$ is easy to compute, becaues $\Sigma$ is a diagonal. 
+    Note, that $\Sigma^-1$ is easy to compute, because $\Sigma$ is a diagonal. 
     We just need to invert each number on the diagonal.  
     
     As was shown experimentally shown in my bachelor thesis \* % cite batchelor thesis 
-    and by other researchers, $\Sigma$ may not properly 
+    and by other researchers \cite{levy2015improving}, $\Sigma$ may not reflect the importance of each feature very well.
+    
+    Because of that, a simpler relationship is usually employed
+    
+    $$v_i = d_i U $$
     
     Matrix of such $v_i$ are then considered to be document features and are used as an input ($X$) to some classifier.
+    
+    \* % TODO Note that this corresponds to averaging each word vector of the sentence.
+    \* % TODO we could argue, that this is just a linear transformation, and it is but in very high
+    % dimensional space
     
     Important part is, that we can we can compute the such embedding even for unseen documents.
     The problem is, that we have to filter all words that are not present in $D$. 
