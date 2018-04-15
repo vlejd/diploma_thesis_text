@@ -220,18 +220,21 @@
     \section{Implementation}
         
         In this section we go through some implementation details and decisions.
-        For code, please refer to chapter \ref{chap:appendixa}. \*% add link
+        Whole thesis, including experiment evaluations, is implemented in Python3.
+        For code, please refer to chapter \ref{chap:appendixa}.
 
+        \subsection{Libraries} 
+    
         While implementing our approach, we made use of multiple tools and libraries that deserves to be mentioned.
-
+    
         \subsubsection{Scikit-learn}
         
         Scikit-learn (or sklearn) is a free machine learning library for Python programming language \cite{scikit-learn}.
         It features wide range of state-of-the-art machine learning algorithms for medium-scale supervised and unsupervised problems.
-        It is extensible and provides very nice APIs \cite{sklearn_api}.
+        It is extensible and provides very nice and clean APIs \cite{sklearn_api}.
         
-        In our implementation we used base classes for weighting schemes \texttt{TfidfTransformer}, \texttt{BaseEstimator}, \texttt{TransformerMixin}.
-        
+        In this thesis, we used it for multiple purposes.
+        We used base classes for weighting schemes \texttt{TfidfTransformer}, \texttt{BaseEstimator}, \texttt{TransformerMixin}.
         We also use this library to generate training and test splits. 
         
         Lastly, we used scikit's implementation of \texttt{LogisticRegression}.
@@ -241,37 +244,51 @@
         
         
         \subsubsection{Gensim}
-        weights, LSA, dictionaries, text manipulation
-        Used gensim LSA that uses fast approximate SVD decomposition that cne be modified by new documents,
         
-        \cite{rehurek_lrec}
-        \* % TODO Intro about gensim
-        \* % TODO cite the fast lsa in gensim
-        \* % TODO, cite other important objects we use (dictionaries, sparse corpus), weights, word2 vec implementation
+        Gensim is a robust open-source vector space modeling and topic modeling toolkit implemented in Python \cite{rehurek_lrec}. 
+        It is efficient and hassle-free software to realize unsupervised semantic modelling from plain text \cite{bird2009natural}. % nlp in python 
+        It is specifically designed to handle large text collections, using data streaming and efficient incremental algorithms. 
         
+        We made use of multiple tools from this library. 
+        We used \texttt{Dictionary} object for vocabulary filtering and embedding into the BOW representation and we used it's TFIDF implementations.
+        We also used it's API to train word vectors. 
         
-        \subsection{Numpy}
-        \cite{bird2009natural} % nlp in python
-        \cite{oliphant2006guide} % numpy
-        for classification part we tried multiple models, , 
-        our own logistic regression thanks to numpy, multilayer eprceptron from sklearn
-        mlp with numpy, 
-         \* %TODO implement this
-
-        \subsection{Tensorflow}
-        mlp with tensorflow
-        \* %TODO implement or delete
-        \* % note about computing the gradient authomaticaly,
-        \* % discuss not used because of fast svd is not there.
-    
-        \subsection{Other used tools}
-        \cite{perez2007ipython} %ipython
-        \* % experiments, evaluation and development
-        \* % cite python
-        \* %cit the blog i used
-        \cite{hunter2007matplotlib} %matplotlib
-        \cite{mckinney2010data} %pandas
+        Most important for us was gensim's implementation of the probabilistic algorithm for constructing approximate matrix decomposition \cite{halko2011finding}.
+        This provides fast and easy to use incremental SVD decomposition.
         
+        \subsubsection{Numpy}
+        NumPy is a library for Python, adding support for large, multi-dimensional arrays and matrices \cite{oliphant2006guide}. % numpy
+        We used this library for result evaluation and to implement our own logistic regression.
+        
+        \subsubsection{Tensorflow}
+        
+        TensorFlow is an open source software library for high performance numerical computation developed by Google Brain team \cite{tensorflow2015-whitepaper}. 
+        It provides simple interface to matrix computations on GPUs and CPUs.
+        
+        One of the most important capabilities of this library is automatic differentiation.
+        We can create symbolic expression representing the desired computation $\hat{y}=g(X\Theta)$ and this library can automatically compute the gradient $\frac{\partial \hat{y}}{\Theta}$.
+        Because of this, TensorFlow is very popular among  machine learning researchers.
+        
+        In theory, we could (and we wanted to) implement our whole approach in TensorFlow.
+        It even contains implementation of SVD, but not with all the properties that we require.
+        
+        \subsubsection{Other used tools}
+        
+        During the development of required code we worked in Jupyter Notebook. 
+        It is an interactive environment the offers very easy prototiping and
+        data visualization \cite{PER-GRA:2007}. %ipython
+        
+        For data visualization we used Mtplotlib library \cite{hunter2007matplotlib}. %matplotlib 
+        
+        Finally for data manipulation and presentation we used Pandas \cite{mckinney2010data}. %pandas
+        
+        Last important mention belongs to Aysen Tatarinov, his blog and his repository \url{https://github.com/aysent/supervised-term-weighting} where he implemented a number of supervised weight schemes \cite{maas2011learning}.
+        \* % TODO coppyright v kode
+        
+        \subsection{Code design} 
+        \*
+        Something about used objects, classifiers, SVD, experiments
+        Two appraches
         
         
 
@@ -292,4 +309,6 @@
     \section{Interpretability}
         \cite{ribeiro2016should} % explainability
 
+\chapter{Important words analysis}
 
+    \section{Dataset 1}
