@@ -74,7 +74,7 @@
     \* %todo train test split
     
     In machine learning, we want to find a function $f$ such that for given sample $x_i$
-    the function's output $\hat{y_i} = f(x_i)$ if very close to the the real label $y_i$.
+    the functions output $\hat{y_i} = f(x_i)$ if very close to the the real label $y_i$.
     
     This is usually done by optimizing parameters $\Theta$ of a parametrized function $f_\Theta$,
     with regards to a loss function $E_y(\hat{y})$. 
@@ -139,7 +139,7 @@
     Neural network consists of small interconnected computational units (neurons) that are usually organized into a layers.
     Each unit takes some inputs, based on them produces an output and sends it to other units. 
     In a feed forward neural network, the signal is always moving forward,
-    hence unit on the $k$-th layer can only take it's input from previous layers \cite{Goodfellow-et-al-2016}.
+    hence unit on the $k$-th layer can only take its input from previous layers \cite{Goodfellow-et-al-2016}.
     
     By adjusting the connections and theirs strengths, the network can learn to produce a specific output for a specific input.
     
@@ -349,9 +349,9 @@
     
     There are two main approaches for training word vectors with neural networks: skip-gram model and continuous bag of words model.
     
-    Based on an embedding of an input word $x$, the \textit{skip-gram model} predicts words from $x$'s context.
+    Based on an embedding of an input word $x$, the \textit{skip-gram model} predicts words from the context of $x$ .
     
-    On the other hand, the \textit{continuous bag of words model} tries to predict the word based on it's context.
+    On the other hand, the \textit{continuous bag of words model} tries to predict the word based on its context.
     
     These methods can be computationally intensive, and they require a lot of training data. 
     Moreover their training usually requires a lot of well chosen hyper-parameters ind tricks \cite{DBLP:journals/corr/MikolovSCCD13}. % podvzorkovanie
@@ -384,7 +384,7 @@
     
     LSA starts with a coocurence matrix $M'$. 
     Each cell $M'_{i,j}$ of this matrix contains number representing the frequency with  which  the  word $D_i$ appears in the document $d_j$.
-    Afterwards each cell entry is weighted by a function that expresses both the word's importance in the particular document and the word importance in the general corpus.
+    Afterwards each cell entry is weighted by a function that expresses both the words importance in the particular document and the word importance in the general corpus.
     A weighting scheme such as TFIDF can be used.
     We denote the reweighted matrix $M$. 
     

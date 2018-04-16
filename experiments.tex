@@ -1,0 +1,183 @@
+\chapter{Experiments}
+
+In this chapter we present our experimental results and compare them to baseline solutions.
+We perform the evaluation on multiple classification tasks. 
+
+\section{Classification datasets}
+    
+    Our datasets were acquired by following instructions in the SentEval (\url{https://github.com/facebookresearch/SentEval}) repository.
+    SentEval is a library for evaluating the quality of sentence embeddings \cite{conneau2017supervised}. 
+    However it focuses on evaluating unsupervised embeddings.
+    We have not used any code from this library, because we were not able to modify its API in a maintainable way to fit our needs. 
+    In the end we just used it as a guideline for datasets acquisition.
+    
+    \subsection{Overview}
+    We use a set of binary classification tasks that covers various types of sentence classification.
+    Datasets corresponding to these tasks are:
+    \begin{itemize}
+        \item Movie review sentiment analysis MR.
+        \item Product review dataset CR.
+        \item Subjectivity/objectivity dataset SUBJ.
+        \item Question-type dataset TREC.
+        \item Opinion polarity dataset MPQA.
+    \end{itemize}
+    
+\* % TODO remove first hline in code
+\* %TODO add basic trec dataset with N/A
+
+\begin{table}[h]
+\begin{center}
+
+\begin{tabular}{l|rrrr} 
+\toprule
+  &        CR &      MPQA &         MR &      SUBJ \\
+\midrule
+\#examples                             &   3775 &  10606 &   10662 &   10000 \\\hline 
+\#unique words                         &   5674 &   6238 &   20325 &   22636 \\\hline 
+\#words                                &  75932 &  32779 &  230162 &  246015 \\\hline 
+\specialcell{avg sentence\\length}    &     20.11 &      3.09 &      21.59 &      24.6 \\\hline
+\specialcell{max sentence\\length}    &    106 &     44 &      62 &     122 \\\hline 
+\specialcell{median sentence\\length} &     18 &      2 &      21 &      23 \\\hline 
+bias                                  &      0.64 &      0.69 &       0.50 &       0.5 \\
+\bottomrule
+\end{tabular}
+
+\caption[Dataset characteristics]{Dataset characteristics}
+\label{tab:datasets:stats}
+\end{center}
+\end{table}
+
+
+    In table \ref{tab:datasets:stats} we present a few basic statistics for each dataset.
+    Column \emph{bias} denotes percentage of the majority class in the dataset.
+    It also presents a baseline accuracy which a naive algorithm could achieve by making constant predictions. 
+    
+    We discuss each of these datasets in more details and we provide some example sentences from these datasets.
+    Note, that these examples  are displayed in very genuine. We see these examples as they really are and as they are presented to our algorithms.
+    The actual preprocessing will be discussed later in section \ref{sec:preprocessing}.
+    
+    \subsubsection{Movie review, MR}
+    
+    With rise of internet forums and critique websites arose a problem of sentiment classification.
+    
+    This dataset contains movie reviews from site Rotten Tomatoes collected by Bo Pang and Lillian Lee \cite{pang2002thumbs}.
+    Originally each comment is accompanied by categorical rating with values ``fresh'' (good movie) to ``rotten'' (bad movie). 
+    These labels were transformed into this freely available dataset\footnote{\url{http://www.cs.cornell.edu/people/pabo/movie-review-data/}}.
+    
+    Example of positive review in this dataset is: \emph{the rock is destined to be the 21st century 's new conan and that he 's going to make a splash even greater than arnold schwarzenegger , jean-claud van damme or steven segal .}
+
+    Example of an negative review: \emph{simplistic , silly and tedious .}
+    
+    \subsubsection{Product review, CR}
+    
+    This dataset was introduced by Hu and Liu \cite{hu2004mining} as a part of a customer review summarization task. \* % write more, chceck this citation
+    They created a pipeline with a summarization pipeline that consists of: mining product features that have been commented on by customers; identifying opinion sentences in each review and deciding whether each opinion sentence is positive or negative;  summarizing  the  results.  
+    
+    We are only interested in the sentiment prediction part.
+    
+    Example of a positive review:
+    \emph{im a more happier person after discovering the i/p button ! .}
+
+    Example of a negative review:
+    \emph{weaknesses are minor : the feel and layout of the remote control are only so-so ; . it does n 't show the complete file names of mp3s with really long names ; . you must cycle through every zoom setting ( 2x , 3x , 4x , 1/2x , etc . ) before getting back to normal size [ sorry if i 'm just ignorant of a way to get back to 1x quickly ] .}
+
+    \subsubsection{Opinion polarity MPQA}
+
+    Another sentiment dataset collected by Wiebe \cite{wiebe2005annotating}.
+    Its focus is to capture not only the overall tone of the document but also strength of the tone.
+    However we will use only the binary positive-negative classification.
+    Wiebe designed a fine grained annotation scheme and employed it on sentence corpus of articles from the world press.
+    
+    Example of a positive sentence:
+    \emph{are also being encouraged}
+    
+    Example of a negative sentence:
+    \emph{complaining}  \* %TODO change to something better
+
+    
+    \subsubsection{Question-type, TREC}
+    
+    An important step in question answering and other dialog systems is to classify the  question to the anticipated type of the answer. 
+    For example, the question of \emph{Who is a good boy?} should be classified into the type of animal (entity), because the question probably refers to some dog.  
+    This information would narrow down the search space to identify the correct answer string \cite{huang2008question}. 
+    
+    This dataset contains questions and their labels in such classification.
+    There are $6$ labels: 
+    
+    \begin{itemize}
+        \item abbreviation (ABR): \emph{what is the full form of .com?}
+        \item description (DESC): \emph{how did serfdom develop in and then leave russia?}
+        \item entity (ENTY): \emph{what films featured the character popeye doyle?}
+        \item human (HUM): \emph{what contemptible scoundrel stole the cork from my lunch?}
+        \item location (LOC): \emph{what sprawling u.s. state boasts the most airports?}
+        \item numeric (NUM): \emph{when was ozzy osbourne born?}
+    \end{itemize}
+    
+    As can be seen, this dataset is not binary. 
+    For our purposes, we create $6$ different binary datasets out of this one by employing \emph{one-vs-all} strategy (one-vs-the-rest) used while training prediction models.
+    This strategy consists in fitting one classifier per class. 
+    For each classifier, the class is fitted against all the other classes. 
+    Hence new dataset TREC-ABR will contain the same samples, but labels will be binary, $1$ if the sentence was originally in class ABR and $0$ otherwise.
+    
+    \* % TODO add table for trec 
+
+
+    \subsubsection{Subjectivity/objectivity, SUBJ}
+    
+    There is number of sub-tasks that can help in context of sentiment prediction.
+    One such task is to decide whether the text was subjective or objective.
+        
+    Pang and Lee were able to mine the Web and create a large, automatically labeled sentence corpus. 
+    To gather subjective sentences they collected movie review snippets from website  \url{www.rottentomatoes.com}.
+    To obtain objective data, they took sentences from plot summaries available from the Internet Movie Database (\url{www.imdb.com}) \cite{pang2004sentimental} \footnote{We personally think, that this technique is rather questionable at best.}.
+    
+    Example of a objective review:
+    \emph{the movie begins in the past where a young boy named sam attempts to save celebi from a hunter .}
+
+    Example of a subjective review:
+    \emph{smart and alert , thirteen conversations about one thing is a small gem .}
+    
+
+    \subsubsection{Preprocessing} \label{sec:preprocessing}
+    
+    Examples provided for each dataset could be slightly strange at the first glance.
+    We deliberately did only minimal processing in terms of word filtering and normalization.
+    We lower-case and tokenize the text. \* % TODO check the tokenization
+    We do not filter any stop words (\texttt{the}) or non token characters (like question marks \texttt{?}). 
+    We only filter words that are present in the corpus less then $10$ times.
+    Not filtering words that are generally filtered showed to be an important decision that allowed us to get an insight from data.
+    
+    LSA is commonly accompanied by heavy filtering and it is known, that stop words removal helps the performance.
+    Our rational behind minimal filtering is, that we would like the weighting scheme to understand, which words are important.
+    Hence we hope, that if the stop word is really not important, its weight will be reduced.
+    
+    \subsection{Metrics}
+    
+    Because we deal with binary classification tasks, our metric of choice is an accuracy.
+    
+    Accuracy of our $p$ predictions $\hat{y}$ given the true labels $y$ can be computed as
+    $$acc_y(\hat{y}) = \frac{1}{p}\sum_{i=1}^py_i ==\hat{y}_i$$
+    
+    Note that this metric can have problems with unbalanced datasets. 
+    We just need to remember, that what is a good accuracy dpeends on the dataset.
+    For example accuracy $0.69$ on MPQA dataset is really bad, because this accuracy can be achieved by constant classifier.
+    In later experiments we will refer to the row with biases in table \ref{tab:datasets:stats}.
+    
+    We will compute accuracy on tree subsets of the dataset. 
+    $\mathrm{acc}_{train}$ on the train set, $\mathrm{acc}_{valid}$ on the validation set and $\mathrm{acc}_{test}$ on the test set.
+    Note that $\mathrm{acc}_{train}$ is not wery interesting on its own, but if we compare it with $\mathrm{acc}_{valid}$ and $\mathrm{acc}_{test}$ we can get an insight about whether our model is overfitting or underfitting.
+
+\section{Results}
+    In this
+    
+    \subsection{Baselines}
+    
+    
+    
+    \subsection{Our approach}
+    
+
+\section{Interpretability}
+    \cite{ribeiro2016should} % explainability
+
+
