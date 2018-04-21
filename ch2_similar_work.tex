@@ -147,6 +147,16 @@ y_{1,k} &\dots&  y_{N,k} \\
     
     They propose to use matrix factorization as a module inside the neural network.
     They also proposed a \emph{matrix backpropagation} methodology to train these networks.
+    They compare their approach against widely used convolutional architectures VGG and Alexnet. 
+    They report that addition of such structured layer improved significantly improved the segmentation accuracy.
     
-    They compare their approach agains widely used convolutional architectures VGG and Alexnet. 
-    They report that addition of such structured layer improved significantly improved the segmentation accuracy. 
+    They compute the exact update that is necessary to perform on matrices $U$, $\sigma$, $V$ that describe the SVD.
+    However, this computation is only possible, because they use the full SVD (not only the top $k$ dimensions).
+    Because of this we can not directly use their results.
+    However their results show, that it is possible to ``flow the gradient through SVD''.
+    
+ 
+    
+    
+    
+    
