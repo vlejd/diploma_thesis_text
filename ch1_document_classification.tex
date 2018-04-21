@@ -2,7 +2,8 @@
 
     In this chapter we introduce a problem of document classification and commonly used approaches that are used to solve this problem.
     \* % define what is document classification
-    
+    \* % hned prve co mi napadlo ked som to otvorila je, ze v kapitole Document classification zacinas tak hned k veci, ale bolo by mozno fajn tam dat nejaky ludsky (human-readable > lama-readble) popis toho, co je document classification (slubujes ze we introduce the problem - ale nepopises co je to za problem). Mozno to mas schovane v tom fixme :) Anyway, malo by byt tu jasne hocikomu aspon zo zaciatku co vlastne document classif. je lebo je to gro Tvojej prace, nemusis okolo toho nic speci vymyslat ze moj nazor alebo nejake conclusion z toho co pises dalej ani to nemusi byt dlhe, len treba pekne definovat problem.
+
 
 \section{Notation}
 
@@ -46,8 +47,11 @@
 
     \end{table}
     
+    \* %Hned dalej este pred "Notation" by si mohol uviezt aj sentiment analysis: nejaku ucebnicovu definiciu a jasne napisat ze sentiment je "the writer's attitude towards a particular topic, product, etc. is positive, negative, or neutral." > lebo potom tu mas v prikladoch "if the statement was positive ($1$) or not ($0$)." > a v skutocnosti chces povedat if the sentiment of the statement ! [note: pripadne hned si to tam slahni aj so skratkou SA a mozes ju pouzivat] 
 
-    This is an example pet sentiment dataset. Labels denote, if the statement was positive ($1$) or not ($0$).
+    \* % popis aj ostatne datasety a veci ktore spominas: semantic relatedness, subjectivity/objectivity, question type, polarity
+
+    This is an example "pet sentiment dataset". Labels denote, if the sentiment of the statement was positive ($1$) or not ($0$).
     
     There are $|D|=11$ distinct words in the vocabulary $D$ of this corpus: 
     \begin{verbatim} a, bad, cat, charlie, dog, good, is, max, nice, oscar, tiger \end{verbatim}
@@ -55,7 +59,7 @@
     Later we will refer to them in this ordering, indexing from $1$. Hence $D_4=\mathtt{charlie}$.
 
 \section{Machine learning}
-    
+    \* % redesign outline, add introductions everywhere
     \* % ML is popular approach to solve great variaty of problems.
     % To use ML in context of document classification, we need to adjust our problem
     % so the machines can understand it. how to frame it in that way,
@@ -201,22 +205,18 @@
     %$\frac{E_y(g(h_1 W_2))}{\partial W_2} = 
     %\frac{\partial E_y(\hat{y})}{\partial \hat{y}}\frac{\partial \hat{y}}{\partial W_2}$
     
-\section{Classification}
-    
-    \subsection{SVM}
-    
-        \* % cite something
-        Some basics of svm, example of classifier that does not use backprop.
+    \subsection{Feed forward neural network}
+    Just outline, what it is and that it is usually hard to train and require lot of data. 
+    But that it can have good results.
     
     \subsection{Linear regression}
-    
-        simple example of neural network that is not trained with backprob, but with normal equations,  
+    simple example of neural network that is not trained with backprob, but with normal equations,  
         but can still be used to do backprob with regards to the input.
     
-    \subsection{Neural networks}
+    \subsection{SVM}
+    \* % cite something
+    Some basics of svm, example of classifier that does not use backprop.
     
-        some more information about neural network training for classification
-
     
 \section{Word and sentence representation}
 
@@ -401,7 +401,7 @@
 
     $U$ and $V$ are orthogonal matrices and $\Sigma$ is a diagonal matrix.
     
-    {\input{svd_math.tex}}
+    {\input{misc/svd_math.tex}}
 
     $U$ describes the original row entities (words) as vectors of derived orthogonal  factor values. 
     $V$ describes the original column entities (documents) in the same way.
@@ -416,7 +416,7 @@
     Note that due to this reduction we inevitably loose some of the information. 
     We can see this as forgetting some of the less represented words.
 
-    An interesting property of SVD is that the generated approximation is the closest matrix of its rank to the original in the least-squares sense.
+    An interesting property of SVD is that the generated approximation is the closest matrix of its rank to the original in the least-squares sense \cite{berry1995using}.
 
     In practice, computing the full SVD decomposition would be time and memory demanding and even unfeasible.
     Because of that, we directly compute the lower rank approximation with $k$ dimensions,
@@ -480,7 +480,7 @@
     it has certain limitations when applied to classification tasks. 
     
     The problem is, that LSA does not incorporate the information about document classes. 
-    It finds the most representative features and not the most discriminative ones.
+    It finds the most representative features and not the most discriminative ones \cite{berry1995using}.
     In other words, it finds embedding that is the best for reconstructing the documents.
     Because of that, infrequent words that have high discriminatory power (are important for the task), may be filtered out.
     
