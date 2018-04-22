@@ -1,36 +1,74 @@
 \chapter{Document Classification}
 
-    In this chapter we introduce a problem of document classification and commonly used approaches that are used to solve this problem.
-    \* % define what is document classification
-    \* % hned prve co mi napadlo ked som to otvorila je, ze v kapitole Document classification zacinas tak hned k veci, ale bolo by mozno fajn tam dat nejaky ludsky (human-readable > lama-readble) popis toho, co je document classification (slubujes ze we introduce the problem - ale nepopises co je to za problem). Mozno to mas schovane v tom fixme :) Anyway, malo by byt tu jasne hocikomu aspon zo zaciatku co vlastne document classif. je lebo je to gro Tvojej prace, nemusis okolo toho nic speci vymyslat ze moj nazor alebo nejake conclusion z toho co pises dalej ani to nemusi byt dlhe, len treba pekne definovat problem.
+    In this chapter we introduce a problem of document (text) classification and commonly used approaches that are used to solve this problem.
 
+\section{Problem description and motivation} \label{sec:problem}
+
+    Thanks to digitalizaion of books and texts, almost all human knowledge is now easily accessible to algorithms. 
+    Thanks to rapid growth of social media platforms and electronic communication we see a new type of documents.
+    These documents are not traditional books, but user generated content.
+    
+    Websites, blogs, facebook posts, tweets, G+ posts contain wast amounts of information that can be very valuable.
+    Moreover, companies customer centers usually receive large amounts of questions and requests from customers that could be automatically processed.
+    
+    Automating text categorization and classification is therefore becoming increasingly important and fundamental task. 
+    A major objective of text classification system is to semantically assignment of one or more predefined categories to documents.
+    
+    Is this document a positive review? 
+    Does this question asks about a person?
+    Is this customer ticket related to software bug?
+    All of the questions above are instances of a text classification problem.
+    
+    Usually, machine learning, statistical pattern recognition, or neural network approaches are used to construct classifiers automatically.
+    This problem has significantly attracted attention from lots of researchers.
+
+    \subsection{Sentiment analysis}
+    
+    % Cite this?
+    
+    One of the most popular instances of document classification is sentiment analysis, \emph{SA}.
+    SA is a process of determining whether a piece of writing is positive, negative or neutral.
+    It is also known as opinion mining, deriving the opinion or attitude of a speaker. 
+    A common use case for this technology is to discover how people feel about a particular topic.
+    SA is widely applied to customer materials such as reviews or online and social media.
+    It can answer questions like: ``Does this review suggests, that Eat\&Meet is a good place to eat (and meet)?'', ``Does the person likes his dog?''.
+    
+    There is a lot of ways how to approach document classification problem. 
+    The most important thinks, that we consider about those approaches are accuracy and interpretability.
+    Further we can consider also speed of required preprocessing, speed of actual classification, amount of required data and memory requirements. 
+    
+    In this thesis we revisit one of the older approaches called LSA and try to address some of its shortcomings.
+    
+    \* %Hned dalej este pred "Notation" by si mohol uviezt aj sentiment analysis: nejaku ucebnicovu definiciu a jasne napisat ze sentiment je "the writer's attitude towards a particular topic, product, etc. is positive, negative, or neutral." > lebo potom tu mas v prikladoch "if the statement was positive ($1$) or not ($0$)." > a v skutocnosti chces povedat if the sentiment of the statement ! [note: pripadne hned si to tam slahni aj so skratkou SA a mozes ju pouzivat] 
+
+    \* % popis aj ostatne datasety a veci ktore spominas: semantic relatedness, subjectivity/objectivity, question type, polarity
 
 \section{Notation}
 
-    This section provides a concise reference describing the notation and terms used in this thesis.
+    In this section we provide a concise reference describing the notation and terms used in this thesis.
     
     \begin{table}[h]
         \centering
-        \begin{tabular}{c c}
+        \begin{tabular}{c l}
+            $\circ$ & Hadamard product. \\
+            $\alpha$ & Learning rate. \\
             $d_j$ & $j$-th document in our corpus.\\
             $D$ & Vocabulary. Denotes set (dictionary) of all used words in our dataset. \\
             $|D|$ & Size of the vocabulary. \\
-            $tf_{w,s}$ & Number of times word $w$ appears in sentence $s$. \\
-            $n_w$ & Number of times word $w$ appears in the whole corpus. \\
-            $N$ & Number of documents in the corpus. \\
-            $\circ$ & Hadamard product. \\
-            $\alpha$ & Learning rate. \\
-            $\Theta$ & Model parameters.\\
             $E$ & Loss function such as L2.\\
+            $N$ & Number of documents in the corpus. \\
+            $n_w$ & Number of times word $w$ appears in the whole corpus. \\
             $Q$ & Cost function, very similar to loss function.\\
+            $\Theta$ & Model parameters.\\
+            $tf_{w,s}$ & Number of times word $w$ appears in sentence $s$. \\
             
         \end{tabular}
     \end{table}
     
-    \* %TODO note about vectors, and that everything is a row vector.
+    \* % TODO note about vectors, and that everything is a row vector.
     \* % TODO note about matrix multiplications and habits from numpy
     
-    Throughout this thesis we try to illustrate most things with examples. 
+    Throughout this thesis we try to illustrate things with examples. 
     For consistency, we will use following sample corpus of sentences and labels:
     
     \begin{table}[h]
@@ -47,16 +85,13 @@
 
     \end{table}
     
-    \* %Hned dalej este pred "Notation" by si mohol uviezt aj sentiment analysis: nejaku ucebnicovu definiciu a jasne napisat ze sentiment je "the writer's attitude towards a particular topic, product, etc. is positive, negative, or neutral." > lebo potom tu mas v prikladoch "if the statement was positive ($1$) or not ($0$)." > a v skutocnosti chces povedat if the sentiment of the statement ! [note: pripadne hned si to tam slahni aj so skratkou SA a mozes ju pouzivat] 
+    This is an example "pet sentiment dataset". Labels denote, if the sentiment of the statement was positive ($1$) or not ($0$). 
 
-    \* % popis aj ostatne datasety a veci ktore spominas: semantic relatedness, subjectivity/objectivity, question type, polarity
-
-    This is an example "pet sentiment dataset". Labels denote, if the sentiment of the statement was positive ($1$) or not ($0$).
-    
     There are $|D|=11$ distinct words in the vocabulary $D$ of this corpus: 
     \begin{verbatim} a, bad, cat, charlie, dog, good, is, max, nice, oscar, tiger \end{verbatim}
     
     Later we will refer to them in this ordering, indexing from $1$. Hence $D_4=\mathtt{charlie}$.
+
 
 \section{Machine learning}
     \* % redesign outline, add introductions everywhere
@@ -117,13 +152,12 @@
     \label{obr:gradient}
     \end{figure}
     
-    
     \subsubsection{Stochastic gradient descent}
     
-    During each gradient descent step, we need to go evaluate the gradient of the loss function over the whole dataset.
+    During each gradient descent step, we need to evaluate the gradient of the loss function over the whole dataset.
     This is usually not feasible for larger datasets. 
     
-    We can exploit that usually the cost function $Q$ can be rewritten as a sum of costs for each data point.
+    We can exploit that the cost function $Q$ can usually be rewritten as a sum of costs $Q_i$ for each data point $x_i$.
     
     $$Q(\Theta) = \sum_{i=1}^n Q_i(\Theta)$$
     
@@ -134,7 +168,6 @@
     $$\Theta^{t+1} = \Theta^t - \alpha \frac{\partial Q_i(\Theta^t)}{\partial \Theta^t} = \Theta^t - \alpha \nabla Q_(\Theta^t)$$
     
     For appropriate $\alpha$ we usually see a much faster convergence than for gradient descent.
-    
     
     \subsection{Feed forward neural network}
     There is a lot of ways how to construct function $f_\theta$ that we want to optimize. 
@@ -354,8 +387,7 @@
     On the other hand, the \textit{continuous bag of words model} tries to predict the word based on its context.
     
     These methods can be computationally intensive, and they require a lot of training data. 
-    Moreover their training usually requires a lot of well chosen hyper-parameters ind tricks \cite{DBLP:journals/corr/MikolovSCCD13}. % podvzorkovanie
-    \* %cite majka
+    Moreover their training usually requires a lot of well chosen hyper-parameters and tricks \cite{DBLP:journals/corr/MikolovSCCD13} \cite{vajdova2017}. % podvzorkovanie
     
 
     \subsection{Count based distributed representation}
@@ -456,7 +488,7 @@
     Note, that $\Sigma^{-1}$ is easy to compute, because $\Sigma$ is a diagonal. 
     We just need to invert each number on the diagonal.  
     
-    As was shown experimentally shown in my bachelor thesis \* % cite batchelor thesis 
+    As was shown experimentally shown in my bachelor thesis \cite{macko2016} 
     and by other researchers \cite{levy2015improving}, $\Sigma$ may not reflect the importance of each feature very well.
     
     Because of that, a simpler relationship is usually employed
@@ -529,8 +561,7 @@
     Note, that these experiments were done on a large bodies of text like English Wikipedia.   
     On small datasets it was empirically shown, that count based methods actually outperform the neural networks.\cite{altszyler2016comparative}. % lsa vs word2vec on samall corpora
     
-    \* \cite{naili2017comparative} % wrf is this? some comparison
-
+    
 \section{Other approached for document classification}
     
     Recurrent neural networks,
