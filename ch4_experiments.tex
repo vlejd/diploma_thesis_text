@@ -22,23 +22,22 @@ We perform the evaluation on multiple classification tasks.
         \item Opinion polarity dataset MPQA.
     \end{itemize}
     
-\* % TODO remove first hline in code
-\* % TODO add basic trec dataset with N/A
 
 \begin{table}[h]
 \begin{center}
 
-\begin{tabular}{l|rrrr} 
+\begin{tabular}{l|rrrrr}
 \toprule
-  &        CR &      MPQA &         MR &      SUBJ \\
+{} &        CR &      MPQA &         MR &      SUBJ &      TREC \\\hline
 \midrule
-\#examples                             &   3775 &  10606 &   10662 &   10000 \\\hline 
-\#unique words                         &   5674 &   6238 &   20325 &   22636 \\\hline 
-\#words                                &  75932 &  32779 &  230162 &  246015 \\\hline 
-\specialcell{avg sentence\\length}    &     20.11 &      3.09 &      21.59 &      24.6 \\\hline
-\specialcell{max sentence\\length}    &    106 &     44 &      62 &     122 \\\hline 
-\specialcell{median sentence\\length} &     18 &      2 &      21 &      23 \\\hline 
-bias                                  &      0.64 &      0.69 &       0.50 &       0.5 \\
+\#examples                                &   3775 &  10606 &   10662 &   10000 &   5952 \\\hline
+\#unique words                            &   5674 &   6238 &   20325 &   22636 &   8968 \\\hline
+\#words                                   &  75932 &  32779 &  230162 &  246015 &  58468 \\\hline
+\specialcell{\#words with\\$1$ apperance} &   2714 &   3117 &   10160 &   11152 &   5338 \\\hline
+\specialcell{avg sentence\\length}       &     20.11 &      3.09 &      21.59 &      24.60 &      9.82 \\\hline
+\specialcell{max sentence\\length}       &    106 &     44 &      62 &     122 &     37 \\\hline
+\specialcell{median sentence\\length}    &     18 &      2 &      21 &      23 &      9 \\\hline
+bias                                     &      0.64 &      0.69 &       0.50 &       0.50 &       NaN \\
 \bottomrule
 \end{tabular}
 
@@ -51,10 +50,11 @@ bias                                  &      0.64 &      0.69 &       0.50 &    
     In table \ref{tab:datasets:stats} we present a few basic statistics for each dataset.
     Column \emph{bias} denotes percentage of the majority class in the dataset.
     It also presents a baseline accuracy which a naive algorithm could achieve by making constant predictions. 
+    Bias for TREC dataset is not applicable for reasons discussed in section \ref{sec:TREC}.
     
     We discuss each of these datasets in more details and we provide some example sentences from these datasets.
     Note, that these examples  are displayed in very genuine. We see these examples as they really are and as they are presented to our algorithms.
-    The actual preprocessing will be discussed later in section \ref{sec:preprocessing}.
+    The actual preprocessing will be discussed later in this section.
     
     \subsubsection{Movie review, MR}
     
@@ -92,7 +92,7 @@ bias                                  &      0.64 &      0.69 &       0.50 &    
     \emph{are also being encouraged}
     
     Example of a negative sentence:
-    \emph{complaining}  \* %TODO change to something better
+    \emph{failing to support} 
 
     
     \subsubsection{Question-type, TREC}
@@ -142,9 +142,9 @@ bias                                  &      0.64 &      0.69 &       0.50 &    
     
     Examples provided for each dataset could be slightly strange at the first glance.
     We deliberately did only minimal processing in terms of word filtering and normalization.
-    We lower-case and tokenize the text. \* % TODO check the tokenization
+    The datasets are already tokenized, we only lower-case the text.
     We do not filter any stop words (\texttt{the}) or non token characters (like question marks \texttt{?}). 
-    We only filter words that are present in the corpus less then $10$ times.
+    We only filter words that are present in the corpus not enough times. \* % fix number
     Not filtering words that are generally filtered showed to be an important decision that allowed us to get an insight from data.
     
     LSA is commonly accompanied by heavy filtering and it is known, that stop words removal helps the performance.
@@ -166,6 +166,8 @@ bias                                  &      0.64 &      0.69 &       0.50 &    
     We will compute accuracy on tree subsets of the dataset. 
     $\mathrm{acc}_{train}$ on the train set, $\mathrm{acc}_{valid}$ on the validation set and $\mathrm{acc}_{test}$ on the test set.
     Note that $\mathrm{acc}_{train}$ is not wery interesting on its own, but if we compare it with $\mathrm{acc}_{valid}$ and $\mathrm{acc}_{test}$ we can get an insight about whether our model is overfitting or underfitting.
+
+
 
 \section{Results}
     In this

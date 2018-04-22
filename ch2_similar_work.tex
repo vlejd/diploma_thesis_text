@@ -5,11 +5,11 @@ We can modify the term matrix $M$ so that weight of each word represents, how im
 This is a contrast to the classical approach, where the weight of the word represents, how important is it for the document reconstruction.
 This gives arise to supervised term weights.
 
-We can introduce some form of supervision directly into the matrix decomposition process.
+Besides that, we can introduce some form of supervision directly into the matrix decomposition process.
 Sun er al. \cite{sun2004supervised} propose supervised LSI and they employ the supervision while choosing the most relevant dimensions of the embedding.
 Chakraborti et al. \cite{chakraborti2006sprinkling} propose to add class dependent terms (supervised terms) into the term matrix and proceed with standard factorization.
 
-Finally we can fully employ advances made in artificial neural networks and use LSA just as a module into this network.
+Finally we can fully employ advances made in artificial neural networks and use LSA just as a module into these networks.
 
 
 \section{LSA with class knowledge} \label{sec:superwisedlsa}
@@ -17,26 +17,28 @@ Finally we can fully employ advances made in artificial neural networks and use 
         Recall that we consider LSI and LSA to refer to the same method. 
     
         Sun et al. \cite{sun2004supervised} %supervised lsi, discriminative basis
-        identified that LSI is not optimal for document categorization tasks because it finds the most representative features and not the most discriminative ones. 
-        To address this problem, they incorporate the available classification of documents into $c$ categories. 
+        also recognized that LSI is not optimal for document categorization tasks because it finds the most representative features and not the most discriminative ones. 
+        To address this problem, they incorporate the available classification of documents into $c$ categories and propose supervised latent semantic indexing (SLSI).
         
-        To introduce they approach we will recapitulate the classical LSI first. 
-        LSI selects the eigenvector of the term matrix $M$ with the biggest eigenvalue.
+        To introduce their approach we will recapitulate the classical LSI first. 
+        LSI selects the eigenvector of the term matrix $M$ with the biggest eigenvalues.
         The effect of this basis vector is then removed from the original document vector and we iterate this process. 
         
-        SLSI algorithm employs the class information to guide the basis vector selection process. 
+        SLSI algorithm employs the class information to guide the selection the basis vectors. 
         For each category they perform standard SVD on the matrix $M$.
         Then they collect eigenvectors with the highest eigenvalues into a collection of candidate vectors.
         
-        For each of these candidate vectors $g_s$ they project all our documents onto this vector.
-        They compute centroids of each class $v_s^p = \frac{1}{|C_p|}\sum_{d\in C_p} g_s d^T$ (average possition of documents from given class). 
+        For each of these candidate vectors $g_s$ they project all documents onto this vector.
+        They compute centroids of each class $v_s^p = \frac{1}{|C_p|}\sum_{d\in C_p} g_s d^T$ (average position of documents from given class). 
         Where $C_p$ denotes all documents belonging to class $p$.
         Note that because they project onto one vector, this centroid is a scalar. 
         Then they compute distances between such centroids for each pair of classes $f_s^{pq} = |v_s^p - v_s^q|$.
         
-        Then they select the most discriminative vector as $b=arg_{g_i \in G} \{\max_{p q} f_i^{p q} \}$ (vector that separates some pair of classes the best) and proceed to select the next one.
+        Finally they select the most discriminative vector as $b=arg_{g_i \in G} \{\max_{p q} f_i^{p q} \}$ (vector that separates some pair of classes the best) and proceed to select the next one.
         
         They report that this algorithm generates better representations and can achieve higher dimensionality reduction without reducing the classification $F1$ score.
+        
+        \* % TODO introduce f1 somewhere
         
     \subsection{Sprinkling}
         Chakraborti et al. propose another way how to incorporate class information into LSI \cite{chakraborti2006sprinkling}\cite{chakraborti2007supervised}.
@@ -84,7 +86,7 @@ y_{1,k} &\dots&  y_{N,k} \\
 \end{figure}
 
     Label related terms $y_{i,k}$, sprinkled terms, have value $1$ if the document $d_i$ belongs to the class $k$ and $0$ otherwise.
-    These term are added as normal word into each document.
+    These term are added as normal words into each document.
     Note, that in the paper they use transposed form of $M$ (documents are rows of $M$).
     We diced to use this variant to be consistent with the rest of the thesis.
     
@@ -95,16 +97,16 @@ y_{1,k} &\dots&  y_{N,k} \\
     
     \subsubsection{Why does it work?}
     Work of Kontostathis et al. \cite{kontostathis2006framework} reveals close correspondence between LSI and higher order associations between terms. 
-    We say that word $w_1$ is has a first order association with another word $w_2$, if they co-occur in at least one document. 
+    We say that word $w_1$ has a first order association with another word $w_2$, if they co-occur in at least one document. 
     We say that words $w_1$ and $w_2$ share a second order association if there is at least one term $w_3$ that co-occurs with $w_1$ and $w_2$ in distinct documents. 
     Kontostathis et al. provide experimental evidence to show that LSI boosts similarity between terms sharing higher order associations. 
     Sprinkled terms create such higher order associations between terms related to  the same class/category.
         
 \section{Supervised weights} \label{sec:supervised:weights}
     
-    In this section we introduce a few important ways how to design term weight, that are aware about the classification task.
+    In this section we introduce a few important ways how to design term weighting schemes, that are aware about the classification task.
     
-    \* %TODO how does it relatet to our work?
+    \* %TODO how does it relate to our work?
     % Results presented in this chapter tell that proper weight can result in very good results. However it is not clear, which weight should be used for which problem.
     % Approach to wind the best weight would be nice.
     
@@ -113,13 +115,13 @@ y_{1,k} &\dots&  y_{N,k} \\
         improved LSA performance for semantic relatedness task.
         
         In semantic relatedness task we have two documents $d_i^1, d_i^2$ and we want to determine, whether they are semantically related or not. 
-        Example of semantic relatedness task can be to determine, if two questions asked on some forum are the same (should be deduplicated) or not.
+        Example of semantic relatedness task can be to determine, if two questions asked on some forum are the same (and should be deduplicated) or not.
         \url{https://www.kaggle.com/c/quora-question-pairs}
         
         For this task Ji and Eisenstein proposed to compute the LSA embeddings of both texts $v_i^1$ and $v_i^2$ and train classifier on features based on these embeddings.
         In the paper they used $[v_1 + v_2, \| v_1- v_2 \|]$.
         
-        They recognized, that LSA with term matrix $M$ containing term frequencies performs poorly. 
+        They recognized, that LSA with term matrix $M$, containing term frequencies, performs poorly. 
         They designed novel weighting scheme called TF-KLD (term frequency Kullback-Leibler divergence). 
         This weighting scheme has classical term frequency part and second novel KLD part.
         
@@ -140,23 +142,19 @@ y_{1,k} &\dots&  y_{N,k} \\
 
 \section{SVD in neural networks}
     Ionescu et al. \cite{ionescu2015training} % svd in neural networks
-    proposed a very interesting method of how to use good properties of SVD inside neural network.
-    They researched the field of computer vision, that is currently dominated by convolutional neural networks.
+    proposed a very interesting method of how to use good properties of SVD inside a neural network.
+    They researched the field of computer vision, that is currently dominated by convolutional neural networks (CNNs).
     
-    Thei argue, that they specialize at local computations while on the other hand SVD can perform global computations.
+    They argue, that CNNs specialize at local computations while on the other hand SVD can perform global computations.
     
     They propose to use matrix factorization as a module inside the neural network.
     They also proposed a \emph{matrix backpropagation} methodology to train these networks.
-    They compare their approach against widely used convolutional architectures VGG and Alexnet. 
-    They report that addition of such structured layer improved significantly improved the segmentation accuracy.
+    They compare their approach against widely used convolutional architectures VGG and Alexnet and report that addition of such structured layer significantly improved the segmentation accuracy.
     
     They compute the exact update that is necessary to perform on matrices $U$, $\sigma$, $V$ that describe the SVD.
     However, this computation is only possible, because they use the full SVD (not only the top $k$ dimensions).
     Because of this we can not directly use their results.
     However their results show, that it is possible to ``flow the gradient through SVD''.
-    
- 
-    
-    
+    Hence that gradient descent can be used to update parts before the SVD.
     
     

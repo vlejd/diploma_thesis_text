@@ -208,15 +208,16 @@
     
     The important observation is, that we can chain such layers to form a deeper neural network.
     
-    $$y=g(g(X \Theta_1) \Theta_2)$$
+    $$y=g_2(g_1(X \Theta_1) \Theta_2)$$
     
-    $W_1$ are weight of hidden neurons (first layer) and $W_2$ are weight of output neurons (second layer).
+    $W_1$ are weight of hidden neurons (first layer) and $W_2$ are weight of output neurons (second layer). Note that $g_2$ (usually sigmoid) can be a different function than $g_1$ (usually relu).
     There is no consensus in the community about how to count the layers. 
     For example the simple network on picture \ref{obr:siet} could be seen as a $3$ layer neural network,
     because it has input units, hidden units and output units.
     In this thesis we will use the number of matrices $W$ that crates the model.
     
-    Neural networks represent very broad family of functions that can in fact approximate any other function \cite{cybenko1989approximation}.
+    Neural networks represent very broad family of functions.
+    Neural networks are in fact an universal approximator and can approximate any other function \cite{cybenko1989approximation}.
     However, we need to train them first.
     
     \subsubsection{Back propagation} \label{sec:backprop}
@@ -238,15 +239,13 @@
     %$\frac{E_y(g(h_1 W_2))}{\partial W_2} = 
     %\frac{\partial E_y(\hat{y})}{\partial \hat{y}}\frac{\partial \hat{y}}{\partial W_2}$
     
-    \subsection{Feed forward neural network}
-    Just outline, what it is and that it is usually hard to train and require lot of data. 
-    But that it can have good results.
-    
     \subsection{Linear regression}
+    \* %TODO fix me
     simple example of neural network that is not trained with backprob, but with normal equations,  
         but can still be used to do backprob with regards to the input.
     
     \subsection{SVM}
+    \* % TODO fix me
     \* % cite something
     Some basics of svm, example of classifier that does not use backprop.
     
@@ -260,7 +259,9 @@
     Because of this, we need a system to translate string sentences $s$ into vectors of numbers $e$.
     Such vector is usually called an embedding. 
     
-    In  other words, we need to project words and sentences into a vector space.
+    In  other words, we need to project words, sentences and documents into a vector space.
+    We consider the sentences to be basically the same as documents. 
+    They are just a sequence of words.
     
     \subsection{Local representation}
     
@@ -270,8 +271,8 @@
     Note, that $|D|$ in real applications easily exceeds $100\,000$ or even $1\,000\,000$.
     This may make this representation unusable for some applications (classification with SVM).
     
-    One of the simplest local representation is called a \textit{bag of words} (BOW). 
-    In this representation, values in vectors are binary, where $1$ means that the word was present in the sentence and $0$ means it was not.
+    One of the simplest local representations is a \textit{bag of words} (BOW) representation. 
+    In this representation, values in vectors are binary, where $1$ means that the word was present in the text and $0$ means it was not.
     This can also be viewed as a simple one hot encoding.
     Optionally we can extend this to a term vector, where the number is not binary, but it express the real count of given word in the sentence.
     
@@ -286,20 +287,19 @@
     $$\mathrm{dist}(s_1, s_2) = \mathrm{dist}(e_1, e_2) = 1- \mathrm{sim}(e_1, e_2) = 1 - \frac{e_1 e_2}{||e_1||.||e_2||}$$
     
     However this representation does not consider, that two words can be similar, even though they are not the same.
-    For example words \texttt{nice} and \texttt{good} are consider completely different, even though they are not. 
+    For example words \texttt{nice} and \texttt{good} are considered to be completely different, even though they are not. 
     
     Second problem is, that this representation forgets the initial ordering of the words.
     This can be partially solved by using bigrams.
     
     Third problem is, that this representation assigns the same weight to each word.
-    The fact that two sentences both has a meaningless word \texttt{a} has the same effect on the similarity as 
-    if they both have word \texttt{bad}. 
+    The fact that two sentences both has a meaningless word \texttt{a} has the same effect on the similarity as if they both have word \texttt{bad}. 
     This problem is partially solved by introducing term weights.
     
     
     \subsubsection{Term-weighting schemes}
     
-    To emphasize that some words in the corpus are more important than other we introduce a term-weighting schemes. 
+    To emphasize that some words in the corpus are more important than others we introduce a term-weighting schemes. 
     The idea is, that words like prepositions (\texttt{a}, \texttt{an}) and other words that are not very informative or redundant (\texttt{is}, \texttt{do}, \texttt{by}) should have smaller weights. 
     In practice, a list of \textit{stop words} is used to completely filter such words.
     
@@ -308,7 +308,7 @@
     
     However words, that appear multiple times in a sentence are probably important for this sentence and should have higher weights.
     
-    Based on these two observations, a number of Term-weighting schemes was proposed~\cite{salton1988term}.
+    Based on these two observations, a number of term-weighting schemes was proposed~\cite{salton1988term}.
     A term-weighting scheme assign a weight to a word $w$ in a sentence $s$ as term weight $t_{w,s}$.
     These weights usually consists of two parts, \emph{term frequency} and \emph{inverse document frequency}. 
     
@@ -340,7 +340,7 @@
     
     This representation performs better than BOW and usually works the best for large documents in document retrieval \cite{li2014semantic}.
     
-    Term weight can help to describe that different words, have different importance.
+    Term weights can help to describe that different words, have different importance.
     However, they still can not take into account, that two different words should have similar representation.
     
     
@@ -461,16 +461,15 @@
     From now on, we drop the subscript $k$ and matrices $U$, $\Sigma$ and $V$ in the later text are assumed to have only $k$ dimensions.
     
     
-    \subsubsection{LSA for classification}
+    \subsubsection{LSA for document classification}
     
     In context of document classification, we first construct our vocabulary $D$ from our training data. 
     We can filter out words that we know, are not relevant, or that have only a few appearances in the corpus.
     
-    Now we can transform sentences into their BOW representation.
-    Afterwards, we compute all necessary statistics required by our chosen weighting scheme. 
+    Now we can transform sentences into their BOW representations.
+    Afterwards, we compute all necessary statistics required by our chosen weighting scheme.
     In case of TFIDF, we compute the number of appearances of each word in our text $n_w$. 
     This can be done efficiently by making use of fast matrix operations and libraries implementing linear algebra.
-    
     Having these statistics, we can reweigh all words with them and construct the term matrix $M$.
     
     Then we factorize $M$ an compute the matrices $U$, $\Sigma$, $V$. 
@@ -488,18 +487,19 @@
     Note, that $\Sigma^{-1}$ is easy to compute, because $\Sigma$ is a diagonal. 
     We just need to invert each number on the diagonal.  
     
-    As was shown experimentally shown in my bachelor thesis \cite{macko2016} 
+    As was experimentally shown in my bachelor thesis \cite{macko2016} 
     and by other researchers \cite{levy2015improving}, $\Sigma$ may not reflect the importance of each feature very well.
     
     Because of that, a simpler relationship is usually employed
     
     $$v_i = d_i U $$
     
-    Matrix of such $v_i$ are then considered to be the document features and are used as an input $X$ to some classifier.
+    Matrix of such $v_i$ are then considered to be the document features and are used as an input $X$ to some classifier. 
+    A popular choices for classifier are a SVM or neural networks.
     
     This process can have a different interpretation.
     Each entry in matrix $U$ is the distributed representation for one word.
-    The matrix multiplication selects words, that are present in the document and sums them according to their weights.
+    The matrix multiplication selects words, that are present in the document and computes a weighted sum of them.
     
     Important part is, that we can compute such embedding even for unseen documents.
     The problem is, that we have to filter all words that are not present in $D$. 
@@ -517,9 +517,7 @@
     Because of that, infrequent words that have high discriminatory power (are important for the task), may be filtered out.
     
     For example, LSA computed on our example corpus \ref{tab:example:dataset} would focus on capturing the words \texttt{a}, \texttt{is}, \texttt{dog} and \texttt{cat},
-    event htough they are completely irrelevant to our prediction task.
-    
-    % TODO SVD Forsythe, Malcolm, Moller 1997  SVD 
+    event though they are completely irrelevant to our prediction task.
     
     \subsection{Relationship of prediction and count based representations}
         
@@ -534,12 +532,12 @@
     They measured how well the word vector similarity correlates with the actual relatedness. 
     Count based methods achieved Pearson correlation coefficient $0.74$ and were outperformed by prediction based methods which achieved $0.84$ \cite{baroni2014don}.
     
-    This, and the hype around neural networks led to recent extreme popularity of prediction based embeddings,
+    This and the hype around neural networks led to recent extreme popularity of prediction based embeddings,
     even though they were much less understood and less ''mathematically grounded``.
     
-    However, later it was shown, that these two approaches are in fact very similar.
+    Later it was shown, that these two approaches are in fact very similar.
     It was proven, that a prediction based model skip-gram with negative-sampling (SGNS) 
-    is implicitly factorizing a word-context matrix,
+    is implicitly factorizing a word-context matrix $M$,
     whose cells are the point-wise mutual information (PMI) of the respective word and context pairs, 
     shifted by a global constant~\cite{levy2014neural}. % word2vec as matrix factorization 
     
@@ -556,7 +554,7 @@
     can also benefit from such hyperparameters and design choices.
     
     After incorporating these insights into the count based methods, 
-    they observed mostly local or insignificant performance differences between these approaches.
+    they observed mostly local or insignificant performance differences between quality of count based embeddings and prediction based embeddings.
     
     Note, that these experiments were done on a large bodies of text like English Wikipedia.   
     On small datasets it was empirically shown, that count based methods actually outperform the neural networks.\cite{altszyler2016comparative}. % lsa vs word2vec on samall corpora

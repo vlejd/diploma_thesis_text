@@ -1,12 +1,9 @@
 \chapter{Our approach}
 
-In this chapter we describe our motivations, the actual design of our approach and some implementation details.
+In this chapter we describe our motivations, the design of our approach and some implementation details.
 
 \section{Goals and motivation}
 
-    \* %TODO introduce minimal amount of hyperparameters,
-    \* %TODO be able to get some insight and interpretability out of the model,
-    
     In LSA, the SVD will inevitably throw away some information. 
     This is due the dimensionality reduction that it performs.
     The problem is, that this information may be vital to the classification task. 
@@ -26,6 +23,11 @@ In this chapter we describe our motivations, the actual design of our approach a
         \item Extract new insights about the dataset.
     \end{itemize}
     
+    As a side goal, we would like to introduce only a minimal amount of new hyperparameters
+    as they may cause a ``false improvement'' of our approach over the baseline.
+    In the best case scenario, we want our approach to be at least slightly interpretable.
+    It would be nice, if it could produce some insight to the dataset.
+    
     Because of the supervised weights, we know that supervision helps. 
     The only problem is, how to achieve it. 
     Here we take the inspiration from neural networks, and the insight that we can easily optimize parameters of rather complex system, as long as each part of this system is differentiable. 
@@ -34,7 +36,7 @@ In this chapter we describe our motivations, the actual design of our approach a
 
     First recall how does the original LSA works in context of document classification.
     We start with a sentence $s_i$. We represent it as a bag of words vector $d_i'$. 
-    With some weighting scheme we transform it into a term vector $d_i$.
+    We transform it with some weighting scheme into a term vector $d_i$.
     Afterwards we compute the lower dimensional embedding of the document $v_i = d_i U$. 
     
     Finally we use these embeddings $v_i$ as features $x_i$ that are an input to the classifier (logistic regression, neural network, SVM).
@@ -102,7 +104,7 @@ In this chapter we describe our motivations, the actual design of our approach a
     
     Our model can be broken down into three parts: weighting, decomposition and classification.
     We will denote the weighting part as $W$, the decomposition part as $S$ (SVD) and the classification part as $C$.
-    Also as these parts are going to be updated through the time, we will denote them with superscripts $W^t$, referring to $W$ at time $t$.
+    Also as these parts are going to be updated through the time, we will denote them with superscripts $W^t$, referring to weighting part $W$ at time $t$.
     
     
     \subsubsection{Batch gradient descent}
@@ -185,8 +187,7 @@ In this chapter we describe our motivations, the actual design of our approach a
     
     Each time step $t$ we evaluate our loss $E_{valid}$ on the validation dataset.
     By convergence we mean, that the $E_{valid}$ stopped improving.
-    In the final solution we track the mean of this errors in last $X$ \* % TODO find number
-    time steps.
+    In the final solution we track the mean of this errors in last few time steps.
     When this mean does not increase for long enough, we stop the training.
 
 \section{Implementation}
@@ -222,7 +223,7 @@ In this chapter we describe our motivations, the actual design of our approach a
     
     We made use of multiple tools from this library. 
     We used \texttt{Dictionary} object for vocabulary filtering and embedding into the BOW representation and we used its TFIDF implementations.
-    We also used its API to train word vectors. 
+    We also used its API to train word vectors. \* % TODO train word vectors 
     
     Most important for us was gensims implementation of the probabilistic algorithm for constructing approximate matrix decomposition \cite{halko2011finding}.
     This provides fast and easy to use incremental SVD decomposition.
@@ -259,6 +260,4 @@ In this chapter we describe our motivations, the actual design of our approach a
     
     \subsection{Code design} 
     
-    \*
-    Something about used objects, classifiers, SVD, experiments
-    Two appraches
+    \* %     Something about used objects, classifiers, SVD, experiments, Two appraches

@@ -1,0 +1,22 @@
+TODO:
+introduction
+
+
+ML introduction
+    train test split
+    linear regression
+    SVM
+    distributed : supervised vs unsupervised
+    cout based introduction
+    other document classification approaches.
+
+term weights
+    DO!
+    code regularized enthropy
+
+write code design
+    copy right v term veights
+
+
+train w2v
+
