@@ -11,7 +11,7 @@ We perform the evaluation on multiple classification tasks.
     We have not used any code from this library, because we were not able to modify its API in a maintainable way to fit our needs. 
     In the end we just used it as a guideline for datasets acquisition.
     
-    \subsection{Overview}
+    \subsection{Overview} \label{sec:data:overview}
     We use a set of binary classification tasks that covers various types of sentence classification.
     Datasets corresponding to these tasks are:
     \begin{itemize}
@@ -119,8 +119,21 @@ bias                                     &      0.64 &      0.69 &       0.50 & 
     For each classifier, the class is fitted against all the other classes. 
     Hence new dataset TREC-ABR will contain the same samples, but labels will be binary, $1$ if the sentence was originally in class ABR and $0$ otherwise.
     
-    \* % TODO add table for trec 
+\begin{table}[h]
+\begin{center}
 
+\begin{tabular}{lrrrrrr}
+\toprule
+{} &  ABBR &  DESC &  ENTY &   HUM &   LOC &   NUM \\
+\midrule
+bias &  0.98 &  0.78 &  0.77 &  0.78 &  0.85 &  0.83 \\
+\bottomrule
+\end{tabular}
+
+\caption[TREC subtasks characteristics]{TREC subtasks characteristics}
+\label{tab:trec:stats}
+\end{center}
+\end{table}
 
     \subsubsection{Subjectivity/objectivity, SUBJ}
     
@@ -144,7 +157,6 @@ bias                                     &      0.64 &      0.69 &       0.50 & 
     We deliberately did only minimal processing in terms of word filtering and normalization.
     The datasets are already tokenized, we only lower-case the text.
     We do not filter any stop words (\texttt{the}) or non token characters (like question marks \texttt{?}). 
-    We only filter words that are present in the corpus not enough times. \* % fix number
     Not filtering words that are generally filtered showed to be an important decision that allowed us to get an insight from data.
     
     LSA is commonly accompanied by heavy filtering and it is known, that stop words removal helps the performance.
@@ -170,14 +182,153 @@ bias                                     &      0.64 &      0.69 &       0.50 & 
 
 
 \section{Results}
-    In this
+    In this section we present accuracy achieved by our approach and by baseline approaches.
+    To address the problems of measuring accuracy, we report relative improvements over a constant baseline.
+    For absolute precisions refer to the appendix B. 
+
+    \subsection{Baselines} \label{sec:baseline}
+
+    There is a number of baselines that we consider.
+    These are commonly used approaches such as pretrained neural embeddings, or very naive baselines such as constant classifier.
+    Further we report accuracy of standard LSA.
+
+    \subsubsection{Constant baselines}
+    As discussed in section \label{sec:data:overview}, some of our datasets are biased. 
+    They may contain substantially more examples belonging to one label that belonging to the other.
+    Because of this, we can ``train'' a very simple constant classifier. 
+    This classifier counts number of samples in each class in the training set and than always outputs the majority class.
     
-    \subsection{Baselines}
+    Performance of this classifier is almost identical to the bies of given dataset. 
+    There are ninor differencies. 
     
+    \subsubsection{BOW baselines}    
+    BOW + logistic regression
+    We try multiple weighting schemes.
+    Could argue, that the term weight in weighting schemes is redundant, because it can be absorbed into weight at the first layer.
+    However, they are not redundant, they introduce a form of bias to the network (we can use regularization more freely).
+
+
+    \subsubsection{Neural embeddings}    
+    We train the word2vec on the dataset and then train the classifier
+    Te train embeddings with dimensions $200$, $300$ and $400$ on each dataset. 
+    Than we compute embedding words each word and sum them into an sentence embedding.
+    Than we train SVC or logistic regression and present the precision.
+
+\begin{table}[H]
+\begin{center}
+
+\begin{tabular}{lllrrrr}
+\toprule
+ & &&CR &MPQA &MR &SUBJ \\
+\midrule
+logistic & 200 & test & 0.03 &0.0 & 0.10 & 0.31 \\
+ & & train & 0.03 &0.0 & 0.11 & 0.31 \\
+ & 300 & test & 0.01 &0.0 & 0.09 & 0.31 \\
+ & & train & 0.02 &0.0 & 0.11 & 0.31 \\
+ & 400 & test & 0.01 &0.0 & 0.09 & 0.32 \\
+ & & train & 0.02 &0.0 & 0.11 & 0.31 \\
+svc & 200 & test &-0.00 &0.0 & 0.05 & 0.17 \\
+ & & train & 0.00 &0.0 & 0.08 & 0.19 \\
+ & 300 & test &-0.00 &0.0 & 0.05 & 0.16 \\
+ & & train & 0.00 &0.0 & 0.08 & 0.18 \\
+ & 400 & test &-0.00 &0.0 & 0.05 & 0.14 \\
+ & & train & 0.00 &0.0 & 0.08 & 0.16 \\
+\bottomrule
+\end{tabular}
+
+
+\caption[Precision improvements for trained word vectors]{Precision improvements for trained word vectors}
+\label{tab:res:trainedwordvec}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+
+\begin{tabular}{lllrrrrrr}
+\toprule
+ & &&ABBR &DESC &ENTY &HUM &LOC &NUM \\
+\midrule
+logistic & 200 & test &-0.0 &0.00 &-0.0 & 0.03 &0.0 & 0.06 \\
+ & & train &-0.0 &0.01 &-0.0 & 0.02 &0.0 & 0.05 \\
+ & 300 & test &-0.0 &0.01 &-0.0 & 0.01 & -0.0 & 0.05 \\
+ & & train &-0.0 &0.00 &-0.0 & 0.01 & -0.0 & 0.04 \\
+ & 400 & test &-0.0 &0.00 &-0.0 & 0.00 & -0.0 & 0.04 \\
+ & & train &-0.0 &0.00 &-0.0 & 0.01 & -0.0 & 0.03 \\
+svc & 200 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
+ & & train &-0.0 & -0.00 & 0.0 & 0.00 & -0.0 & 0.00 \\
+ & 300 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
+ & & train &-0.0 & -0.00 & 0.0 & 0.00 & -0.0 & 0.00 \\
+ & 400 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
+ & & train &-0.0 & -0.00 & 0.0 & 0.00 & -0.0 & 0.00 \\
+\bottomrule
+\end{tabular}
+
+\caption[Precision improvements for trained word vectors on TREC dataset]{Precision improvements for trained word vectors on TREC dataset}
+\label{tab:res:trainedwordvec:trec}
+\end{center}
+\end{table}
+
+
+We see, that logistic regression performs better than support vector machine. Biggest improvements are on SUBJ dataset.
+
+
+    \subsubsection{Pre-trained neural embeddings}    
+    We get pretrained word2vec embeddings, sum them and train the classifier (logistic vs SVM)
+    we use spacy $300$ dimensional word vectors pretrained on wikipedia. 
+    This is not very fair comparison.
     
+
+\begin{table}[H]
+\begin{center}
+
+\begin{tabular}{llrrrr}
+\toprule
+ &&CR &MPQA &MR &SUBJ \\
+\midrule
+logistic & test & 0.18 & 0.20 & 0.29 & 0.43 \\
+ & train & 0.19 & 0.20 & 0.29 & 0.42 \\
+svc & test &-0.00 & 0.17 & 0.24 & 0.40 \\
+ & train & 0.00 & 0.18 & 0.24 & 0.40 \\
+\bottomrule
+\end{tabular}
+
+\caption[Precision improvements for pretrained word vectors]{Precision improvements for pretrained word vectors}
+\label{tab:}
+\end{center}
+\end{table}
+
+
+
+\begin{table}[H]
+\begin{center}
+
+\begin{tabular}{llrrrrrr}
+\toprule
+ &&ABBR &DESC &ENTY &HUM &LOC &NUM \\
+\midrule
+logistic & test &0.01 &0.08 &0.07 & 0.14 & 0.10 & 0.07 \\
+ & train &0.01 &0.11 &0.09 & 0.14 & 0.10 & 0.10 \\
+svc & test & -0.00 &0.02 & -0.00 & 0.09 & 0.00 & 0.00 \\
+ & train & -0.00 &0.03 &0.00 & 0.09 & 0.01 & 0.00 \\
+\bottomrule
+\end{tabular}
+
+\caption[Precision improvements for pretrained word vectors on TREC dataset]{Precision improvements for pretrained word vectors on TREC dataset}
+\label{tab:}
+\end{center}
+\end{table}
+
     
     \subsection{Our approach}
     
+    In our approach we evaluate a number of hyperparameters. Most notably the classifier, used term weights and type of learning (batch vs stochastic).
+    
+    With batch, we evaluate how many w updates we perform before we recompute the SVD and retrain the classifier.
+    
+
+    
+
 
 \section{Interpretability}
     \cite{ribeiro2016should} % explainability

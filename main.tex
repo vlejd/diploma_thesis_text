@@ -19,6 +19,7 @@
 \usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{caption}
+\usepackage[toc,page]{appendix}
 
 \DeclareCaptionType{equ}[][]
 
@@ -254,11 +255,12 @@ Consultant: & \mfkonzultant \\
 %Nepovinná časť prílohy obsahuje materiály, ktoré neboli zaradené priamo  do textu. Každá príloha sa začína na novej strane.
 %Zoznam príloh je súčasťou obsahu.
 %
-\addcontentsline{toc}{chapter}{Appendix A}
+\begin{appendices}
+
 \input AppendixA.tex
-%
+\input AppendixB.tex
 %\addcontentsline{toc}{chapter}{Appendix B}
-%\input AppendixB.tex
+\end{appendices}
 
 \end{document}
 

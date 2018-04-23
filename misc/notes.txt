@@ -18,5 +18,8 @@ write code design
     copy right v term veights
 
 
-train w2v
+fix appendices
+
+
+train my approach and properly evaluate
 

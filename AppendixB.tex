@@ -1,0 +1,99 @@
+\chapter{Appendix B - detailed results}
+\label{appendix:b}
+
+\begin{table}[h]
+\begin{center}
+
+\begin{tabular}{lllrrrr}
+\toprule
+ & &&CR &MPQA &MR &SUBJ \\
+\midrule
+logistic & 200 & test & 0.67 & 0.69 & 0.60 & 0.81 \\
+ & & train & 0.67 & 0.69 & 0.61 & 0.81 \\
+ & 300 & test & 0.65 & 0.69 & 0.59 & 0.81 \\
+ & & train & 0.66 & 0.69 & 0.61 & 0.81 \\
+ & 400 & test & 0.64 & 0.69 & 0.59 & 0.82 \\
+ & & train & 0.66 & 0.69 & 0.61 & 0.81 \\
+svc & 200 & test & 0.64 & 0.69 & 0.55 & 0.67 \\
+ & & train & 0.64 & 0.69 & 0.58 & 0.69 \\
+ & 300 & test & 0.64 & 0.69 & 0.55 & 0.66 \\
+ & & train & 0.64 & 0.69 & 0.58 & 0.68 \\
+ & 400 & test & 0.64 & 0.69 & 0.55 & 0.64 \\
+ & & train & 0.64 & 0.69 & 0.58 & 0.66 \\
+\bottomrule
+\end{tabular}           
+\caption[Precisions for trained word vectors]{Precisions for trained word vectors}
+\label{tab:res:trainedwordvec}
+\end{center}
+\end{table}
+
+
+\begin{table}[h]
+\begin{center}
+
+\begin{tabular}{lllrrrrrr}
+\toprule
+ & &&ABBR &DESC &ENTY &HUM &LOC &NUM \\
+\midrule
+logistic & 200 & test &0.98 &0.79 &0.77 & 0.81 & 0.85 & 0.89 \\
+ & & train &0.98 &0.79 &0.77 & 0.81 & 0.85 & 0.88 \\
+ & 300 & test &0.98 &0.79 &0.77 & 0.80 & 0.85 & 0.88 \\
+ & & train &0.98 &0.78 &0.77 & 0.80 & 0.85 & 0.87 \\
+ & 400 & test &0.98 &0.79 &0.77 & 0.79 & 0.85 & 0.87 \\
+ & & train &0.98 &0.78 &0.77 & 0.79 & 0.85 & 0.87 \\
+svc & 200 & test &0.98 &0.78 &0.77 & 0.78 & 0.85 & 0.83 \\
+ & & train &0.98 &0.78 &0.77 & 0.78 & 0.85 & 0.83 \\
+ & 300 & test &0.98 &0.78 &0.77 & 0.78 & 0.85 & 0.83 \\
+ & & train &0.98 &0.78 &0.77 & 0.78 & 0.85 & 0.83 \\
+ & 400 & test &0.98 &0.78 &0.77 & 0.78 & 0.85 & 0.83 \\
+ & & train &0.98 &0.78 &0.77 & 0.78 & 0.85 & 0.83 \\
+\bottomrule
+\end{tabular}
+
+\caption[Precisions for trained word vectors on TREC dataset]{Precisions for trained word vectors on TREC dataset}
+\label{tab:res:trainedwordvec:trec}
+\end{center}
+\end{table}
+
+
+
+\begin{table}[h]
+\begin{center}
+
+\begin{tabular}{llrrrr}
+\toprule
+ &&CR &MPQA &MR &SUBJ \\
+\midrule
+logistic & test & 0.82 & 0.88 & 0.79 & 0.93 \\
+ & train & 0.83 & 0.89 & 0.79 & 0.92 \\
+svc & test & 0.64 & 0.86 & 0.74 & 0.90 \\
+ & train & 0.64 & 0.87 & 0.74 & 0.90 \\
+\bottomrule
+\end{tabular}
+
+\caption[Precision for pretrained word vectors]{Precision for pretrained word vectors}
+\label{tab:}
+\end{center}
+\end{table}
+
+
+
+\begin{table}[h]
+\begin{center}
+
+\begin{tabular}{llrrrrrr}
+\toprule
+ &&ABBR &DESC &ENTY &HUM &LOC &NUM \\
+\midrule
+logistic & test &0.99 &0.86 &0.85 & 0.93 & 0.94 & 0.90 \\
+ & train &0.99 &0.89 &0.86 & 0.93 & 0.95 & 0.93 \\
+svc & test &0.98 &0.80 &0.77 & 0.87 & 0.85 & 0.83 \\
+ & train &0.98 &0.81 &0.77 & 0.87 & 0.85 & 0.83 \\
+\bottomrule
+\end{tabular}
+
+\caption[Precision for pretrained word vectors on TREC dataset]{Precision for pretrained word vectors on TREC dataset}
+\label{tab:}
+\end{center}
+\end{table}
+
