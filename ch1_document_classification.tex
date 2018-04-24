@@ -188,7 +188,7 @@
     \label{obr:siet}
     \end{figure}
     
-    The simplest realization of an unit is weighted sum and application of some function $g$. 
+    The simplest realization of a unit is a weighted sum and application of activation function $g$. 
     Formally the unit receives a vector of inputs $x$ and computes output $g(\sum_{i=1}^n \theta_i x_i)$, 
     where $\theta_i$ is a connection strength to the $i$-th input.
     This one unit can be viewed as a simple one layer neural network with one output.
@@ -220,13 +220,13 @@
     Neural networks are in fact an universal approximator and can approximate any other function \cite{cybenko1989approximation}.
     However, we need to train them first.
     
-    \subsubsection{Back propagation} \label{sec:backprop}
+    \subsubsection{Backpropagation} \label{sec:backprop}
     
-    Back propagation is a method for efficient computation of the gradient of a neural network.
+    Backpropagation is a method for efficient computation of the gradient of a neural network.
     It relies on the the fact, that neural networks are just a simple compositions of matrix multiplications and function applications. 
     It also relies on the fact, that functions used in the units are differentiable (almost everywhere).
     
-    \textit{Back propagation} works in two parts, forward pass and backward pass.
+    \textit{Backpropagation} works in two parts, forward pass and backward pass.
     In the forward pass we feed to input to the network, compute activations of each layer and compute the final output.
     In the second pass, we make use of the chain rule and incrementally compute gradient with respect to each layer of the network.
     Then we use the gradient descent and optimize the parameters \cite{rumelhart1986david}.
@@ -290,10 +290,14 @@
     For example words \texttt{nice} and \texttt{good} are considered to be completely different, even though they are not. 
     
     Second problem is, that this representation forgets the initial ordering of the words.
-    This can be partially solved by using bigrams.
+    We can address this problem, by using pairs of words instead of single words. 
+    Pairs of words are called bigrams (n-grams).
+    For example, the first sentence in our example dataset can be represented as bag of bigrams:
+    
+    $$e = ((4,7),(7,1),(1,6),(6,5))$$
     
     Third problem is, that this representation assigns the same weight to each word.
-    The fact that two sentences both has a meaningless word \texttt{a} has the same effect on the similarity as if they both have word \texttt{bad}. 
+    The fact that two sentences both have a meaningless word \texttt{a} has the same effect on the similarity as if they both have semantically meaningful word \texttt{bad}. 
     This problem is partially solved by introducing term weights.
     
     
@@ -331,8 +335,8 @@
         \item $\log \left(\frac{N-n_w}{n_w} \right)$, probabilistic inverse document frequency.
     \end{itemize}
 
-    Combination of such parts is called TFIDF.
-    Note, that these choices for $\mathrm{TF}_{w,s}$ and $\mathrm{IDF}_{w,s}$ are probabilistically grounded \cite{aizawa2003information}. %information perspective on tfidf
+    Combination of such parts is called TF-IDF.
+    Note, that these choices for $\mathrm{TF}_{w,s}$ and $\mathrm{IDF}_{w,s}$ are probabilistically grounded \cite{aizawa2003information}. %information perspective on TF-IDF
     
     Another popular weighting scheme that is usually used in document retrieval is $\mathrm{BM_{25}}$. 
     
@@ -369,7 +373,7 @@
     \subsection{Prediction based distributed representation}
     
     Number of researchers used neural networks to create a good, dense, distributed word representations \cite{pennington2014glove} \cite{DBLP:conf/icml/LeM14} \cite{rong2014word2vec}. % slovne vektory, some word2vec shit, glove word vectors
-    These representations are also commonly called \emph{neural embeddings}.
+    These representations are also commonly called \emph{neural embeddings} or just word vectors.
     We will call these representations \emph{word vectors}.
     Word vectors proved to be very useful in broad range of natural language processing tasks. 
     
@@ -381,9 +385,7 @@
     $v$ denotes the word vector for given word.
     
     There are two main approaches for training word vectors with neural networks: skip-gram model and continuous bag of words model.
-    
     Based on an embedding of an input word $x$, the \textit{skip-gram model} predicts words from the context of $x$ .
-    
     On the other hand, the \textit{continuous bag of words model} tries to predict the word based on its context.
     
     These methods can be computationally intensive, and they require a lot of training data. 
@@ -406,18 +408,17 @@
     
     \subsubsection{Latent semantic analysis}
     
-    During this thesis we consider the \emph{latent semantic indexing} (LSI) to be the same as \emph{latent semantic analysis} (LSA).
+    For the purposes of this thesis we consider the \emph{latent semantic indexing} (LSI) to be the same as \emph{latent semantic analysis} (LSA) \cite{deerwester1990indexing}.
     For simplicity, we will refer only to the LSA.
     
     \emph{Latent semantic analysis} is one of the standard approaches to identify hidden variables describing the data.
-    
     In the context of natural language classification it extracts and infers relations of expected contextual usage of words in documents.
     It does so without any humanly constructed dictionaries, knowledge bases, semantic networks, grammars or syntactic parsers.
     
     LSA starts with a coocurence matrix $M'$. 
     Each cell $M'_{i,j}$ of this matrix contains number representing the frequency with  which  the  word $D_i$ appears in the document $d_j$.
     Afterwards each cell entry is weighted by a function that expresses both the words importance in the particular document and the word importance in the general corpus.
-    A weighting scheme such as TFIDF can be used.
+    A weighting scheme such as TF-IDF can be used.
     We denote the reweighted matrix $M$. 
     
     Next, LSA applies singular value decomposition (SVD) to the matrix.
@@ -425,7 +426,7 @@
     In case a different matrix factorization is used such as non negative matrix factorization, we would arrive to probabilistic latent semantic analysis.
     
     SVD breaks down the document matrix $M$ into three matrices $U$, $\Sigma$, $V$,\cite{papadimitriou2000latent} % interpretation of lsa, steal some introduction 
-    \cite{deerwester1990indexing} % first lsi/lsa?
+     % first lsi/lsa?
     \cite{maas2011learning} % lda, vector space model
     \cite{wiemer2004latent} % Latent semantic analysis
     \cite{landauer1998introduction} % introduction to lsa 
@@ -446,7 +447,7 @@
     The thesis behind LSI is that those less important dimensions correspond to “noise” due to word-choice variability.
     
     Note that due to this reduction we inevitably loose some of the information. 
-    We can see this as forgetting some of the less represented words.
+    We can see this as forgetting some of the less often words.
 
     An interesting property of SVD is that the generated approximation is the closest matrix of its rank to the original in the least-squares sense \cite{berry1995using}.
 
@@ -468,7 +469,7 @@
     
     Now we can transform sentences into their BOW representations.
     Afterwards, we compute all necessary statistics required by our chosen weighting scheme.
-    In case of TFIDF, we compute the number of appearances of each word in our text $n_w$. 
+    In case of TF-IDF, we compute the number of appearances of each word in our text $n_w$. 
     This can be done efficiently by making use of fast matrix operations and libraries implementing linear algebra.
     Having these statistics, we can reweigh all words with them and construct the term matrix $M$.
     

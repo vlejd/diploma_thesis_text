@@ -198,21 +198,47 @@ bias &  0.98 &  0.78 &  0.77 &  0.78 &  0.85 &  0.83 \\
     Because of this, we can ``train'' a very simple constant classifier. 
     This classifier counts number of samples in each class in the training set and than always outputs the majority class.
     
-    Performance of this classifier is almost identical to the bies of given dataset. 
-    There are ninor differencies. 
+    Performance of this classifier is almost identical to the bias of given dataset. 
+    There are minor differencies because of the random data split. 
     
     \subsubsection{BOW baselines}    
-    BOW + logistic regression
-    We try multiple weighting schemes.
-    Could argue, that the term weight in weighting schemes is redundant, because it can be absorbed into weight at the first layer.
-    However, they are not redundant, they introduce a form of bias to the network (we can use regularization more freely).
+    
+    First commonly used baseline is a BOW representation with logistic regression as a classifier. 
+    We test multiple different supervised and unsupervised word weighting schemes.
+    
+    It would be argued, that using term weights is not necessary when using logistic regression as the classifier.
+    The argument is, that the term weighs could in theory be absorbed into the weights of the classifier. 
+    This argument actually true if we only consider the TF part of the weighting scheme.
+    
+    However, this argument only holds for the optimal solution. 
+    The problem is, that even though an equivalent solution exists, it may not be found by the learning algorithm. 
+    In practice it is useful to add the weighting scheme. 
+    This introduces some form of a bias, because we tell then the algorithm which words are probably more important.
+    Because of that we may employ more strict regularization techniques without significant decrees in the performance.
+    
+
+    \* %table
+    
+    
+    \* % describe results
 
 
-    \subsubsection{Neural embeddings}    
-    We train the word2vec on the dataset and then train the classifier
-    Te train embeddings with dimensions $200$, $300$ and $400$ on each dataset. 
-    Than we compute embedding words each word and sum them into an sentence embedding.
+    \subsubsection{LSA baselines}    
+    The most important baseline that we need to consider is LSA.
+    In this baseline we construct the term matrix $M$, reweigh it with weighting scheme, train the LSA embedding and train the classifier.
+    We try multiple weighting schemes and multiple classifiers.
+    
+    \* % table
+    \* % results    
+
+    \subsubsection{Neural embeddings}
+    In this baseline we train word2vec neural embeddings on the dataset. 
+    We use implementation from gensim \inlinecode{Python}{gensim.models.Word2Vec}.
+    Te train embeddings with dimensions $200$, $300$ and $400$. 
+    Than we compute embedding for each word and sum them into an sentence embeddings.
     Than we train SVC or logistic regression and present the precision.
+    
+    Note, that we train embeddings for each dataset separately.
 
 \begin{table}[H]
 \begin{center}
@@ -270,16 +296,29 @@ svc & 200 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
 \end{table}
 
 
-We see, that logistic regression performs better than support vector machine. Biggest improvements are on SUBJ dataset.
-
-
-    \subsubsection{Pre-trained neural embeddings}    
-    We get pretrained word2vec embeddings, sum them and train the classifier (logistic vs SVM)
-    we use spacy $300$ dimensional word vectors pretrained on wikipedia. 
-    This is not very fair comparison.
+    Tables \ref{tab:res:trainedwordvec} and \ref{tab:res:trainedwordvec:trec} contain our results.
+    We see zero improvement of SVM classifier for TREC datasets for all embedding sizes.
+    TREC dataset seems to be overall very challenging dataset.
+    Interesting observation is, that precision on this dataset decreases as we increase the embedding dimensions.
+    The highest precision increase ($0.05$) on TREC dataset is achieved by logistic regression and embeddings size $200$. 
+    
+    We see the biggest improvement on the SUBJ dataset ($0.31$), with no notable dependency on embedding dimension size.  
+    
+    We also conclude that we have not observed any overfitting as train and test precisions are very similar.
     
 
-\begin{table}[H]
+    \subsubsection{Pre-trained neural embeddings}    
+    
+    In this experiment we use pretrained word embeddings. 
+    We use python library spacy.
+    It provides easy interface for obtaining pretrained word embeddings.
+    
+    We use \inlinecode{Python}{spacy.load('en_vectors_web_lg')}.
+    This command returns a pretrained model that we can query with words. 
+    Embedding obtained in this way have $300$ dimensions and were trained on a large web corpus (large collection of websites). 
+    Note, that because these vectors were trained on much bigger datasets, it is not a very fair comparison to other methods presented here.
+
+\begin{table}[h]
 \begin{center}
 
 \begin{tabular}{llrrrr}
@@ -294,7 +333,7 @@ svc & test &-0.00 & 0.17 & 0.24 & 0.40 \\
 \end{tabular}
 
 \caption[Precision improvements for pretrained word vectors]{Precision improvements for pretrained word vectors}
-\label{tab:}
+\label{tab:res:pretrainedwordvec}
 \end{center}
 \end{table}
 
@@ -315,9 +354,15 @@ svc & test & -0.00 &0.02 & -0.00 & 0.09 & 0.00 & 0.00 \\
 \end{tabular}
 
 \caption[Precision improvements for pretrained word vectors on TREC dataset]{Precision improvements for pretrained word vectors on TREC dataset}
-\label{tab:}
+\label{tab:res:pretrainedwordvec:trec}
 \end{center}
 \end{table}
+
+    
+    We see, that these embeddings perform much better than the trained ones. 
+    We even see a significant improvements on the TREC dataset (absolute precision over $0.90$).
+    Interesting observation is, that logistic regression performs much better than SVM.
+    Note, that we have not spend much time on finetuning hyperparameters of these classifiers. 
 
     
     \subsection{Our approach}
@@ -331,6 +376,8 @@ svc & test & -0.00 &0.02 & -0.00 & 0.09 & 0.00 & 0.00 \\
 
 
 \section{Interpretability}
-    \cite{ribeiro2016should} % explainability
-
+    Most machine learning algorithm are black box approaches \cite{ribeiro2016should}. % explainability
+    It is hard, to justify their predictions or to extract some insight from them. 
+    
+    Because our approach just re-weights words, we artue that it is explainable and we can extract important insight about our data from it.
 

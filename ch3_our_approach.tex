@@ -67,7 +67,7 @@ In this chapter we describe our motivations, the design of our approach and some
     
     \subsection{Gradient computation}
     
-    To compute the gradient efficiently, we recall the back-propagation trick mentioned in section \ref{sec:backprop}.
+    To compute the gradient efficiently, we recall the backpropagation trick mentioned in section \ref{sec:backprop}.
     We can compute the derivation $\frac{\partial E_y(\hat{y})}{\partial w'}$ thanks to the chain rule
     
     \begin{align}
@@ -175,7 +175,7 @@ In this chapter we describe our motivations, the design of our approach and some
         \caption{Batch training of $w'$}
     \end{algorithm}
     
-    \subsubsection{Pseudocode explenations}
+    \subsubsection{Code explanations}
     
     There is a few technical details that we need to discuss, 
     mainly, what exactly do we mean by training until convergence.
@@ -222,7 +222,7 @@ In this chapter we describe our motivations, the design of our approach and some
     It is specifically designed to handle large text collections, using data streaming and efficient incremental algorithms. 
     
     We made use of multiple tools from this library. 
-    We used \texttt{Dictionary} object for vocabulary filtering and embedding into the BOW representation and we used its TFIDF implementations.
+    We used \texttt{Dictionary} object for vocabulary filtering and embedding into the BOW representation and we used its TF-IDF implementations.
     We also used its API to train word vectors. \* % TODO train word vectors 
     
     Most important for us was gensims implementation of the probabilistic algorithm for constructing approximate matrix decomposition \cite{halko2011finding}.
@@ -233,7 +233,7 @@ In this chapter we describe our motivations, the design of our approach and some
     NumPy is a library for Python, adding support for large, multi-dimensional arrays and matrices \cite{oliphant2006guide}. % numpy
     We used this library for result evaluation and to implement our own logistic regression.
     
-    \subsubsection{Tensorflow}
+    \subsubsection{TensorFlow}
     
     TensorFlow is an open source software library for high performance numerical computation developed by Google Brain team \cite{tensorflow2015-whitepaper}. 
     It provides simple interface to matrix computations on GPUs and CPUs.
@@ -248,10 +248,10 @@ In this chapter we describe our motivations, the design of our approach and some
     \subsubsection{Other used tools}
     
     During the development of required code we worked in Jupyter Notebook. 
-    It is an interactive environment the offers very easy prototiping and
+    It is an interactive environment the offers very easy prototyping and
     data visualization \cite{PER-GRA:2007}. %ipython
     
-    For data visualization we used Mtplotlib library \cite{hunter2007matplotlib}. %matplotlib 
+    For data visualization we used Matplotlib library \cite{hunter2007matplotlib}. %matplotlib 
     
     Finally for data manipulation and presentation we used Pandas \cite{mckinney2010data}. %pandas
     
