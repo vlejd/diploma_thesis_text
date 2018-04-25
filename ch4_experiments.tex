@@ -186,6 +186,8 @@ bias &  0.98 &  0.78 &  0.77 &  0.78 &  0.85 &  0.83 \\
     To address the problems of measuring accuracy, we report relative improvements over a constant baseline.
     For absolute precisions refer to the appendix B. 
 
+    Note, that because we have multiple testing datasets and multiple methods, we witness a small combinatorial explosion.
+
     \subsection{Baselines} \label{sec:baseline}
 
     There is a number of baselines that we consider.
@@ -217,18 +219,108 @@ bias &  0.98 &  0.78 &  0.77 &  0.78 &  0.85 &  0.83 \\
     Because of that we may employ more strict regularization techniques without significant decrees in the performance.
     
 
-    \* %table
-    
-    
+\begin{table}[H]
+\begin{center}
+
+\begin{tabular}{llrrrr}
+\toprule
+{} &      &  CR &  MPQA &  MR &  SUBJ \\
+scheme &  &            &              &            &              \\
+\midrule
+None & test &      0.143 &        0.159 &      0.270 &        0.419 \\
+{} & train &      0.335 &        0.223 &      0.479 &        0.494 \\
+tfchi2 & test &      0.111 &        0.125 &      0.176 &        0.349 \\
+{} & train &      0.147 &        0.166 &      0.206 &        0.343 \\
+tfgr & test &      0.116 &        0.126 &      0.176 &        0.349 \\
+{} & train &      0.150 &        0.167 &      0.211 &        0.346 \\
+tfidf & test &      0.124 &        0.160 &      0.258 &        0.416 \\
+{} & train &      0.361 &        0.291 &      0.500 &        0.500 \\
+tfig & test &      0.116 &        0.126 &      0.176 &        0.349 \\
+{} & train &      0.150 &        0.167 &      0.211 &        0.346 \\
+tfor & test &      0.135 &        0.151 &      0.273 &        0.404 \\
+{} & train &      0.253 &        0.198 &      0.407 &        0.436 \\
+tfrf & test &      0.106 &        0.147 &      0.239 &        0.386 \\
+{} & train &      0.194 &        0.179 &      0.322 &        0.418 \\
+\bottomrule
+\end{tabular}
+
+\caption[Precision improvements for BOW baseline]{Precision improvements for BOW baseline}
+\label{tab:}
+\end{center}
+\end{table}
+
+\begin{table}[H]
+\begin{center}
+
+\begin{tabular}{llrrrrrr}
+\toprule
+{} &&  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
+scheme &  & & & &&&\\
+\midrule
+None & test & 0.011 & 0.148 & 0.108 &0.138 &0.117 &0.129 \\
+{} & train & 0.010 & 0.202 & 0.209 &0.202 &0.142 &0.158 \\
+tfchi2 & test & 0.009 & 0.083 & 0.006 &0.102 &0.104 &0.097 \\
+{} & train & 0.009 & 0.098 & 0.015 &0.113 &0.103 &0.092 \\
+tfgr & test & 0.006 & 0.081 & 0.006 &0.104 &0.104 &0.106 \\
+{} & train & 0.007 & 0.097 & 0.014 &0.112 &0.103 &0.103 \\
+tfidf & test & 0.011 & 0.148 & 0.108 &0.134 &0.127 &0.139 \\
+{} & train & 0.016 & 0.218 & 0.226 &0.216 &0.154 &0.170 \\
+tfig & test & 0.006 & 0.081 & 0.006 &0.104 &0.104 &0.106 \\
+{} & train & 0.007 & 0.097 & 0.014 &0.112 &0.103 &0.103 \\
+tfor & test & 0.006 & 0.066 & 0.063 &0.139 &0.107 &0.129 \\
+{} & train & 0.006 & 0.170 & 0.166 &0.183 &0.123 &0.140 \\
+tfrf & test & 0.006 & 0.061 & 0.060 &0.124 &0.102 &0.118 \\
+{} & train & 0.007 & 0.136 & 0.135 &0.158 &0.104 &0.125 \\
+\bottomrule
+\end{tabular}
+
+\caption[Precision improvements for BOW baseline on TREC datasets]{Precision improvements for BOW baseline on TREC datasets}
+\label{tab:}
+\end{center}
+\end{table}
+
     \* % describe results
 
 
-    \subsubsection{LSA baselines}    
+    \subsubsection{LSA baselines}
     The most important baseline that we need to consider is LSA.
     In this baseline we construct the term matrix $M$, reweigh it with weighting scheme, train the LSA embedding and train the classifier.
     We try multiple weighting schemes and multiple classifiers.
     
-    \* % table
+    Refer to tables \ref{tab:lsa:resuts:300} and \ref{tab:lsa:resuts:400} in appendix B for resuts for dimensions $300$ and $400$.
+    
+\begin{table}[H]
+\begin{center}
+
+\begin{tabular}{llrrrr}
+\toprule
+{} &      &  CR &  MPQA &  MR &  SUBJ \\
+scheme &  &            &              &            &              \\
+\midrule
+None & test &      0.093 &        0.095 &      0.198 &        0.360 \\
+{} & train &      0.162 &        0.103 &      0.216 &        0.390 \\
+tfchi2 & test &      0.093 &        0.095 &      0.198 &        0.360 \\
+{} & train &      0.162 &        0.103 &      0.215 &        0.390 \\
+tfgr & test &      0.093 &        0.094 &      0.198 &        0.359 \\
+{} & train &      0.162 &        0.103 &      0.215 &        0.390 \\
+tfidf & test &      0.093 &        0.095 &      0.197 &        0.360 \\
+{} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
+tfig & test &      0.093 &        0.094 &      0.197 &        0.360 \\
+{} & train &      0.162 &        0.103 &      0.216 &        0.390 \\
+tfor & test &      0.093 &        0.094 &      0.197 &        0.360 \\
+{} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
+tfrf & test &      0.093 &        0.094 &      0.197 &        0.359 \\
+{} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
+\bottomrule
+\end{tabular}
+
+\caption[Precision improvements for LSA baseline with 200 dimensions]{Precision improvements for LSA baseline with 200 dimensions}
+\label{tab:}
+\end{center}
+\end{table}
+
+    %comapre to word vectos, compare to logistic regression, discuss overfitting.
+    
     \* % results    
 
     \subsubsection{Neural embeddings}
