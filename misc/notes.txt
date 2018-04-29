@@ -1,44 +1,33 @@
+TODO: zdvihni learning rate
+
+
 TODO:
 introduction
 
 
 ML introduction
-    train test split
     linear regression
     SVM
-    distributed : supervised vs unsupervised
     count based introduction
     other document classification approaches.
-
     superwised weights
 
-term weights
-    DO!
-    code regularized enthropy
 
 write code design
     copy right v term veights
 
 
 fix appendices refs
+check missing articles everywhere
+refky viac neskvo
+pis ako pre lingvistu
 
+document classification definicia
+sentiment analysis definicia
 
-train my approach and properly evaluate
-
-
-Kika notes:
-v poslednej dobe to skor stretavam spolu: backpropagation, tiez som si vsimla ze davas citacie skor nakoniec nez na zaciatok, nie je to nutne zle, ale mozno by bolo lepsie ich mat skor nez neskor... ak to nie je nejako predpisane
-
-
-
-v kapitole Document classification ale bolo by mozno fajn tam dat nejaky ludsky popis toho, co je document classification (slubujes ze we introduce the problem - ale nepopises co je to za problem). 
-
-Hned dalej este pred "Notation" by si mohol uviezt aj sentiment analysis: nejaku ucebnicovu definiciu a jasne napisat ze sentiment je "the writer's attitude towards a particular topic, product, etc. is positive, negative, or neutral." > lebo potom tu mas v prikladoch "if the statement was positive ($1$) or not ($0$)." > a v skutocnosti chces povedat if the sentiment of the statement !
 
 Potom co je nice mat v uvode do kapitoly nie su zdanlivo prepojene - ML, Classification, Word & sentence repres, ... - treba toto prepojenie vysvetlit hned na zaciatku a vymenovat "in section \ref{} we discuss lalala, which is lalala with lalala in order to lalala". Mne napr nejde vobec do hlavy preco mas niektore veci pod ML a niektore ine pod Classif - ak si ani sam nie si isty skus sa zamysliet a preusporiadat resp. popisat ako to suvisi a preco to popisujes v tom poradi (to poradie myslim vysvetlit tak nepriamo nemusis sa akoze obhajovat, len mat k tomu pokec, ktory to uvedie ako pisem) 
 
-Takymto sposobom sa ti vyrobi na zaciatku pekny hutny odsek alebo 2 ktore uvedu citatela uz do praktickych veci. 
-[note: osobne som momentalne tiez skor vyznavacom rovnic, tabuliek a prikladov, ale treba aj nejake textiky, mysli na to, ze DP nie je clanok, mas priestor a mal by sa z toho vediet "vysomarit" hocikto, kto ma povedzme prvy stupen VS, hlavne mysli na to, ze mozno to budu chciet raz citat aj napr. nejaki lingvisti nie len informatici :)] 
 
 
-check missing articles everywhere
+

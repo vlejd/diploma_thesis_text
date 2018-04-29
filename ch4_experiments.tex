@@ -5,7 +5,7 @@ We perform the evaluation on multiple classification tasks.
 
 \section{Classification datasets}
     
-    Our datasets were acquired by following instructions in the SentEval (\url{https://github.com/facebookresearch/SentEval}) repository.
+    Our datasets were acquired by following instructions in the SentEval\footnote{\url{https://github.com/facebookresearch/SentEval}} repository.
     SentEval is a library for evaluating the quality of sentence embeddings \cite{conneau2017supervised}. 
     However it focuses on evaluating unsupervised embeddings.
     We have not used any code from this library, because we were not able to modify its API in a maintainable way to fit our needs. 
@@ -463,7 +463,13 @@ svc & test & -0.00 &0.02 & -0.00 & 0.09 & 0.00 & 0.00 \\
     
     With batch, we evaluate how many w updates we perform before we recompute the SVD and retrain the classifier.
     
+    \* %write
+    we test number of weights
+    initializations
+    \texttt{tfidf} \texttt{tfchi2} \texttt{tfig} \texttt{tfgr} \texttt{tfor} \texttt{tfrf} \texttt{None}
 
+    multiple learning rates and multiple embedding sizes on all datasets
+    We compare our results agains lsas baseline (lsa with given weights, but without training).
     
 
 

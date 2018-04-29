@@ -5,14 +5,13 @@
 \section{Problem description and motivation} \label{sec:problem}
 
     Thanks to digitalizaion of books and texts, almost all human knowledge is now easily accessible to algorithms. 
-    Thanks to rapid growth of social media platforms and electronic communication we see a new type of documents.
+    With rapid growth of social media platforms and electronic communication we see a new type of documents.
     These documents are not traditional books, but user generated content.
-    
     Websites, blogs, facebook posts, tweets, G+ posts contain wast amounts of information that can be very valuable.
     Moreover, companies customer centers usually receive large amounts of questions and requests from customers that could be automatically processed.
     
     Automating text categorization and classification is therefore becoming increasingly important and fundamental task. 
-    A major objective of text classification system is to semantically assignment of one or more predefined categories to documents.
+    A major objective of text classification system is to semantically assignment one or more predefined categories to documents.
     
     Is this document a positive review? 
     Does this question asks about a person?
@@ -24,9 +23,9 @@
 
     \subsection{Sentiment analysis}
     
-    % Cite this?
+    % Cite something?
     
-    One of the most popular instances of document classification is sentiment analysis, \emph{SA}.
+    One of the most popular instances of document classification is a sentiment analysis, \emph{SA}.
     SA is a process of determining whether a piece of writing is positive, negative or neutral.
     It is also known as opinion mining, deriving the opinion or attitude of a speaker. 
     A common use case for this technology is to discover how people feel about a particular topic.
@@ -90,7 +89,8 @@
     There are $|D|=11$ distinct words in the vocabulary $D$ of this corpus: 
     \begin{verbatim} a, bad, cat, charlie, dog, good, is, max, nice, oscar, tiger \end{verbatim}
     
-    Later we will refer to them in this ordering, indexing from $1$. Hence $D_4=\mathtt{charlie}$.
+    Later we will refer to them in this ordering, indexing from $1$. 
+    Hence $D_4=\mathtt{charlie}$.
 
 
 \section{Machine learning}
@@ -345,7 +345,7 @@
     This representation performs better than BOW and usually works the best for large documents in document retrieval \cite{li2014semantic}.
     
     Term weights can help to describe that different words, have different importance.
-    However, they still can not take into account, that two different words should have similar representation.
+    However, they still cannot take into account, that two different words should have similar representation.
     
     
     \subsection{Distributed representation}
@@ -358,7 +358,6 @@
     Simple but unrelated example of distributed representation is a binary representation of a number.
     
     To acquire a distributed representation, algorithms often make use of the distributional hypothesis.
-    \* % fix, that it is supervised vs unsupervised
 
     \subsubsection{Distributional hypothesis}
     
@@ -406,7 +405,7 @@
     Non-negative matrix factorization
     
     
-    \subsubsection{Latent semantic analysis}
+    \subsubsection{Latent semantic analysis} \label{sec:lsa}
     
     For the purposes of this thesis we consider the \emph{latent semantic indexing} (LSI) to be the same as \emph{latent semantic analysis} (LSA) \cite{deerwester1990indexing}.
     For simplicity, we will refer only to the LSA.
@@ -495,9 +494,6 @@
     
     $$v_i = d_i U $$
     
-    Matrix of such $v_i$ are then considered to be the document features and are used as an input $X$ to some classifier. 
-    A popular choices for classifier are a SVM or neural networks.
-    
     This process can have a different interpretation.
     Each entry in matrix $U$ is the distributed representation for one word.
     The matrix multiplication selects words, that are present in the document and computes a weighted sum of them.
@@ -506,6 +502,15 @@
     The problem is, that we have to filter all words that are not present in $D$. 
     However, because this method is fully unsupervised, we can make use of any unlabeled data (documents, that do no have known label). 
     Factorized matrix $M$ can contain documents, that we do not have the label for.
+    
+    Finally, we perform the classification.
+    Matrix of embeddings $v_i$ are considered to be the document features and are used as an input $X$ to some classifier. 
+    A popular choices for classifier are a SVM or neural networks.
+    First we train the classifier on some training set of documents and ther labels.
+    Then we can easily predict labels for unseen documents.
+    
+    We can break down the whole process into three parts: weighting, decomposition and classification.
+    We denote the weighting part as $W$, the decomposition part as $S$ (SVD) and the classification part as $C$.
     
     \subsubsection{LSA pitfalls}
 
@@ -545,7 +550,7 @@
     These results suggest, that these two approaches are somehow equivalent and with proper weights the LSA should achieve similar results as skip-gram model. 
     However in practice, this was not the case.
     
-    Prediction based models require a lot of hyperparameters, that can not be learned and need to be set up manually,
+    Prediction based models require a lot of hyperparameters, that cannot be learned and need to be set up manually,
     or through excessive search.
     On the other hand, count based models usually do not require a lot of parameters, besides the number of dimensions of the resulting embedding. 
     

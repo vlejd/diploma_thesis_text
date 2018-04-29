@@ -4,18 +4,19 @@ In this chapter we describe our motivations, the design of our approach and some
 
 \section{Goals and motivation}
 
-    In LSA, the SVD will inevitably throw away some information. 
-    This is due the dimensionality reduction that it performs.
-    The problem is, that this information may be vital to the classification task. 
-    It is clear, that we need to introduce some form of supervision, that happens before the SVD.
+    The root of LSAs problems is the dimensionality reduction.
+    It will inevitably throw away some information. 
+    However, this information may be vital to the classification task. 
+    It is clear, that we need to address this problem and introduce some form of supervision, that precedes the SVD.
     
-    This is done to some extend by the supervised word weights described in section \ref{sec:supervised:weights}. 
-    However, we consider this supervision rather weak, as it only computes simple statistics over words and labels.
+    To some extend, This can be done by the supervised word weights described in section \ref{sec:supervised:weights}.
+    However, we consider this supervision to be rather weak, as it only computes simple statistics over the words and labels.
     
-    We would like to incorporate some form of direct supervision, that can be affected by the actual performance of the discriminator.
-    We think it can be achieved by training our own word weighting scheme. 
+    In the end, we want to train some classifier $C$ on top of the document embeddings.
+    We would like to find a way, how to use the knowledge about the classifiers error and incorporate it before the SVD.
+    We achieve it by training our own word weighting scheme. 
     
-    Our goals are:
+    Our goals are to:
     \begin{itemize}
         \item Propose a novel approach for learning task-specific word weights.
         \item Experimentally evaluate the performance of the new approach.
@@ -25,41 +26,34 @@ In this chapter we describe our motivations, the design of our approach and some
     
     As a side goal, we would like to introduce only a minimal amount of new hyperparameters
     as they may cause a ``false improvement'' of our approach over the baseline.
-    In the best case scenario, we want our approach to be at least slightly interpretable.
+    We also would like our approach to be at least slightly interpretable.
     It would be nice, if it could produce some insight to the dataset.
     
     Because of the supervised weights, we know that supervision helps. 
     The only problem is, how to achieve it. 
     Here we take the inspiration from neural networks, and the insight that we can easily optimize parameters of rather complex system, as long as each part of this system is differentiable. 
 
-\section{Design}
+\section{Design} \label{sec:design}
 
-    First recall how does the original LSA works in context of document classification.
-    We start with a sentence $s_i$. We represent it as a bag of words vector $d_i'$. 
-    We transform it with some weighting scheme into a term vector $d_i$.
+    First, recall how does the LSA works in the context of document classification.
+    We start with a sentence $s_i$ and we represent it as a bag of words vector $d_i'$. 
+    Then we transform it with a weighting scheme into a term vector $d_i$.
     Afterwards we compute the lower dimensional embedding of the document $v_i = d_i U$. 
-    
-    Finally we use these embeddings $v_i$ as features $x_i$ that are an input to the classifier (logistic regression, neural network, SVM).
-    This classifier predicts some labels $\hat{y}$ that can be compared to
-    the true labels $y$.
+    Finally we use this embedding $v_i$ as an input $x_i$ to the classifier $C$ (logistic regression, neural network or SVM).
+    This classifier predicts label $\hat{y_i}$ that can be compared to
+    the true labels $y_i$.
     
     Our contribution is to introduce another layer of reweighting. 
-    Instead of using the term vector $d_i$, we introduce weights $w'$ and use reweighted vector $d_i \circ w'$.
-    Recall, that $\circ$ means Hadamard product (pointwise multiplication).
+    Instead of using the term vector $d_i$, we introduce weights $w'$ and use reweighted vector $d_i \circ w'$\footnote{Recall, that $\circ$ means Hadamard product (pointwise multiplication).}.
     This is equivalent to multiplying the vector $d_i$ by diagonal matrix with diagonal $w'$.
-    
-    Further we do not perform the SVD decomposition on the matrix $M$, 
-    but on the reweighted version $M \circ w'$. 
-    Here we employ a few conventions from popular linear algebra library NumPy \cite{oliphant2006guide}, 
+    Then we perform the SVD decomposition on the reweighted matrix $M \circ w'$. 
+    Here, we employ a few conventions from popular linear algebra library NumPy \cite{oliphant2006guide}, 
     where such operation is automatically broadcasted through the matrix.
     
-    We initialize the $w'$ to be a vector of ones. 
-    This effectively does not change the matrix at first.
-    Now we are interested, in finding the best $w'$. 
-    
-    Recall, that for fixed decomposition $M\circ w'= U\Sigma V^T$ and some classifier $C$ (like a neural network),
+    We initialize the $w'$ to be a vector of ones (this effectively does not change the matrix at first).
+    For fixed decomposition $M\circ w'= U\Sigma V^T$ and some classifier $C$ (like a neural network),
     we compute $\hat{y} = C(M \circ w' U)$.
-    We want to optimize $w'$ to minimize some error $E_y(\hat{y})$.
+    Then we want to optimize $w'$ to minimize the error function $E_y(\hat{y})$.
     The only question is, how to do it.
     
     The natural choice is to employ the gradient descent algorithm. 
@@ -67,54 +61,53 @@ In this chapter we describe our motivations, the design of our approach and some
     
     \subsection{Gradient computation}
     
-    To compute the gradient efficiently, we recall the backpropagation trick mentioned in section \ref{sec:backprop}.
+    To compute the gradient efficiently, we use the backpropagation trick mentioned in section \ref{sec:backprop}.
     We can compute the derivation $\frac{\partial E_y(\hat{y})}{\partial w'}$ thanks to the chain rule
     
-    \begin{align}
+    \begin{equation} \label{eq:derivation}
     \frac{\partial E_y(\hat{y})}{\partial w'} = \frac{\partial E_y(\hat{y})}{\partial \hat{y}} \frac{\partial c(x)}{\partial x} \frac{\partial x}{\partial d}
-    \end{align}
+    \end{equation}
     
-    To compute the derivation $\frac{\partial E_y(\hat{y})}{\partial w'} = \frac{\partial E_y(\hat{y})}{\partial \hat{y}} \frac{\partial C(x)}{\partial x} \frac{\partial x}{\partial d}$ we realize,
-    that each part of this expression is easy to calculate.
-    
-    The first part of this expression is a function dependent on the chosen error function. 
+    The first part of expression \ref{eq:derivation} is dependent on the chosen error function. 
     For L2 error we get 
     $\frac{\partial E_y(\hat{y})}{\partial \hat{y}} = \frac{\partial \frac{1}{2}(\hat{y}-y)^2}{\partial \hat{y}} = \hat{y}-y$
     
     The second part is dependent on the classifier that we use. 
     In case we use logistic regression $\hat{y} = \sigma(x \Theta + b)$, the expression becomes
-    $\frac{\partial c(x)}{\partial x} = \hat{y} (1-\hat{y}) \Theta$
-    Note, that it is easy to compute this expression even for more complicated classifiers. 
+    $\frac{\partial c(x)}{\partial x} = \hat{y} (1-\hat{y}) \Theta$.
+    Note, that it is possible to compute this expression even for more complicated classifiers. 
     Some libraries can even compute this automatically \cite{tensorflow2015-whitepaper}.
-    However we still need that the classifier is differentiable, so we can not easily use SVM. 
+    However we need the classifier to be differentiable so we cannot easily use SVM as the classifier. 
     
-    The third and last part is tied to the computation of LSA embedding.
+    The third and last part is tied to the computation of the LSA embedding.
     Because $x = d \circ w' U$, we can compute 
-    $\frac{\partial x}{\partial d} = d U$ \* % TODO fix this math stuff
+    $\frac{\partial x}{\partial d} = d U$ 
+    \* % TODO fix this math stuff
+    \* % IMPORTANT
     
-    Once we know how to computed the gradient, we need to decide on the the optimization routine we employ.
+    Once we know how to compute the gradient, we need to decide on the the optimization routine we will employ.
 
-    \subsection{Optimization routine}
+\section{Optimization routines}
     
-    We want to perform the gradient step $w' = w' - \frac{\partial E_y(\hat{y})}{\partial w'}$. 
-    However this changes the input to the SVD and we should recompute the decomposition as well. 
-    However it is not clear, how often we want to recompute the SVD and how often (and how much) we want to retrain the classifier.
+    Inspired by gradient descent algorithm, we perform the gradient step $w' = w' - \frac{\partial E_y(\hat{y})}{\partial w'}$. 
+    The problem is, that equation \ref{eq:derivation} holds only for stationary classifier $C$ and decomposition $S$. 
+    We ignore that fact, that $S$ is actually a function of reweighted matrix and hence it is a function of $w'$.
+    It is probably possible to compute the exact gradient (refer to section \ref{sec:nn:svd}), but we will not do that.
+    
+    It is not clear, how often we want to recompute the SVD and how often (and how much) we want to retrain the classifier.
     We propose two main approaches inspired by neural network training and by 
-    expectation minimization algorithm. \* % TODO cite something
+    expectation minimization algorithm.
     
-    Our model can be broken down into three parts: weighting, decomposition and classification.
-    We will denote the weighting part as $W$, the decomposition part as $S$ (SVD) and the classification part as $C$.
-    Also as these parts are going to be updated through the time, we will denote them with superscripts $W^t$, referring to weighting part $W$ at time $t$.
+    We use the notation introduced in section \ref{sec:lsa}.
+    However, our parts $W$, $S$, $C$ are going to be updated through the time. We denote them with superscripts, e.g.~$W^t$, referring to weighting part $W$ at time $t$.
     
+    \subsection{Batch gradient descent}
     
-    \subsubsection{Batch gradient descent}
-    
-    We need to find the best weights $w'$ for the part $W$, 
+    We need to find weights $w'$ for the part $W$, 
     such that the decomposition $S$ captures the most information and hence the classifier $C$ has access to all the important features of the document.
-    
     However, the decomposition $S$ is dependent on the reweighted matrix produced by $W$. 
     Because of this, after each update of $w'$ we need to fully recompute the decomposition $S$ and retrain the classifier $C$.
-    The first optimization routine is described in algorithm \ref{algo:batch}.
+    The first optimization routine is described in the algorithm \ref{algo:batch}.
     
     \medskip
     
@@ -122,39 +115,39 @@ In this chapter we describe our motivations, the design of our approach and some
         \KwData{$M$}
         \KwResult{trained $W$, $S$, $C$ }
         $w'^0 = 1$, $t=1$\;
-        \While{not converged, $t$++}{
+        \While{performance is improving on validation dataset, $t$++}{
             recompute $S^t$ from $M \circ w'^{t-1}$\;
             compute embeddings $v^t$ from $M \circ w'^{t-1}$ with $S^t$\;
             fully train $C^t$ on $v^t$ and labels $y$\;
-            updat $W^t$: $w'^t = w'^{t-1} - \alpha \frac{\partial E(C(S(M w'^{t-1}))}{\partial w'^{t-1}} $\;
+            update $W^t$: $w'^t = w'^{t-1} - \alpha \frac{\partial E(C(S(M w'^{t-1}))}{\partial w'^{t-1}} $\;
         }
         \caption{stochastic training of $w'$} \label{algo:batch}
     \end{algorithm}
-    
-    Furthermore, we can increase the number of gradient steps performed on $w'$ in each step of the while loop.
     
     We took inspiration from expectation maximization algorithm.  
     Note, that it is not essential in any way for the reader to know this algorithm for further reading.
     
     This algorithm needs to do a lot of computations for one update of the weights $w'$.
+    To address this, we can increase the number of gradient steps performed on $w'$ in each step of the while loop.
     We recall the same problem in neural networks was solved by stochastic gradient descent.
-    We try to employ such solution as well.
+    We explore such solution as well.
     
-    \subsubsection{Stochastic gradient descent}
+    \subsection{Stochastic gradient descent}
     
     We take the inspiration from stochastic gradient descent for neural networks.
     Instead of computing the full gradient, we just compute the gradient related to one example $\frac{\partial E_{y_i}(\hat{y_i})}{\partial w'}$.
     Because the document vector $d_i$ is sparse, we will only update a few values from $w'$, hence we can easily update part $W$.
     
-    Because we updated $w'$, the entry in matrix $M$ corresponding to the document $d_i$ changed.
+    Because we updated $w'$, the entry in matrix $M$ corresponding to the document $d_i$ has changed.
     We know, that SVD can be build incrementally and that we can add new documents to the matrix $M$ \cite{brand2006fast}.
     We just use the adding routine and add the new representation $d_i \circ w'^{t}$ to the decomposition.
-    Because we changed the reweighed document and the decomposition matrices,
+    Because we changed the reweighted document and the decomposition matrices,
     the embedding of this document also changed to 
     $x_i^{t} = v_i^{t} = d_i w'^{t} U^{t}$
     
     We update $C$ in the similar manner.
     We perform the stochastic gradient step for example $x_i^{t+1}$ and threat it as a new example in the dataset.
+    Pseudocode is available in algorithm \ref{algo:stochastic}.
     
     \begin{algorithm}[H]
         \KwData{$M$}
@@ -164,7 +157,7 @@ In this chapter we describe our motivations, the design of our approach and some
         compute embeddings $v^0$ from $M \circ w'^{0}$ with $S^0$\;
         fully train $C^0$ on $v^0$ and labels $y$\;
         
-        \While{not converged}{
+        \While{performance is improving on validation dataset}{
             \For{document $d_i \in M$, $i++$, $t++$}{
                 add $d_i$ to $S^{t-1}$ and get $S^t$\;
                 compute embedding $v_i^{t}$ from $d_i \circ w'^{t-1}$ with $S^t$\;
@@ -172,28 +165,49 @@ In this chapter we describe our motivations, the design of our approach and some
                 update $W^t$, $w'^t = w'^{t-1} - \alpha \frac{\partial E(C(S(d_i \circ w'^{t-1}))}{\partial w'^{t-1}} $\;    
             }
         }
-        \caption{Batch training of $w'$}
+        \caption{Batch training of $w'$} \label{algo:stochastic}
     \end{algorithm}
     
-    \subsubsection{Code explanations}
     
-    There is a few technical details that we need to discuss, 
-    mainly, what exactly do we mean by training until convergence.
-    Motivated by our experimental results and good practice from neural network training,
-    we split our dataset into $3$ parts: train, validation and test.
+    \subsection{Algorithm explanation}
+    We need to address a few things that are no apparent from the description provided above.
+    We do it here to not clutter the notation and so that the previous sections are a bit cleaner. 
     
-    We use train set for gradient evaluations and overall training. 
-    We use the validation set to keep track of our performance on unseen data and finally we report the performance on the test set, that was never seen by the model.
+    \subsubsection{Train test split} 
     
-    Each time step $t$ we evaluate our loss $E_{valid}$ on the validation dataset.
+    Motivated by good practice from neural network training,
+    we split our dataset into $3$ parts: train, validation, and test.
+    Train set is $80\%$ of our samples, validation and test are both $10\%$.
+    We make sure that all those sets have percentage of positive and negative labels that is similar to the whole dataset.
+    
+    We use the train set for gradient evaluations and overall training. 
+    We use the validation set to keep track of our performance on unseen data.
+    Based on this performance, we decide if the model is still improving, or if it started to overfit.
+    Finally we report the performance on the test set, that was never seen by the model.
+    
+    Because our datasets are not very big, we stabilize our results by employing the crossvalidation technique.  
+    However because we need to run a lot of experiments, we only use $3$ fold crossvalidation.
+    
+    \subsubsection{Stopping conditions} 
+    
+    In both optimization routines we iteratively update parameters $w'$ and we do so while our performance on validation set is increasing.
+    This needs more clarification.
+    
+    Each time step $t$ we evaluate our loss $E_{valid}^t$ on the validation dataset.
     By convergence we mean, that the $E_{valid}$ stopped improving.
     In the final solution we track the mean of this errors in last few time steps.
-    When this mean does not increase for long enough, we stop the training.
+    When this mean does not increase for long enough, we stop the training. 
+    Formally we track 
+    $ME_{10}^t = \frac{1}{10} \sum_{0\leq i < 10} E_{valid}^{t-i}$ (mean for last $10$ iterations) and
+    $ME_{10,20}^t = \frac{1}{10} \sum_{10\leq i < 20} E_{valid}^{t-i}$ (mean for previous $10$ iterations).
+    
+    We stop the training in time $t$ if $ME_{10}^t > ME_{10,20}^t$, which means our validation error started to increase and we need to stop.
+    
 
 \section{Implementation}
     
     In this section we go through some implementation details and decisions.
-    Whole thesis, including experiment evaluations, is implemented in Python3.
+    The whole thesis, including experiment evaluations, is implemented in Python3.
     For code, please refer to appendix A. %\ref{appendix:a}
 
     \subsection{Libraries} 
@@ -223,7 +237,7 @@ In this chapter we describe our motivations, the design of our approach and some
     
     We made use of multiple tools from this library. 
     We used \texttt{Dictionary} object for vocabulary filtering and embedding into the BOW representation and we used its TF-IDF implementations.
-    We also used its API to train word vectors. \* % TODO train word vectors 
+    We also used its API to train word vectors. 
     
     Most important for us was gensims implementation of the probabilistic algorithm for constructing approximate matrix decomposition \cite{halko2011finding}.
     This provides fast and easy to use incremental SVD decomposition.
@@ -243,21 +257,33 @@ In this chapter we describe our motivations, the design of our approach and some
     Because of this, TensorFlow is very popular among  machine learning researchers.
     
     In theory, we could (and we wanted to) implement our whole approach in TensorFlow.
-    It even contains implementation of SVD, but not with all the properties that we require.
+    It even contains implementation of SVD, however that implementation does not have all the properties that we require.
     
-    \subsubsection{Other used tools}
+    \subsection{Other tools used}
     
     During the development of required code we worked in Jupyter Notebook. 
     It is an interactive environment the offers very easy prototyping and
     data visualization \cite{PER-GRA:2007}. %ipython
+    For data visualization we used the Matplotlib library \cite{hunter2007matplotlib}. %matplotlib 
+    Finally, for data manipulation and presentation we used the Pandas \cite{mckinney2010data}. %pandas
     
-    For data visualization we used Matplotlib library \cite{hunter2007matplotlib}. %matplotlib 
-    
-    Finally for data manipulation and presentation we used Pandas \cite{mckinney2010data}. %pandas
-    
-    Last important mention belongs to Aysen Tatarinov, his blog and his repository \url{https://github.com/aysent/supervised-term-weighting} where he implemented a number of supervised weight schemes \cite{maas2011learning}.
+    Last important mention belongs to Aysen Tatarinov, his blog and his repository \footnote{\url{https://github.com/aysent/supervised-term-weighting}}, where he implemented a number of supervised weight schemes \cite{maas2011learning}.
     \* % TODO coppyright v kode
+    
+    
+    \subsubsection{Cloud} 
+    Because we want to test multiple parameters on multiple datasets, the number of experiments we need to perform explodes.
+    Running all those experiments on one PC would be unfeasible.
+    
+    In this thesis we made use of the free trial provided by Google Cloud \footnote{\url{https://cloud.google.com/}}.
+    This trial provides $300\$$ credit that can be spend on spawning virtual machines. 
+    This credit equals to approximately $6$ moths of compute time on PC with $2$ CPUs and with $7.5$GB of memory (\texttt{n1-standard2}).
+    
     
     \subsection{Code design} 
     
-    \* %     Something about used objects, classifiers, SVD, experiments, Two appraches
+    \* % TODO Something about used objects, classifiers, SVD, experiments, Two appraches
+    
+
+
+    
