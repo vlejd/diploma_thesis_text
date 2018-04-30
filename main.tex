@@ -13,12 +13,17 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{float}
-\usepackage[final]{pdfpages}
+\usepackage[final]{pdfpages} % kill final
 \usepackage[none]{hyphenat}
 \usepackage{algorithm2e}
 \usepackage{hyperref}
 \usepackage{booktabs}
-\usepackage[toc,page]{appendix}
+\usepackage{indentfirst}
+\usepackage{enumerate}
+
+%\usepackage{epigraph}
+
+\usepackage{nameref}
 
 
 \definecolor{lightgray}{gray}{0.9}
@@ -48,6 +53,7 @@
 
 
 \linespread{1.25} % hodnota 1.25 by mala zodpovedat 1.5 riadkovaniu
+\setcounter{secnumdepth}{3}
 
 % -------------------
 % --- Definicia zakladnych pojmov
@@ -229,7 +235,10 @@ Consultant: & \mfkonzultant \\
 
 %\newpage 
 
-%\listoffigures
+\listoffigures
+
+
+\listoftables
 
 % ---  Koniec Zoznamov
 
@@ -237,12 +246,9 @@ Consultant: & \mfkonzultant \\
 
 \input text.tex 
 
-
-\input ch5_conclusion.tex
-
-% -------------------
-% --- Bibliografia
-% -------------------
+\appendix
+\input{appendix/A}
+\input{appendix/B}
 
 
 \newpage	
@@ -255,23 +261,6 @@ Consultant: & \mfkonzultant \\
 
 \bibliographystyle{plain}
 \bibliography{literatura} 
-
-
-%---koniec Referencii
-
-% -------------------
-%--- Prilohy---
-% -------------------
-
-%Nepovinná časť prílohy obsahuje materiály, ktoré neboli zaradené priamo  do textu. Každá príloha sa začína na novej strane.
-%Zoznam príloh je súčasťou obsahu.
-%
-\begin{appendices}
-
-\input AppendixA.tex
-\input AppendixB.tex
-%\addcontentsline{toc}{chapter}{Appendix B}
-\end{appendices}
 
 \end{document}
 

@@ -208,7 +208,7 @@ In this chapter we describe our motivations, the design of our approach and some
     
     In this section we go through some implementation details and decisions.
     The whole thesis, including experiment evaluations, is implemented in Python3.
-    For code, please refer to appendix A. %\ref{appendix:a}
+    For code, please refer to appendix \ref{appendix:code}
 
     \subsection{Libraries} 
 
@@ -275,15 +275,20 @@ In this chapter we describe our motivations, the design of our approach and some
     Because we want to test multiple parameters on multiple datasets, the number of experiments we need to perform explodes.
     Running all those experiments on one PC would be unfeasible.
     
-    In this thesis we made use of the free trial provided by Google Cloud \footnote{\url{https://cloud.google.com/}}.
-    This trial provides $300\$$ credit that can be spend on spawning virtual machines. 
+    We made use of the Google Cloud service \footnote{\url{https://cloud.google.com/}}.
+    We choose Google cloud mainly because it is easy to use and it provides a free trial with $300\$$ of credit that can be spend on computation. 
     This credit equals to approximately $6$ moths of compute time on PC with $2$ CPUs and with $7.5$GB of memory (\texttt{n1-standard2}).
     
+    Thanks to a good experiment design and a few bash scripts,
+    we were able to run experiments on $10$ machines at parallel.
+    
+    
+    \* %TODO experiments cost
+    In the end, our experiments costed approximately $70\$$ worth of computation time.
     
     \subsection{Code design} 
     
     \* % TODO Something about used objects, classifiers, SVD, experiments, Two appraches
     
-
 
     

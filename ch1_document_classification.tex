@@ -216,8 +216,18 @@
     because it has input units, hidden units and output units.
     In this thesis we will use the number of matrices $W$ that crates the model.
     
-    Neural networks represent very broad family of functions.
-    Neural networks are in fact an universal approximator and can approximate any other function \cite{cybenko1989approximation}.
+    \subsubsection{Logistic regression}
+    One of the simplest classifiers and one of the simplest neural networks is the logistic regression.
+    It is a one layer neural network with nonlinearity realized by the logistic (sigmoid) function $g(x) = \frac{1}{1+e^{-x}}$.
+    
+    This classifier has a lot of nice properties: 
+    $g'(x) = g(x)(1-g(x))$.
+    Good for classification, because it is from 0 to one. Other nice properties.
+    \* %TODO fix me
+    
+    
+    In general, neural networks represent very broad family of functions.
+    They are in fact an universal approximator and can approximate any other function \cite{cybenko1989approximation}.
     However, we need to train them first.
     
     \subsubsection{Backpropagation} \label{sec:backprop}
@@ -231,6 +241,7 @@
     In the second pass, we make use of the chain rule and incrementally compute gradient with respect to each layer of the network.
     Then we use the gradient descent and optimize the parameters \cite{rumelhart1986david}.
     
+    \* %introduce more
     \* %example
     %Let's take for example the simple 2 layer neural network $y=g(g(X W_1) W_2)$ with the $L2$ loss. 
     %Let $h_1=g(X W_1)$. 
@@ -239,16 +250,13 @@
     %$\frac{E_y(g(h_1 W_2))}{\partial W_2} = 
     %\frac{\partial E_y(\hat{y})}{\partial \hat{y}}\frac{\partial \hat{y}}{\partial W_2}$
     
-    \subsection{Linear regression}
-    \* %TODO fix me
-    simple example of neural network that is not trained with backprob, but with normal equations,  
-        but can still be used to do backprob with regards to the input.
-    
     \subsection{SVM}
+    \emph{Suport vector machine} (SVM) one of the most popular classifiers before NNs. Not trained with backprop, 
+    Optimized maximal margin.
+    We do not use it directly in thesis, but we use it in benchmarks.
     \* % TODO fix me
     \* % cite something
-    Some basics of svm, example of classifier that does not use backprop.
-    
+
     
 \section{Word and sentence representation}
 

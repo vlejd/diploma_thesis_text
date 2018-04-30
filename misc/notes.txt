@@ -1,20 +1,23 @@
 TODO: zdvihni learning rate
 
 
-TODO:
-introduction
+introduction, conclusion, acknowledgement
 
+always accuracy
 
+superwised weights
 ML introduction
-    linear regression
-    SVM
-    count based introduction
-    other document classification approaches.
-    superwised weights
+count based introduction
+SVM
+logistic regression
+other document classification approaches.
+
+document classification definicia
+sentiment analysis definicia
 
 
 write code design
-    copy right v term veights
+copy right v term weights
 
 
 fix appendices refs
@@ -22,8 +25,7 @@ check missing articles everywhere
 refky viac neskvo
 pis ako pre lingvistu
 
-document classification definicia
-sentiment analysis definicia
+
 
 
 Potom co je nice mat v uvode do kapitoly nie su zdanlivo prepojene - ML, Classification, Word & sentence repres, ... - treba toto prepojenie vysvetlit hned na zaciatku a vymenovat "in section \ref{} we discuss lalala, which is lalala with lalala in order to lalala". Mne napr nejde vobec do hlavy preco mas niektore veci pod ML a niektore ine pod Classif - ak si ani sam nie si isty skus sa zamysliet a preusporiadat resp. popisat ako to suvisi a preco to popisujes v tom poradi (to poradie myslim vysvetlit tak nepriamo nemusis sa akoze obhajovat, len mat k tomu pokec, ktory to uvedie ako pisem) 
