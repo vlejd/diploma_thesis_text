@@ -5,44 +5,51 @@ We perform the evaluation on multiple classification tasks.
 
 \section{Classification datasets}
     
-    Used datasets were acquired by following instructions in the SentEval\footnote{\url{https://github.com/facebookresearch/SentEval}} repository.
-    SentEval is a library for evaluating the quality of unsupervised sentence embeddings \cite{conneau2017supervised}.
-    We have not used any code from this library, because we were not able to modify its API in a maintainable way to fit our needs. 
-    In the end we just used it as a guideline for dataset acquisition.
+    To evaluate the performance of different approaches, we make use of multiple popular datasets.
+    In this section we describe these datasets in more details.
     
     \subsection{Overview} \label{sec:data:overview}
-    We use a set of binary classification tasks that covers various types of sentence classification.
-    Datasets corresponding to these tasks are:
+    
+    We use datasets from  SentEval\footnote{\url{https://github.com/facebookresearch/SentEval}} repository.
+    SentEval is a library for evaluating the quality of unsupervised sentence embeddings \cite{conneau2017supervised}.
+    We have not directly used  any code from this library, because we were not able to modify its API in a maintainable way to fit our needs. 
+    In the end we just used it as a guideline for dataset acquisition.
+    Specifically, we only used the \texttt{get\_transfer\_data.bash} script.
+    
+    This repository contains multiple a lot of different datasets, 
+    but we only use those related to binary classification tasks.
+    
+    We use:
     \begin{itemize}
-        \item Movie review sentiment analysis MR.
+        \item Movie review sentiment analysis dataset MR.
         \item Product review dataset CR.
         \item Subjectivity/objectivity dataset SUBJ.
         \item Question-type dataset TREC.
         \item Opinion polarity dataset MPQA.
     \end{itemize}
     
-\begin{table}[h]
-\begin{center}
-
-\begin{tabular}{l|rrrrr}
-\toprule
-{} &        CR &      MPQA &         MR &      SUBJ &      TREC \\\hline
-\midrule
-\#examples                                &   3775 &  10606 &   10662 &   10000 &   5952 \\\hline
-\#unique words                            &   5674 &   6238 &   20325 &   22636 &   8968 \\\hline
-\#words                                   &  75932 &  32779 &  230162 &  246015 &  58468 \\\hline
-\specialcell{\#words with\\$1$ apperance} &   2714 &   3117 &   10160 &   11152 &   5338 \\\hline
-\specialcell{avg sentence\\length}       &     20.11 &      3.09 &      21.59 &      24.60 &      9.82 \\\hline
-\specialcell{max sentence\\length}       &    106 &     44 &      62 &     122 &     37 \\\hline
-\specialcell{median sentence\\length}    &     18 &      2 &      21 &      23 &      9 \\\hline
-bias                                     &      0.64 &      0.69 &       0.50 &       0.50 &       NaN \\
-\bottomrule
-\end{tabular}
-
-\caption[Dataset characteristics]{Dataset characteristics}
-\label{tab:datasets:stats}
-\end{center}
-\end{table}
+    \begin{table}[h]
+    \begin{center}
+    
+    \begin{tabular}{l|rrrrr}
+    \toprule
+    {} &        CR &      MPQA &         MR &      SUBJ &      TREC \\\hline
+    \midrule
+    \#examples                                &   3775 &  10606 &   10662 &   10000 &   5952 \\\hline
+    \#unique words                            &   5674 &   6238 &   20325 &   22636 &   8968 \\\hline
+    \#words                                   &  75932 &  32779 &  230162 &  246015 &  58468 \\\hline
+    \specialcell{\#words with\\$1$ apperance} &   2714 &   3117 &   10160 &   11152 &   5338 \\\hline
+    \specialcell{avg sentence\\length}       &     20.11 &      3.09 &      21.59 &      24.60 &      9.82 \\\hline
+    \specialcell{max sentence\\length}       &    106 &     44 &      62 &     122 &     37 \\\hline
+    \specialcell{median sentence\\length}    &     18 &      2 &      21 &      23 &      9 \\\hline
+    bias                                     &      0.64 &      0.69 &       0.50 &       0.50 &       NaN \\
+    \bottomrule
+    \end{tabular}
+    
+    \caption[Dataset characteristics]{Dataset characteristics}
+    \label{tab:datasets:stats}
+    \end{center}
+    \end{table}
 
 
     In table \ref{tab:datasets:stats} we present a few basic statistics for each dataset.
@@ -118,21 +125,21 @@ bias                                     &      0.64 &      0.69 &       0.50 & 
     For each classifier, the class is fitted against all the other classes. 
     Hence new dataset TREC-ABR will contain the same samples, but labels will be binary, $1$ if the sentence was originally in class ABR and $0$ otherwise.
     
-\begin{table}[h]
-\begin{center}
-
-\begin{tabular}{lrrrrrr}
-\toprule
-{} &  ABBR &  DESC &  ENTY &   HUM &   LOC &   NUM \\
-\midrule
-bias &  0.98 &  0.78 &  0.77 &  0.78 &  0.85 &  0.83 \\
-\bottomrule
-\end{tabular}
-
-\caption[TREC subtasks characteristics]{TREC subtasks characteristics}
-\label{tab:trec:stats}
-\end{center}
-\end{table}
+    \begin{table}[h]
+    \begin{center}
+    
+    \begin{tabular}{lrrrrrr}
+    \toprule
+    {} &  ABBR &  DESC &  ENTY &   HUM &   LOC &   NUM \\
+    \midrule
+    bias &  0.98 &  0.78 &  0.77 &  0.78 &  0.85 &  0.83 \\
+    \bottomrule
+    \end{tabular}
+    
+    \caption[TREC subtasks characteristics]{TREC subtasks characteristics}
+    \label{tab:trec:stats}
+    \end{center}
+    \end{table}
 
     \subsubsection{Subjectivity/objectivity, SUBJ}
     
@@ -179,14 +186,7 @@ bias &  0.98 &  0.78 &  0.77 &  0.78 &  0.85 &  0.83 \\
     Note that $\mathrm{acc}_{train}$ is not very interesting on its own, but if we compare it with $\mathrm{acc}_{valid}$ and $\mathrm{acc}_{test}$ we can get an insight about whether our model is overfitting or underfitting.
 
 
-\section{Results}
-    In this section we present accuracy achieved by our approach and by baseline approaches.
-    To address the problems of measuring accuracy, we report relative improvements over a constant baseline.
-    For absolute accuracies refer to the appendix \ref{appendix:detailed}. 
-
-    Note, that because we have multiple testing datasets and multiple methods, we witness a small combinatorial explosion.
-
-    \subsection{Baselines} \label{sec:baseline}
+\section{Baselines} \label{sec:baseline}
 
     There is a number of baselines that we consider.
     These are commonly used approaches such as pretrained neural embeddings, or very naive baselines such as constant classifier.
@@ -194,8 +194,14 @@ bias &  0.98 &  0.78 &  0.77 &  0.78 &  0.85 &  0.83 \\
     The most important baseline we want to improve upon is in section \ref{sec:lsa:baseline}, 
     and it is the standard LSA.
 
+    \subsection{BOW baselines}
+    
+    First we evaluate baselines 
+    \* % TODO Rewrite
+    
     \subsubsection{Constant baselines}
-    As discussed in section \label{sec:data:overview}, some of our datasets are biased. 
+    
+    As discussed in section \ref{sec:data:overview}, some of our datasets are biased. 
     They may contain substantially more examples belonging to one label that belonging to the other.
     Because of this, we can ``train'' a very simple constant classifier. 
     This classifier counts number of samples in each class in the training set and than always outputs the majority class.
@@ -203,9 +209,9 @@ bias &  0.98 &  0.78 &  0.77 &  0.78 &  0.85 &  0.83 \\
     Performance of this classifier is almost identical to the bias of given dataset. 
     There are minor differences because of the random data split. 
 
-    \* %TODO add graph
+    \* %TODO add table
     
-    \subsubsection{BOW baselines}    
+    \subsubsection{Logistic regression}
     
     First commonly used baseline is a BOW representation with logistic regression as a classifier. 
     We test multiple different supervised and unsupervised word weighting schemes.
@@ -221,174 +227,180 @@ bias &  0.98 &  0.78 &  0.77 &  0.78 &  0.85 &  0.83 \\
     because we tell then the algorithm which words are probably more important.
     Because of that we may employ more strict regularization techniques without significant decrees in the performance.
     
-
-\begin{table}[H]
-\begin{center}
-
-\begin{tabular}{llrrrr}
-\toprule
-{} &      &  CR &  MPQA &  MR &  SUBJ \\
-scheme &  &            &              &            &              \\
-\midrule
-None & test &      0.143 &        0.159 &      0.270 &        0.419 \\
-{} & train &      0.335 &        0.223 &      0.479 &        0.494 \\
-tfchi2 & test &      0.111 &        0.125 &      0.176 &        0.349 \\
-{} & train &      0.147 &        0.166 &      0.206 &        0.343 \\
-tfgr & test &      0.116 &        0.126 &      0.176 &        0.349 \\
-{} & train &      0.150 &        0.167 &      0.211 &        0.346 \\
-tfidf & test &      0.124 &        0.160 &      0.258 &        0.416 \\
-{} & train &      0.361 &        0.291 &      0.500 &        0.500 \\
-tfig & test &      0.116 &        0.126 &      0.176 &        0.349 \\
-{} & train &      0.150 &        0.167 &      0.211 &        0.346 \\
-tfor & test &      0.135 &        0.151 &      0.273 &        0.404 \\
-{} & train &      0.253 &        0.198 &      0.407 &        0.436 \\
-tfrf & test &      0.106 &        0.147 &      0.239 &        0.386 \\
-{} & train &      0.194 &        0.179 &      0.322 &        0.418 \\
-\bottomrule
-\end{tabular}
-
-\caption[Accuracy improvements for BOW baseline]{Accuracy improvements for BOW baseline}
-\label{tab:}
-\end{center}
-\end{table}
-
-\begin{table}[H]
-\begin{center}
-
-\begin{tabular}{llrrrrrr}
-\toprule
-{} &&  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
-scheme &  & & & &&&\\
-\midrule
-None & test & 0.011 & 0.148 & 0.108 &0.138 &0.117 &0.129 \\
-{} & train & 0.010 & 0.202 & 0.209 &0.202 &0.142 &0.158 \\
-tfchi2 & test & 0.009 & 0.083 & 0.006 &0.102 &0.104 &0.097 \\
-{} & train & 0.009 & 0.098 & 0.015 &0.113 &0.103 &0.092 \\
-tfgr & test & 0.006 & 0.081 & 0.006 &0.104 &0.104 &0.106 \\
-{} & train & 0.007 & 0.097 & 0.014 &0.112 &0.103 &0.103 \\
-tfidf & test & 0.011 & 0.148 & 0.108 &0.134 &0.127 &0.139 \\
-{} & train & 0.016 & 0.218 & 0.226 &0.216 &0.154 &0.170 \\
-tfig & test & 0.006 & 0.081 & 0.006 &0.104 &0.104 &0.106 \\
-{} & train & 0.007 & 0.097 & 0.014 &0.112 &0.103 &0.103 \\
-tfor & test & 0.006 & 0.066 & 0.063 &0.139 &0.107 &0.129 \\
-{} & train & 0.006 & 0.170 & 0.166 &0.183 &0.123 &0.140 \\
-tfrf & test & 0.006 & 0.061 & 0.060 &0.124 &0.102 &0.118 \\
-{} & train & 0.007 & 0.136 & 0.135 &0.158 &0.104 &0.125 \\
-\bottomrule
-\end{tabular}
-
-\caption[Accuracy improvements for BOW baseline on TREC datasets]{Accuracy improvements for BOW baseline on TREC datasets}
-\label{tab:}
-\end{center}
-\end{table}
+    
+    \begin{table}[H]
+    \begin{center}
+    
+    \begin{tabular}{llrrrr}
+    \toprule
+    {} &      &  CR &  MPQA &  MR &  SUBJ \\
+    scheme &  &            &              &            &              \\
+    \midrule
+    None & test &      0.143 &        0.159 &      0.270 &        0.419 \\
+    {} & train &      0.335 &        0.223 &      0.479 &        0.494 \\
+    tfchi2 & test &      0.111 &        0.125 &      0.176 &        0.349 \\
+    {} & train &      0.147 &        0.166 &      0.206 &        0.343 \\
+    tfgr & test &      0.116 &        0.126 &      0.176 &        0.349 \\
+    {} & train &      0.150 &        0.167 &      0.211 &        0.346 \\
+    tfidf & test &      0.124 &        0.160 &      0.258 &        0.416 \\
+    {} & train &      0.361 &        0.291 &      0.500 &        0.500 \\
+    tfig & test &      0.116 &        0.126 &      0.176 &        0.349 \\
+    {} & train &      0.150 &        0.167 &      0.211 &        0.346 \\
+    tfor & test &      0.135 &        0.151 &      0.273 &        0.404 \\
+    {} & train &      0.253 &        0.198 &      0.407 &        0.436 \\
+    tfrf & test &      0.106 &        0.147 &      0.239 &        0.386 \\
+    {} & train &      0.194 &        0.179 &      0.322 &        0.418 \\
+    \bottomrule
+    \end{tabular}
+    
+    \caption[Accuracy improvements for BOW baseline]{Accuracy improvements for BOW baseline}
+    \label{tab:}
+    \end{center}
+    \end{table}
+    
+    \begin{table}[H]
+    \begin{center}
+    
+    \begin{tabular}{llrrrrrr}
+    \toprule
+    {} &&  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
+    scheme &  & & & &&&\\
+    \midrule
+    None & test & 0.011 & 0.148 & 0.108 &0.138 &0.117 &0.129 \\
+    {} & train & 0.010 & 0.202 & 0.209 &0.202 &0.142 &0.158 \\
+    tfchi2 & test & 0.009 & 0.083 & 0.006 &0.102 &0.104 &0.097 \\
+    {} & train & 0.009 & 0.098 & 0.015 &0.113 &0.103 &0.092 \\
+    tfgr & test & 0.006 & 0.081 & 0.006 &0.104 &0.104 &0.106 \\
+    {} & train & 0.007 & 0.097 & 0.014 &0.112 &0.103 &0.103 \\
+    tfidf & test & 0.011 & 0.148 & 0.108 &0.134 &0.127 &0.139 \\
+    {} & train & 0.016 & 0.218 & 0.226 &0.216 &0.154 &0.170 \\
+    tfig & test & 0.006 & 0.081 & 0.006 &0.104 &0.104 &0.106 \\
+    {} & train & 0.007 & 0.097 & 0.014 &0.112 &0.103 &0.103 \\
+    tfor & test & 0.006 & 0.066 & 0.063 &0.139 &0.107 &0.129 \\
+    {} & train & 0.006 & 0.170 & 0.166 &0.183 &0.123 &0.140 \\
+    tfrf & test & 0.006 & 0.061 & 0.060 &0.124 &0.102 &0.118 \\
+    {} & train & 0.007 & 0.136 & 0.135 &0.158 &0.104 &0.125 \\
+    \bottomrule
+    \end{tabular}
+    
+    \caption[Accuracy improvements for BOW baseline on TREC datasets]{Accuracy improvements for BOW baseline on TREC datasets}
+    \label{tab:}
+    \end{center}
+    \end{table}
 
     \* % describe results
 
-
-    \subsubsection{LSA baselines} \label{sec:lsa:baseline}
+    \subsection{LSA baselines} \label{sec:lsa:baseline}
     The most important baseline that we need to consider is standard LSA.
     In this baseline we construct the term matrix $M$, reweigh it with weighting scheme, train the LSA embedding and train the classifier.
     We try multiple weighting schemes and multiple classifiers.
     
     Refer to tables \ref{tab:lsa:resuts:300} and \ref{tab:lsa:resuts:400} in appendix B for results for dimensions $300$ and $400$.
     
-\begin{table}[H]
-\begin{center}
-
-\begin{tabular}{llrrrr}
-\toprule
-{} &      &  CR &  MPQA &  MR &  SUBJ \\
-scheme &  &            &              &            &              \\
-\midrule
-None & test &      0.093 &        0.095 &      0.198 &        0.360 \\
-{} & train &      0.162 &        0.103 &      0.216 &        0.390 \\
-tfchi2 & test &      0.093 &        0.095 &      0.198 &        0.360 \\
-{} & train &      0.162 &        0.103 &      0.215 &        0.390 \\
-tfgr & test &      0.093 &        0.094 &      0.198 &        0.359 \\
-{} & train &      0.162 &        0.103 &      0.215 &        0.390 \\
-tfidf & test &      0.093 &        0.095 &      0.197 &        0.360 \\
-{} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
-tfig & test &      0.093 &        0.094 &      0.197 &        0.360 \\
-{} & train &      0.162 &        0.103 &      0.216 &        0.390 \\
-tfor & test &      0.093 &        0.094 &      0.197 &        0.360 \\
-{} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
-tfrf & test &      0.093 &        0.094 &      0.197 &        0.359 \\
-{} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
-\bottomrule
-\end{tabular}
-
-\caption[Accuracy improvements for LSA baseline with 200 dimensions]{Accuracy improvements for LSA baseline with 200 dimensions}
-\label{tab:}
-\end{center}
-\end{table}
+    \begin{table}[H]
+    \begin{center}
+    
+    \begin{tabular}{llrrrr}
+    \toprule
+    {} &      &  CR &  MPQA &  MR &  SUBJ \\
+    scheme &  &            &              &            &              \\
+    \midrule
+    None & test &      0.093 &        0.095 &      0.198 &        0.360 \\
+    {} & train &      0.162 &        0.103 &      0.216 &        0.390 \\
+    tfchi2 & test &      0.093 &        0.095 &      0.198 &        0.360 \\
+    {} & train &      0.162 &        0.103 &      0.215 &        0.390 \\
+    tfgr & test &      0.093 &        0.094 &      0.198 &        0.359 \\
+    {} & train &      0.162 &        0.103 &      0.215 &        0.390 \\
+    tfidf & test &      0.093 &        0.095 &      0.197 &        0.360 \\
+    {} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
+    tfig & test &      0.093 &        0.094 &      0.197 &        0.360 \\
+    {} & train &      0.162 &        0.103 &      0.216 &        0.390 \\
+    tfor & test &      0.093 &        0.094 &      0.197 &        0.360 \\
+    {} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
+    tfrf & test &      0.093 &        0.094 &      0.197 &        0.359 \\
+    {} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
+    \bottomrule
+    \end{tabular}
+    
+    \caption[Accuracy improvements for LSA baseline with 200 dimensions]{Accuracy improvements for LSA baseline with 200 dimensions}
+    \label{tab:}
+    \end{center}
+    \end{table}
 
     %comapre to word vectos, compare to logistic regression, discuss overfitting.
     
     \* % results    
 
-    \subsubsection{Neural embeddings}
-    In this baseline we train word2vec neural embeddings on the dataset. 
+    \subsection{Neural embedding baselines}
+    \* % FIX THIS
+    LSA can be viewed a a different way of computing word vectors.
+    We test it against neural networks way.
+    First we try to train the word vectors on the dataset we want to classify
+    Then we will use pretrained word embeddings
+    
+    \subsubsection{Trained neural embeddings}
+    In this baseline we train word2vec neural embeddings on the dataset we want to classify on. 
     We use implementation \inlinecode{Python}{gensim.models.Word2Vec} from gensim.
     We train embeddings with dimensions $200$, $300$ and $400$. 
     Than we compute embedding for each word and sum them into an sentence embedding.
-    Than we train the classifier (SVM or logistic) regression and present the accuracy.
-    \* % TODO FIX SVC, SVM
+    Finally we train the classifier (SVM or logistic) regression and present the accuracy.
+    We refer to SVM as SVC (support vector classifier).
     Note, that we train embeddings for each dataset separately.
 
-\begin{table}[H]
-\begin{center}
+    \begin{table}[H]
+    \begin{center}
+    
+    \begin{tabular}{lllrrrr}
+    \toprule
+     & &&CR &MPQA &MR &SUBJ \\
+    \midrule
+    logistic & 200 & test & 0.03 &0.0 & 0.10 & 0.31 \\
+     & & train & 0.03 &0.0 & 0.11 & 0.31 \\
+     & 300 & test & 0.01 &0.0 & 0.09 & 0.31 \\
+     & & train & 0.02 &0.0 & 0.11 & 0.31 \\
+     & 400 & test & 0.01 &0.0 & 0.09 & 0.32 \\
+     & & train & 0.02 &0.0 & 0.11 & 0.31 \\
+    svc & 200 & test &-0.00 &0.0 & 0.05 & 0.17 \\
+     & & train & 0.00 &0.0 & 0.08 & 0.19 \\
+     & 300 & test &-0.00 &0.0 & 0.05 & 0.16 \\
+     & & train & 0.00 &0.0 & 0.08 & 0.18 \\
+     & 400 & test &-0.00 &0.0 & 0.05 & 0.14 \\
+     & & train & 0.00 &0.0 & 0.08 & 0.16 \\
+    \bottomrule
+    \end{tabular}
+    
+    
+    \caption[Accuracy improvements for trained word vectors]{Accuracy improvements for trained word vectors}
+    \label{tab:res:trainedwordvec}
+    \end{center}
+    \end{table}
 
-\begin{tabular}{lllrrrr}
-\toprule
- & &&CR &MPQA &MR &SUBJ \\
-\midrule
-logistic & 200 & test & 0.03 &0.0 & 0.10 & 0.31 \\
- & & train & 0.03 &0.0 & 0.11 & 0.31 \\
- & 300 & test & 0.01 &0.0 & 0.09 & 0.31 \\
- & & train & 0.02 &0.0 & 0.11 & 0.31 \\
- & 400 & test & 0.01 &0.0 & 0.09 & 0.32 \\
- & & train & 0.02 &0.0 & 0.11 & 0.31 \\
-svc & 200 & test &-0.00 &0.0 & 0.05 & 0.17 \\
- & & train & 0.00 &0.0 & 0.08 & 0.19 \\
- & 300 & test &-0.00 &0.0 & 0.05 & 0.16 \\
- & & train & 0.00 &0.0 & 0.08 & 0.18 \\
- & 400 & test &-0.00 &0.0 & 0.05 & 0.14 \\
- & & train & 0.00 &0.0 & 0.08 & 0.16 \\
-\bottomrule
-\end{tabular}
-
-
-\caption[Accuracy improvements for trained word vectors]{Accuracy improvements for trained word vectors}
-\label{tab:res:trainedwordvec}
-\end{center}
-\end{table}
-
-\begin{table}[H]
-\begin{center}
-
-\begin{tabular}{lllrrrrrr}
-\toprule
- & &&ABBR &DESC &ENTY &HUM &LOC &NUM \\
-\midrule
-logistic & 200 & test &-0.0 &0.00 &-0.0 & 0.03 &0.0 & 0.06 \\
- & & train &-0.0 &0.01 &-0.0 & 0.02 &0.0 & 0.05 \\
- & 300 & test &-0.0 &0.01 &-0.0 & 0.01 & -0.0 & 0.05 \\
- & & train &-0.0 &0.00 &-0.0 & 0.01 & -0.0 & 0.04 \\
- & 400 & test &-0.0 &0.00 &-0.0 & 0.00 & -0.0 & 0.04 \\
- & & train &-0.0 &0.00 &-0.0 & 0.01 & -0.0 & 0.03 \\
-svc & 200 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
- & & train &-0.0 & -0.00 & 0.0 & 0.00 & -0.0 & 0.00 \\
- & 300 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
- & & train &-0.0 & -0.00 & 0.0 & 0.00 & -0.0 & 0.00 \\
- & 400 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
- & & train &-0.0 & -0.00 & 0.0 & 0.00 & -0.0 & 0.00 \\
-\bottomrule
-\end{tabular}
-
-\caption[Accuracy improvements for trained word vectors on TREC dataset]{Accuracy improvements for trained word vectors on TREC dataset}
-\label{tab:res:trainedwordvec:trec}
-\end{center}
-\end{table}
+    \begin{table}[H]
+    \begin{center}
+    
+    \begin{tabular}{lllrrrrrr}
+    \toprule
+     & &&ABBR &DESC &ENTY &HUM &LOC &NUM \\
+    \midrule
+    logistic & 200 & test &-0.0 &0.00 &-0.0 & 0.03 &0.0 & 0.06 \\
+     & & train &-0.0 &0.01 &-0.0 & 0.02 &0.0 & 0.05 \\
+     & 300 & test &-0.0 &0.01 &-0.0 & 0.01 & -0.0 & 0.05 \\
+     & & train &-0.0 &0.00 &-0.0 & 0.01 & -0.0 & 0.04 \\
+     & 400 & test &-0.0 &0.00 &-0.0 & 0.00 & -0.0 & 0.04 \\
+     & & train &-0.0 &0.00 &-0.0 & 0.01 & -0.0 & 0.03 \\
+    svc & 200 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
+     & & train &-0.0 & -0.00 & 0.0 & 0.00 & -0.0 & 0.00 \\
+     & 300 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
+     & & train &-0.0 & -0.00 & 0.0 & 0.00 & -0.0 & 0.00 \\
+     & 400 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
+     & & train &-0.0 & -0.00 & 0.0 & 0.00 & -0.0 & 0.00 \\
+    \bottomrule
+    \end{tabular}
+    
+    \caption[Accuracy improvements for trained word vectors on TREC dataset]{Accuracy improvements for trained word vectors on TREC dataset}
+    \label{tab:res:trainedwordvec:trec}
+    \end{center}
+    \end{table}
 
 
     Tables \ref{tab:res:trainedwordvec} and \ref{tab:res:trainedwordvec:trec} contain our results.
@@ -402,75 +414,62 @@ svc & 200 & test &-0.0 &0.00 &-0.0 &-0.00 & -0.0 & 0.00 \\
     We also conclude that we have not observed any overfitting as train and test accuracies are very similar.
     
 
-    \subsubsection{Pre-trained neural embeddings}    
+    \subsubsection{Pretrained neural embeddings}    
     
     In this experiment we use pretrained word embeddings. 
-    We use python library spacy.
-    It provides easy interface for obtaining pretrained word embeddings.
+    We use python library spacy which provides easy interface for obtaining such embeddings.
     
-    We use \inlinecode{Python}{spacy.load('en_vectors_web_lg')}.
+    We use \texttt{spacy.load('en\_vectors\_web\_lg')}.
     This command returns a pretrained model that we can query with words. 
     Embedding obtained in this way have $300$ dimensions and were trained on a large web corpus (large collection of websites). 
     Note, that because these vectors were trained on much bigger datasets, it is not a very fair comparison to other methods presented here.
 
-\begin{table}[h]
-\begin{center}
-
-\begin{tabular}{llrrrr}
-\toprule
- &&CR &MPQA &MR &SUBJ \\
-\midrule
-logistic & test & 0.18 & 0.20 & 0.29 & 0.43 \\
- & train & 0.19 & 0.20 & 0.29 & 0.42 \\
-svc & test &-0.00 & 0.17 & 0.24 & 0.40 \\
- & train & 0.00 & 0.18 & 0.24 & 0.40 \\
-\bottomrule
-\end{tabular}
-
-\caption[Accuracy improvements for pretrained word vectors]{Accuracy improvements for pretrained word vectors}
-\label{tab:res:pretrainedwordvec}
-\end{center}
-\end{table}
-
-
-
-\begin{table}[H]
-\begin{center}
-
-\begin{tabular}{llrrrrrr}
-\toprule
- &&ABBR &DESC &ENTY &HUM &LOC &NUM \\
-\midrule
-logistic & test &0.01 &0.08 &0.07 & 0.14 & 0.10 & 0.07 \\
- & train &0.01 &0.11 &0.09 & 0.14 & 0.10 & 0.10 \\
-svc & test & -0.00 &0.02 & -0.00 & 0.09 & 0.00 & 0.00 \\
- & train & -0.00 &0.03 &0.00 & 0.09 & 0.01 & 0.00 \\
-\bottomrule
-\end{tabular}
-
-\caption[Accuracy improvements for pretrained word vectors on TREC dataset]{Accuracy improvements for pretrained word vectors on TREC dataset}
-\label{tab:res:pretrainedwordvec:trec}
-\end{center}
-\end{table}
+    \begin{table}[h]
+    \begin{center}
+    
+    \begin{tabular}{llrrrr}
+    \toprule
+     &&CR &MPQA &MR &SUBJ \\
+    \midrule
+    logistic & test & 0.18 & 0.20 & 0.29 & 0.43 \\
+     & train & 0.19 & 0.20 & 0.29 & 0.42 \\
+    svc & test &-0.00 & 0.17 & 0.24 & 0.40 \\
+     & train & 0.00 & 0.18 & 0.24 & 0.40 \\
+    \bottomrule
+    \end{tabular}
+    
+    \caption[Accuracy improvements for pretrained word vectors]{Accuracy improvements for pretrained word vectors}
+    \label{tab:res:pretrainedwordvec}
+    \end{center}
+    \end{table}
+    
+    
+    
+    \begin{table}[H]
+    \begin{center}
+    
+    \begin{tabular}{llrrrrrr}
+    \toprule
+     &&ABBR &DESC &ENTY &HUM &LOC &NUM \\
+    \midrule
+    logistic & test &0.01 &0.08 &0.07 & 0.14 & 0.10 & 0.07 \\
+     & train &0.01 &0.11 &0.09 & 0.14 & 0.10 & 0.10 \\
+    svc & test & -0.00 &0.02 & -0.00 & 0.09 & 0.00 & 0.00 \\
+     & train & -0.00 &0.03 &0.00 & 0.09 & 0.01 & 0.00 \\
+    \bottomrule
+    \end{tabular}
+    
+    \caption[Accuracy improvements for pretrained word vectors on TREC dataset]{Accuracy improvements for pretrained word vectors on TREC dataset}
+    \label{tab:res:pretrainedwordvec:trec}
+    \end{center}
+    \end{table}
 
     
     We see, that these embeddings perform much better than the trained ones. 
     We even see a significant improvements on the TREC dataset (absolute accuracy over $0.90$).
     Interesting observation is, that logistic regression performs much better than SVM.
-    Note, that we have not spend much time on finetuning hyperparameters of these classifiers. 
+    Note, that we have not spend much time on fine tuning hyperparameters of these classifiers. 
 
     
-    \subsection{Our approach}
-    
-    In our approach we evaluate a number of hyperparameters. Most notably the classifier, used term weights and type of learning (batch vs stochastic).
-    
-    With batch, we evaluate how many w updates we perform before we recompute the SVD and retrain the classifier.
-    
-    \* %write
-    we test number of weights
-    initializations
-    \texttt{tfidf} \texttt{tfchi2} \texttt{tfig} \texttt{tfgr} \texttt{tfor} \texttt{tfrf} \texttt{None}
-
-    multiple learning rates and multiple embedding sizes on all datasets
-    We compare our results agains lsas baseline (lsa with given weights, but without training).
-    
+    % section Our approach
+    {\input{ch41_our_approach}}
