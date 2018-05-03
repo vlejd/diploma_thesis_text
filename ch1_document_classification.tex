@@ -66,7 +66,7 @@
     
     Our math notation is mostly influenced by programming practice.
     In this thesis we assume all vectors to be row vectors.
-    We also assume natural broadcasting of some operations, like \circ for Hadamard product.
+    We also assume natural broadcasting of some operations, like $\circ$ for Hadamard product.
     
     Throughout this thesis we try to illustrate things with examples. 
     For consistency, we will use following sample corpus of sentences and labels:
@@ -522,7 +522,7 @@
     For example, LSA computed on our example corpus \ref{tab:example:dataset} would focus on capturing the words \texttt{a}, \texttt{is}, \texttt{dog} and \texttt{cat},
     event though they are completely irrelevant to our prediction task.
     
-    \subsection{Relationship of prediction and count based representations}
+    \subsection{Relationship of prediction and count based representations} \label{sec:count:vs:predict}
         
     LSA and other count based techniques used to be very popular alternative to local representations.
     However after the raise of neural networks, they were soon overshadowed by neural word embeddings.
@@ -560,6 +560,6 @@
     they observed mostly local or insignificant performance differences between quality of count based embeddings and prediction based embeddings.
     
     Note, that these experiments were done on a large bodies of text like English Wikipedia.   
-    On small datasets it was empirically shown, that count based methods actually outperform the neural networks.\cite{altszyler2016comparative}. % lsa vs word2vec on samall corpora
+    On small datasets it was empirically shown, that count based methods actually outperform the neural networks\cite{altszyler2016comparative}. % lsa vs word2vec on samall corpora
     
     
