@@ -1,6 +1,6 @@
 \section{Weights analysis} \label{chap:weight:analysis}
 
-    Most machine learning algorithm primarily used as black box approaches \cite{ribeiro2016should}. % explainability
+    Most machine learning algorithm primarily used as black box approaches~\cite{ribeiro2016should}. % explainability
     It is hard, to justify their predictions or to extract some insight from them. 
     
     We designed our approach with interpretability in mind.
@@ -126,13 +126,13 @@
     \label{tab:words:CR:tfidf}
 \end{table}
 
-    In table \ref{tab:words:CR:tfidf} we see results for \texttt{tfidf}. 
+    In table \ref{tab:words:CR:tfidf} we display results for \texttt{tfidf}. 
     Recall from section \ref{sec:term:weights}, that \texttt{tfidf} decreases importance of words, that are common in the dataset.
     However, we see (and already know), that such words may be very important for the classification task.
-    This is exactly what eLSA finds. 
+    This is exactly what eLSA can find out. 
     Our approach boosted words like \texttt{good} and \texttt{worst}, that are very common and very discriminative.
     Moreover, our approach boosted the word \texttt{not}, that is usually completely removed from the datasets, because it is considered to be a stop word. 
-    On the other hand, eLSA almost completely inhibited the preposition \texttt{a}, that almost certainly does not hold any importance for any classification task.
+    Last, but not least, eLSA almost completely inhibited the preposition \texttt{a}, that almost certainly does not hold any importance for any classification task.
 
 
 \begin{table}[H]
@@ -190,7 +190,7 @@
     On the other hand, it looks like this scheme undervalued some rather interesting words like \texttt{awesome} or \texttt{slow}.
     Interesting is a word \texttt{the}, what is always considered to be a stop word and is usually removed. 
     However, according to our approach, it was underweighted. 
-    We think, that it is because it can signify some form of superlative and hence sentiment polarity.
+    We think, that it is because it can signify some form of superlative and hence indicate sentiment polarity.
     
 
     Now we look at the TREC-DESC dataset. 
@@ -247,7 +247,7 @@
     \label{tab:words:TREC:none}
 \end{table}
 
-    If we use just the term vectors (scheme \texttt{None}), there are again obvious words that we underweight.
+    If we use just the term vectors (scheme \texttt{None}), there are again typical words that we underweight.
     The answer obviously depends on the interrogative pronoun such as: \texttt{who} or \texttt{what}.
     Also words like \texttt{origin}, \texttt{mean}, and \texttt{reason} probably associate with some desired explanation.
     On the other hand, words like \texttt{does}, \texttt{of}, and \texttt{and} were identified like not important.
@@ -360,14 +360,17 @@ words &  $w'$ \\
     In table \ref{tab:words:TREC:tfig} we see, that even supervised scheme \texttt{tfig} underweighted some interrogative pronouns like \texttt{what}.
     We see, that it had almost never overweighted any word as only $5$ words have $w'$ lover than $0.9$ and only $9$ words have $w'$ less than $1$.
 
+    \newpage
     \subsubsection{Weight histograms}
     
     We can look on the overall distribution of weights $w'$ for given dataset and weighting scheme.
+    We present histograms of values in $w'$.
+    Because these values seems to be exponentially distributed, with set the $y$ axis to logarithmic scale.
     This gives us an idea, if the scheme generally underweights or overweights words.
     If the mass of the histogram is around $1$, we know that parameters $w'$ not changed the matrix $M$ very much.
     If the mass is on the right of the $1$, it means the scheme is underweighting and $w'$ needs to compensate that. On the other hand, if the histogram is skewed to the left, it means the scheme is overweighting.
     
-    We present histograms with logarithmic $y$ axis.
+    
     
     \begin{figure}
     \centerline{\includegraphics[width=0.7\textwidth]{images/histw_cr.png}}
@@ -386,9 +389,9 @@ words &  $w'$ \\
     
     \subsubsection{Possible further directions for analysis}
     
-    There is a number of other interesting analysis that can be performed on such weights and may be subject to future work.
+    There is a number of other interesting analysis that can be performed on on parameters $w'$ and may be subject to future work.
     
-    We think that the most interesting, and possibly the hardest task would be to find the analytic formula for such weighted scheme, that incorporates the learned parameters $w'$. 
+    We think that the most interesting, and possibly the hardest task, would be to find the analytic formula for such weighted scheme, that incorporates the learned parameters $w'$. 
     This could lead to a design of a new supervised weighting scheme with better performance that current ones.
     
     To learn such analytic formula, we recommend to use symbolic regression.

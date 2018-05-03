@@ -1,12 +1,12 @@
 \chapter{Similar work}
-In literature, we identified $3$ ways how to address shortcomings of LSA for document classification. In this chapter we discuss these approaches in more details.
+From studying the literature, we identified 3 ways how to address shortcomings of LSA for document classification. In this chapter we discuss these approaches in more details.
 
 We can modify the term matrix $M$ so that weight of each word represents how important is this word for the actual classification task and use \emph{supervised term weights}. 
 This is a contrast to the classical approach, where the weight of the word represents, how important is it for the document reconstruction.
 
 Besides that, we can introduce some form of supervision directly into the matrix decomposition process.
-Sun et al. \cite{sun2004supervised} propose sLSI (supervised latent semantic indexing) and they employ the supervision while choosing the most relevant dimensions of the embedding.
-Chakraborti et al. \cite{chakraborti2006sprinkling} propose to add class dependent terms (supervised terms) into the term matrix and proceed with standard factorization.
+Sun et al.~\cite{sun2004supervised} propose sLSI (supervised latent semantic indexing) and they employ the supervision while choosing the most relevant dimensions of the embedding.
+Chakraborti et al.~\cite{chakraborti2006sprinkling} propose to add class dependent terms (supervised terms) into the term matrix and proceed with standard factorization.
 
 Finally, we can fully employ advances made in artificial neural networks and use LSA just as a module into these networks.
 
@@ -17,7 +17,7 @@ In this chapter, we introduce each of these approaches in more details.
     \subsection{Supervised LSI}
         Recall (from section \ref{sec:lsa}) that we consider LSI and LSA to refer to the same method. 
     
-        Sun et al. \cite{sun2004supervised} %supervised lsi, discriminative basis
+        Sun et al.~\cite{sun2004supervised} %supervised lsi, discriminative basis
         also recognized that LSI is not optimal for document categorization tasks because it finds the most representative features and not the most discriminative ones. 
         To address this problem, they incorporate the available classification of documents into $c$ categories and propose supervised latent semantic indexing (SLSI).
         
@@ -35,12 +35,12 @@ In this chapter, we introduce each of these approaches in more details.
         Note that because they project onto one vector, this centroid is a scalar. 
         Then they compute distances between such centroids for each pair of classes $f_s^{pq} = |v_s^p - v_s^q|$.
         
-        Finally they select the most discriminative vector as $b=arg_{g_i \in G} \{\max_{p q} f_i^{p q} \}$ (vector that separates some pair of classes the best) and proceed to select the next one.
+        Finally, they select the most discriminative vector as $b=arg_{g_i \in G} \{\max_{p q} f_i^{p q} \}$ (vector that separates some pair of classes the best) and proceed to select the next one.
         
         They report that this algorithm generates better representations than standard LSI and can achieve higher dimensionality reduction without reducing the classification accuracy.
         
     \subsection{Sprinkling}
-        Chakraborti et al. propose another way how to incorporate class information into LSI \cite{chakraborti2006sprinkling}\cite{chakraborti2007supervised}.
+        Chakraborti et al. propose another way how to incorporate class information into LSI~\cite{chakraborti2006sprinkling}\cite{chakraborti2007supervised}.
         They propose to add the label directly to the term matrix $M$ resulting into a ``sprinkled'' matrix $M'$.
 
 \begin{figure}[h]
@@ -95,7 +95,7 @@ y_{1,k} &\dots&  y_{N,k} \\
     This approach reports $1\%$ improvement over LSI without sprinkling.
     
     \subsubsection{Why does it work?}
-    Work of Kontostathis et al. \cite{kontostathis2006framework} reveals close correspondence between LSI and higher order associations between terms. 
+    Work of Kontostathis et al.~\cite{kontostathis2006framework} reveals close correspondence between LSI and higher order associations between terms. 
     We say that word $w_1$ has a first order association with another word $w_2$, if they co-occur in at least one document. 
     We say that words $w_1$ and $w_2$ share a second order association if there is at least one term $w_3$ that co-occurs with $w_1$ and $w_2$ in distinct documents. 
     Kontostathis et al. provide experimental evidence to show that LSI boosts similarity between terms sharing higher order associations. 
@@ -115,7 +115,7 @@ y_{1,k} &\dots&  y_{N,k} \\
 
 
     \subsection{Supervised weights for sentiment classification}
-    Deng et al. \cite{deng2014study} % supervised weights
+    Deng et al.~\cite{deng2014study} % supervised weights
     proposed a number of superwised weighting schemes.
     \* % TODO write more about superwised weights
     IDT:
@@ -131,12 +131,12 @@ y_{1,k} &\dots&  y_{N,k} \\
 
     
     
-    A number of supervised weighting schemes was also studies by Wu et al. \cite{wu2017balancing} % word weights, TODO read
-    and Lan et al. \cite{lan2009supervised}. % supervised weights for text categorization
+    A number of supervised weighting schemes was also studies by Wu et al.~\cite{wu2017balancing} % word weights, TODO read
+    and Lan et al.~\cite{lan2009supervised}. % supervised weights for text categorization
 
 
     \subsection{TF-KLD}
-        Ji and Eisenstein \cite{ji2013discriminative} % TF KLD
+        Ji and Eisenstein~\cite{ji2013discriminative} % TF KLD
         studied the performance of LSA for semantic relatedness task.
         
         In semantic relatedness task we have two documents $d_i^1, d_i^2$ and we want to determine, whether they are semantically related or not. 
@@ -153,17 +153,17 @@ y_{1,k} &\dots&  y_{N,k} \\
         They compute probabilities $p_j = P(s_{ij}^1| s_{ij}^2, y_i=1)$ and $q_j = P(s_{ij}^1| s_{ij}^2, y_i=0)$.
         In other words, what is the probability that word $w_j$ is in the first sentence if it is the second one and the sentences are (not) related.
         
-        KLD for word $j$ is $KL(p_j || q_j) = \sum_x p_j(x) \log \frac{p_j(x)}{q_j(x)}$, where $KL$ denotes the Kullback-Leibler divergence.
+        KLD for word $j$ is $KL(p_j || q_j) = \sum_x p_j(x) \log \frac{p_j(x)}{q_j(x)}$, where $KL$ denotes the \hyphenation{Kullback-Leibler} divergence.
         This can be seen as an amount of information that presence of the word tells us about similarity of this pair of sentences. 
     
-        This approach with TF-KLD weights can perform even better, than recurrent neural networks \cite{conneau2017supervised}.
+        This approach with TF-KLD weights can perform even better, than recurrent neural networks~\cite{conneau2017supervised}.
         This result shows, that with proper supervised weights, we can even outperform complicated neural network approaches.
         
 
 \section{SVD in neural networks} \label{sec:nn:svd}
-    Ionescu et al. \cite{ionescu2015training} % svd in neural networks
+    Ionescu et al.~\cite{ionescu2015training} % svd in neural networks
     proposed a very interesting method of how to use good properties of SVD inside a neural network.
-    They researched the field of computer vision, that is currently dominated by convolutional neural networks (CNNs).
+    They researched the field of computer vision, that is currently dominated by convolutional neural networks (CNNs)~\ref{lecun1998}.
     
     They argue, that CNNs specialize at local computations while on the other hand SVD can perform global computations.
     

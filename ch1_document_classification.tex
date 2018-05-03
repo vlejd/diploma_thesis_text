@@ -2,7 +2,8 @@
 
     In this chapter we introduce a problem of document (text) classification and commonly used approaches that are used to solve this problem.
     
-    In this thesis we will improve upon one of the unsupervised approaches for this problem and add a supervised twist to it.
+    In this thesis discuss one of the unsupervised approaches for this problem.
+    Then, we enhance this approach by incorporating a few trick from supervised machine learning.
 
 \section{Problem description and motivation} \label{sec:problem}
 
@@ -12,16 +13,16 @@
     Websites, blogs, facebook posts, tweets, G+ posts contain wast amounts of information that can be very valuable.
     Moreover, companies customer centers usually receive large amounts of questions and requests from customers that could be automatically processed.
     
-    Automating text categorization and classification is therefore becoming increasingly important and fundamental task. 
-    A major objective of text classification system is to semantically assignment one or more predefined categories to documents.
+    Automating text categorization and classification is therefore becoming an increasingly important and fundamental task. 
+    A major objective of text classification system is to semantically assign one or more predefined categories to documents.
     
     Is this document a positive review? 
-    Does this question asks about a person?
-    Is this customer ticket related to software bug?
-    All of the questions above are instances of a text classification problem.
+    Is this question about a person?
+    Is this customer ticket related to a software bug?
+    All of the questions above are instances of the text classification problem.
     
     Usually, machine learning, statistical pattern recognition, or neural network approaches are used to construct classifiers automatically.
-    This problem has significantly attracted attention from lots of researchers.
+    This problem has significantly attracted attention from many researchers.
 
     \subsection{Sentiment analysis}
     
@@ -32,11 +33,11 @@
     It is also known as opinion mining, deriving the opinion or attitude of a speaker. 
     A common use case for this technology is to discover how people feel about a particular topic.
     SA is widely applied to customer materials such as reviews or online and social media.
-    It can answer questions like: ``Does this review suggests, that Eat\&Meet is a good place to eat (and meet)?'', ``Does the person likes his dog?''.
+    It can answer questions like: ``Does this review suggests, that Eat\&Meet is a good place to eat (and meet)?'', ``Does the person like his dog?''.
     
     There is a lot of ways how to approach document classification problem. 
-    The most important thinks, that we consider about those approaches are accuracy and interpretability.
-    Further we can consider also speed of required preprocessing, speed of actual classification, amount of required data and memory requirements. 
+    The most important things, that we consider about those approaches are accuracy and interpretability.
+    Further we can consider also the speed of required preprocessing, the speed of actual classification, the amount of required data and the memory requirements. 
     
     In this thesis we revisit one of the older approaches called LSA and try to address some of its shortcomings.
     
@@ -66,7 +67,7 @@
     
     Our math notation is mostly influenced by programming practice.
     In this thesis we assume all vectors to be row vectors.
-    We also assume natural broadcasting of some operations, like $\circ$ for Hadamard product.
+    We also assume natural broadcasting of some operations, like $\circ$ for the Hadamard product.
     
     Throughout this thesis we try to illustrate things with examples. 
     For consistency, we will use following sample corpus of sentences and labels:
@@ -126,7 +127,7 @@
     $$E_y(\hat{y}) = \frac{1}{2}(y - \hat{y})^2 = \frac{1}{2}\sum_{i=1}^n (y_i - \hat{y_i})^2= \frac{1}{2}\sum_{i=1}^n (y_i - f_\Theta(x))^2$$  
     
     Formally we want to find parameter $\hat{\Theta}$ such that $\hat{\Theta} = argmin_\Theta \left(E_y(f_\Theta(x) \right)$. 
-    This equation is usually not solved directly, but through an optimization process called learning \cite{Goodfellow-et-al-2016}. % deep learning book
+    This equation is usually not solved directly, but through an optimization process called learning~\cite{Goodfellow-et-al-2016}. % deep learning book
     
     \subsubsection{Gradient descent}
 
@@ -142,17 +143,20 @@
     We follow the opposite direction of gradient of the cost function $Q$ in respect to parameters $\Theta$. 
     We initialize $\Theta_0$ to small random numbers and we perform a gradient descent step
     
-    $$\Theta^{t+1} = \Theta^t - \alpha \frac{\partial Q(\Theta^t)}{\partial \Theta^t} = \Theta^t - \alpha \nabla Q(\Theta^t)$$
-    
+    \begin{equation}
+      \Theta^{t+1} = \Theta^t - \alpha \frac{\partial Q(\Theta^t)}{\partial \Theta^t} = \Theta^t - \alpha \nabla Q(\Theta^t)
+      \label{eq:gradient:descent}
+    \end{equation}
+
     $\alpha$ denotes the size of the step we will make and is commonly known as a learning rate. 
     We perform the gradient descent step until we are not improving enough any more. 
-    Formally we stop, when $|\Theta^{t+1} - \Theta^t| < \epsilon$ for a given $\epsilon$ \cite{bottou-bousquet-2008}.
+    Formally we stop, when $|\Theta^{t+1} - \Theta^t| < \epsilon$ for a given $\epsilon$~\cite{bottou-bousquet-2008}.
     
     This process is also sometimes referred to as a batch gradient descent.
 
     \begin{figure}
     \centerline{\includegraphics[width=0.4\textwidth]{images/gradient_descent}}
-    \caption[Gradient descent]{Gradient descent \cite{pict}}
+    \caption[Gradient descent]{Gradient descent~\cite{pict}}
     \label{obr:gradient}
     \end{figure}
     
@@ -169,7 +173,10 @@
     Instead of performing the gradient step on the whole $Q$, 
     we can perform a gradient step for each $Q_i$. 
 
-    $$\Theta^{t+1} = \Theta^t - \alpha \frac{\partial Q_i(\Theta^t)}{\partial \Theta^t} = \Theta^t - \alpha \nabla Q_(\Theta^t)$$
+    \begin{equation}
+    \Theta^{t+1} = \Theta^t - \alpha \frac{\partial Q_i(\Theta^t)}{\partial \Theta^t} = \Theta^t - \alpha \nabla Q_(\Theta^t)
+    \label{eq:stochastic:gradient:descent}
+    \end{equation}
     
     For appropriate $\alpha$ we usually see a much faster convergence than for gradient descent.
     
@@ -180,15 +187,15 @@
     Neural network consists of small interconnected computational units (neurons) that are usually organized into a layers.
     Each unit takes some inputs, based on them produces an output and sends it to other units. 
     In a feed forward neural network, the signal is always moving forward,
-    hence unit on the $k$-th layer can only take its input from previous layers \cite{Goodfellow-et-al-2016}.
+    hence unit on the $k$-th layer can only take its input from previous layers~\cite{Goodfellow-et-al-2016}.
     
     By adjusting the connections and theirs strengths, the network can learn to produce a specific output for a specific input.
     
-    Simple neural network can be seen on an image \ref{obr:siet}.
+    A simple neural network is shown in figure~\ref{obr:siet}.
     
     \begin{figure}[h]
     \centerline{\includegraphics[width=0.4\textwidth]{images/neural_network}}
-    \caption[Simple neural network with 2 layers, 3 inputs, 4 neurons and 2 outputs]{Simple neural network with 2 layers, 3 inputs, 4 neurons and 2 outputs}
+    \caption[Simple neural network with 2 layers, 3 inputs, 4 neurons and 2 outputs]{Simple neural network with 2 layers, 3 inputs, 4 hidden neurons and 2 outputs}
     \label{obr:siet}
     \end{figure}
     
@@ -210,6 +217,7 @@
     
     $X$ represents the input matrix (number of samples $n$ times number of features $k$) and $\Theta$ is the matrix of weights (number of features $k$ times number of units $u$). Note that function $g$ is applied element-wise.
     
+    \subsubsection{Logistic regression}
     One of the simplest classifiers and one of the simplest neural networks is the logistic regression.
     It is a one layer neural network with nonlinearity realized by the logistic (sigmoid) function $g(x) = \frac{1}{1+e^{-x}}$.
     This classifier has a few nice properties. 
@@ -217,7 +225,7 @@
     Sigmoid outputs values in interval $[0,1]$ that can be directly viewed as a probability for given class.
     Because of these properties, the logistic regression is one of the most used classifiers and serves as a benchmark to great number of problems.
     
-    
+    \subsubsection{Multilayer neural networks}
     The important observation about neural networks is, that we can chain such layers to form a deeper neural network.
     $$y=g_2(g_1(X \Theta_1) \Theta_2)$$
     
@@ -225,10 +233,10 @@
     There is no consensus in the community about how to count the layers. 
     For example the simple network on picture \ref{obr:siet} could be seen as a $3$ layer neural network,
     because it has input units, hidden units and output units.
-    In this thesis we will use the number of matrices $W$ that crates the model.
+    In this thesis we will use the number of matrices $W$ that are in the model.
     
     In general, such multilayer feed forward neural networks represent very broad family of functions.
-    They are in fact an universal approximator and can approximate any other function \cite{cybenko1989approximation}.
+    They are in fact an universal approximator and can approximate any other function~\cite{cybenko1989approximation}.
     However, we need to train them first.
     
     \subsubsection{Backpropagation} \label{sec:backprop}
@@ -240,9 +248,9 @@
     \textit{Backpropagation} works in two parts, forward pass and backward pass.
     In the forward pass we feed to input to the network, compute activations of each layer and compute the final output.
     In the second pass, we make use of the chain rule and incrementally compute gradient with respect to each layer of the network.
-    Then we use the gradient descent and optimize the parameters \cite{rumelhart1986david}.
     
-    \* % write the equation
+    Then we use the gradient descent according to equation \ref{eq:gradient:descent} and optimize the parameters~\cite{rumelhart1986david}.
+    
     
     
 \section{Word and sentence representation}
@@ -331,13 +339,13 @@
     \end{itemize}
 
     Combination of such parts is called TF-IDF.
-    Note, that these choices for $\mathrm{TF}_{w,s}$ and $\mathrm{IDF}_{w,s}$ are probabilistically grounded \cite{aizawa2003information}. %information perspective on TF-IDF
+    Note, that these choices for $\mathrm{TF}_{w,s}$ and $\mathrm{IDF}_{w,s}$ are probabilistically grounded~\cite{aizawa2003information}. %information perspective on TF-IDF
     
     Another popular weighting scheme that is usually used in document retrieval is $\mathrm{BM_{25}}$. 
     
     $$\mathrm{BM}_{25~w,s} = \log \left(\frac{N-n_w+0.5}{n_w + 0.5}\right)    \frac{\mathrm{tf}_{w,s} (1.2 + 1)}{\mathrm{tf}_{w,s} + 1.2  \left(1 - 0.75 + 0.75 \cdot \frac{N}{\text{avgdl}}\right)}$$
     
-    This representation performs better than BOW and usually works the best for large documents in document retrieval \cite{li2014semantic}.
+    This representation performs better than BOW and usually works the best for large documents in document retrieval~\cite{li2014semantic}.
     
     Term weights can help to describe that different words, have different importance.
     However, they still cannot take into account, that two different words should have similar representation.
@@ -348,7 +356,7 @@
     To address the problem of high dimensionality and to allow different words to have high cosine similarity, we employ distributed representation.
     In this representation, dimensions do not correspond directly to words, but rather to some features of these words.
     In this representation the ''meaning`` of the word is split across multiple dimensions.
-    We can view each dimension as if it holds some form of an abstract meaning \cite{le2014distributed}. 
+    We can view each dimension as if it holds some form of an abstract meaning~\cite{le2014distributed}. 
     
     Simple but unrelated example of distributed representation is a binary representation of a number.
     
@@ -357,16 +365,16 @@
     \subsubsection{Distributional hypothesis}
     
     Distributional hypothesis states, that words that appear in similar contexts tend to have similar meaning,
-    even though they do not appear directly together \cite{harris1954distributional} \cite{Rubenstein:1965:CCS:365628.365657}. % distributional hypothesis 
+    even though they do not appear directly together~\cite{harris1954distributional}~\cite{Rubenstein:1965:CCS:365628.365657}. % distributional hypothesis 
     For example we can exchange words \texttt{dog} and \texttt{cat} in each sentence in our example corpus \ref{tab:example:dataset}
     and all sentences will still make sense. 
     The positive correlation between the words appearing in similar contexts and words having similar meaning was in fact empirically confirmed.
     
-    Because of this, distributional hypothesis is used as a foundation for a lot of methods that try to capture the word semantic similarity \cite{rubenstein1965contextual}. 
+    Because of this, distributional hypothesis is used as a foundation for a lot of methods that try to capture the word semantic similarity~\cite{rubenstein1965contextual}. 
 
     \subsection{Prediction based distributed representation}
     
-    Number of researchers used neural networks to create a good, dense, distributed word representations \cite{pennington2014glove} \cite{DBLP:conf/icml/LeM14} \cite{rong2014word2vec}. % slovne vektory, some word2vec shit, glove word vectors
+    Number of researchers used neural networks to create a good, dense, distributed word representations~\cite{pennington2014glove}~\cite{DBLP:conf/icml/LeM14}~\cite{rong2014word2vec}. % slovne vektory, some word2vec shit, glove word vectors
     These representations are also commonly called \emph{neural embeddings} or just word vectors.
     We will call these representations \emph{word vectors}.
     Word vectors proved to be very useful in broad range of natural language processing tasks. 
@@ -383,7 +391,7 @@
     On the other hand, the \textit{continuous bag of words model} tries to predict the word based on its context.
     
     These methods can be computationally intensive, and they require a lot of training data. 
-    Moreover their training usually requires a lot of well chosen hyper-parameters and tricks \cite{DBLP:journals/corr/MikolovSCCD13} \cite{vajdova2017}. % podvzorkovanie
+    Moreover their training usually requires a lot of well chosen hyper-parameters and tricks~\cite{DBLP:journals/corr/MikolovSCCD13}~\cite{vajdova2017}. % podvzorkovanie
     
 
     \subsection{Count based distributed representation}
@@ -392,7 +400,7 @@
     These approaches are very popular before the raise of neural networks and neural embeddings.
     
     There is multiple ways how to extract some structure out of the Co-occurrence matrix.
-    For example, latent Dirichlet allocation (LDA) \cite{blei2003latent} constructs a probabilistic model of each document. 
+    For example, latent Dirichlet allocation (LDA)~\cite{blei2003latent} constructs a probabilistic model of each document. 
     It assumes, that each document is created as a mixture of topics and that each topic is just a distribution over words. 
     
     Second popular class of approaches relies on performing some matrix factorization on the co-occurrence matrix.
@@ -400,7 +408,7 @@
     
     \subsubsection{Latent semantic analysis} \label{sec:lsa}
     
-    For the purposes of this thesis we consider the \emph{latent semantic indexing} (LSI) to be the same as \emph{latent semantic analysis} (LSA) \cite{deerwester1990indexing}.
+    For the purposes of this thesis we consider the \emph{latent semantic indexing} (LSI) to be the same as \emph{latent semantic analysis} (LSA)~\cite{deerwester1990indexing}.
     For simplicity, we will refer only to the LSA.
     
     \emph{Latent semantic analysis} is one of the standard approaches to identify hidden variables describing the data.
@@ -423,9 +431,9 @@
     
     SVD breaks down the document matrix $M$ into three matrices $U$, $\Sigma$, $V$,\cite{papadimitriou2000latent} % interpretation of lsa, steal some introduction 
      % first lsi/lsa?
-    \cite{maas2011learning} % lda, vector space model
-    \cite{wiemer2004latent} % Latent semantic analysis
-    \cite{landauer1998introduction} % introduction to lsa 
+   ~\cite{maas2011learning} % lda, vector space model
+   ~\cite{wiemer2004latent} % Latent semantic analysis
+   ~\cite{landauer1998introduction} % introduction to lsa 
     such that $$M=U \Sigma V^T$$ 
 
     $U$ and $V$ are orthogonal matrices and $\Sigma$ is a diagonal matrix.
@@ -445,12 +453,12 @@
     Note that due to this reduction we inevitably loose some of the information. 
     We can see this as forgetting some of the less often words.
 
-    An interesting property of SVD is that the generated approximation is the closest matrix of its rank to the original in the least-squares sense \cite{berry1995using}.
+    An interesting property of SVD is that the generated approximation is the closest matrix of its rank to the original in the least-squares sense~\cite{berry1995using}.
 
     In practice, computing the full SVD decomposition would be time and memory demanding and even unfeasible.
     Because of that, we directly compute the lower rank approximation with $k$ dimensions,
-    such that $M \simeq U_k \Sigma V_k^T$ \cite{halko2011finding}. %fast svd
-    Moreover, we do not even need to have access to the full matrix $M$ and we can compute the decomposition in an incremental manner \cite{brand2006fast}. % incremental svd
+    such that $M \simeq U_k \Sigma V_k^T$~\cite{halko2011finding}. %fast svd
+    Moreover, we do not even need to have access to the full matrix $M$ and we can compute the decomposition in an incremental manner~\cite{brand2006fast}. % incremental svd
     
     Not only we can incrementally adjust the decomposition when adding a new document into the corpus, we can remove a document as well.
     Incremental SVD could in theory be used in the stochastic gradient descent setting.
@@ -484,8 +492,8 @@
     Note, that $\Sigma^{-1}$ is easy to compute, because $\Sigma$ is a diagonal. 
     We just need to invert each number on the diagonal.  
     
-    As was experimentally shown in my bachelor thesis \cite{macko2016} 
-    and by other researchers \cite{levy2015improving}, $\Sigma$ may not reflect the importance of each feature very well.
+    As was experimentally shown in my bachelor thesis~\cite{macko2016} 
+    and by other researchers~\cite{levy2015improving}, $\Sigma$ may not reflect the importance of each feature very well.
     
     Because of that, a simpler relationship is usually employed
     
@@ -515,7 +523,7 @@
     it has certain limitations when applied to classification tasks. 
     
     The problem is, that LSA does not incorporate the information about document classes. 
-    It finds the most representative features and not the most discriminative ones \cite{berry1995using}.
+    It finds the most representative features and not the most discriminative ones~\cite{berry1995using}.
     In other words, it finds embedding that is the best for reconstructing the documents.
     Because of that, infrequent words that have high discriminatory power (are important for the task), may be filtered out.
     
@@ -527,13 +535,13 @@
     LSA and other count based techniques used to be very popular alternative to local representations.
     However after the raise of neural networks, they were soon overshadowed by neural word embeddings.
     
-    Prediction based models achieved much better performance across multiple word relatedness tasks, categorization tasks, synonym tasks and analogy tasks \cite{baroni2014don}. % do not count, predict
+    Prediction based models achieved much better performance across multiple word relatedness tasks, categorization tasks, synonym tasks and analogy tasks~\cite{baroni2014don}. % do not count, predict
     
     During these evaluations, they obtained the word representations by training on a big monolingual dataset, like wikipedia.
     Then they used a prepared pairs of related words (synonyms or words from the same category) and tested,
     how similar are the vector representations of related words. 
     They measured how well the word vector similarity correlates with the actual relatedness. 
-    Count based methods achieved Pearson correlation coefficient $0.74$ and were outperformed by prediction based methods which achieved $0.84$ \cite{baroni2014don}.
+    Count based methods achieved Pearson correlation coefficient $0.74$ and were outperformed by prediction based methods which achieved $0.84$~\cite{baroni2014don}.
     
     This and the hype around neural networks led to recent extreme popularity of prediction based embeddings,
     even though they were much less understood and less ''mathematically grounded``.
@@ -551,7 +559,7 @@
     or through excessive search.
     On the other hand, count based models usually do not require a lot of parameters, besides the number of dimensions of the resulting embedding. 
     
-    Levy et al. \cite{levy2015improving} % word2vec hacks in lsi
+    Levy et al.~\cite{levy2015improving} % word2vec hacks in lsi
     showed, that much  of  the  performance  gains  of  neural embeddings  are  due  to such hyperparameters and certain system design choices, rather than the embedding algorithms themselves. 
     Furthermore they showed that traditional (count based) distributional models
     can also benefit from such hyperparameters and design choices.

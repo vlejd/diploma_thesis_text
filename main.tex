@@ -246,21 +246,24 @@ Consultant: & \mfkonzultant \\
 
 \input text.tex 
 
+
+\newpage	
+
+{
+    \backmatter
+    
+    \thispagestyle{empty}
+    \nocite{*}
+    \clearpage
+    
+    \bibliographystyle{plain}
+    \bibliography{literatura} 
+}
+
 \appendix
 \input{appendix/A}
 \input{appendix/B}
 
-
-\newpage	
-
-\backmatter
-
-\thispagestyle{empty}
-\nocite{*}
-\clearpage
-
-\bibliographystyle{plain}
-\bibliography{literatura} 
 
 \end{document}
 

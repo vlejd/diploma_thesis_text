@@ -5,12 +5,12 @@ We describe our motivations, the design of eLSA and some implementation details.
 
 \section{Goals and motivation}
 
-    The root of LSAs problems is the dimensionality reduction.
+    The root of LSA's problems is the dimensionality reduction.
     It will inevitably throw away some information. 
     However, this information may be vital to the classification task. 
     It is clear, that we need to address this problem and introduce some form of supervision, that precedes the SVD.
     
-    To some extend, This can be done by the supervised word weights described in section \ref{sec:supervised:weights}.
+    To some extend, this can be done by the supervised word weights described in section \ref{sec:supervised:weights}.
     However, we consider this supervision to be rather weak, as it only computes simple statistics over the words and labels.
     
     In the end, we want to train some classifier $C$ on top of the document embeddings.
@@ -48,7 +48,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     Instead of using the term vector $d_i$, we introduce weights $w'$ and use reweighted vector $d_i \circ w'$\footnote{Recall, that $\circ$ means Hadamard product (pointwise multiplication).}.
     This is equivalent to multiplying the vector $d_i$ by diagonal matrix with diagonal $w'$.
     Then we perform the SVD decomposition on the reweighted matrix $M \circ w'$. 
-    Here, we employ a few conventions from popular linear algebra library NumPy \cite{oliphant2006guide}, 
+    Here, we employ a few conventions from popular linear algebra library NumPy~\cite{oliphant2006guide}, 
     where such operation is automatically broadcasted through the matrix.
     
     We initialize the $w'$ to be a vector of ones (this effectively does not change the matrix at first).
@@ -77,7 +77,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     In case we use logistic regression $\hat{y} = \sigma(x \Theta + b)$, the expression becomes
     $\frac{\partial c(x)}{\partial x} = \hat{y} (1-\hat{y}) \Theta$.
     Note, that it is possible to compute this expression even for more complicated classifiers. 
-    Some libraries can even compute this automatically \cite{tensorflow2015-whitepaper}.
+    Some libraries can even compute this automatically~\cite{tensorflow2015-whitepaper}.
     However we need the classifier to be differentiable so we cannot easily use SVM as the classifier. 
     
     The third and last part is tied to the computation of the LSA embedding.
@@ -150,7 +150,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     Because the document vector $d_i$ is sparse, we will only update a few values from $w'$, hence we can easily update part $W$.
     
     Because we updated $w'$, the entry in matrix $M$ corresponding to the document $d_i$ has changed.
-    We know, that SVD can be build incrementally and that we can add new documents to the matrix $M$ \cite{brand2006fast}.
+    We know, that SVD can be build incrementally and that we can add new documents to the matrix $M$~\cite{brand2006fast}.
     We just use the adding routine and add the new representation $d_i \circ w'^{t}$ to the decomposition.
     Because we changed the reweighted document and the decomposition matrices,
     the embedding of this document also changed to 
@@ -251,9 +251,9 @@ We describe our motivations, the design of eLSA and some implementation details.
 
     \subsubsection{Scikit-learn}
     
-    Scikit-learn (or sklearn) is a free machine learning library for Python programming language \cite{scikit-learn}.
+    Scikit-learn (or sklearn) is a free machine learning library for Python programming language~\cite{scikit-learn}.
     It features wide range of state-of-the-art machine learning algorithms for medium-scale supervised and unsupervised problems.
-    It is extensible and provides very nice and clean APIs \cite{sklearn_api}.
+    It is extensible and provides very nice and clean APIs~\cite{sklearn_api}.
     
     In this thesis, we used it for multiple purposes.
     We used base classes for weighting schemes \texttt{TfidfTransformer}, \texttt{BaseEstimator}, \texttt{TransformerMixin}.
@@ -266,25 +266,25 @@ We describe our motivations, the design of eLSA and some implementation details.
     
     \subsubsection{Gensim}
     
-    Gensim is a robust open-source vector space modeling and topic modeling toolkit implemented in Python \cite{rehurek_lrec}. 
-    It is efficient and hassle-free software to realize unsupervised semantic modelling from plain text \cite{bird2009natural}. % nlp in python 
+    Gensim is a robust open-source vector space modeling and topic modeling toolkit implemented in Python~\cite{rehurek_lrec}. 
+    It is efficient and hassle-free software to realize unsupervised semantic modelling from plain text~\cite{bird2009natural}. % nlp in python 
     It is specifically designed to handle large text collections, using data streaming and efficient incremental algorithms. 
     
     We made use of multiple tools from this library. 
     We used \texttt{Dictionary} object for vocabulary filtering and embedding into the BOW representation and we used its TF-IDF implementations.
     We also used its API to train word vectors. 
     
-    Most important for us was gensims implementation of the probabilistic algorithm for constructing approximate matrix decomposition \cite{halko2011finding}.
+    Most important for us was gensims implementation of the probabilistic algorithm for constructing approximate matrix decomposition~\cite{halko2011finding}.
     This provides fast and easy to use incremental SVD decomposition.
     
     \subsubsection{Numpy}
     
-    NumPy is a library for Python, adding support for large, multi-dimensional arrays and matrices \cite{oliphant2006guide}. % numpy
+    NumPy is a library for Python, adding support for large, multi-dimensional arrays and matrices~\cite{oliphant2006guide}. % numpy
     We used this library for result evaluation and to implement our own logistic regression.
     
     \subsubsection{TensorFlow}
     
-    TensorFlow is an open source software library for high performance numerical computation developed by Google Brain team \cite{tensorflow2015-whitepaper}. 
+    TensorFlow is an open source software library for high performance numerical computation developed by Google Brain team~\cite{tensorflow2015-whitepaper}. 
     It provides simple interface to matrix computations on GPUs and CPUs.
     
     One of the most important capabilities of this library is automatic differentiation.
@@ -298,11 +298,11 @@ We describe our motivations, the design of eLSA and some implementation details.
     
     During the development of required code we worked in Jupyter Notebook. 
     It is an interactive environment the offers very easy prototyping and
-    data visualization \cite{PER-GRA:2007}. %ipython
-    For data visualization we used the Matplotlib library \cite{hunter2007matplotlib}. %matplotlib 
-    Finally, for data manipulation and presentation we used the Pandas \cite{mckinney2010data}. %pandas
+    data visualization~\cite{PER-GRA:2007}. %ipython
+    For data visualization we used the Matplotlib library~\cite{hunter2007matplotlib}. %matplotlib 
+    Finally, for data manipulation and presentation we used the Pandas~\cite{mckinney2010data}. %pandas
     
-    Last important mention belongs to Aysen Tatarinov, his blog and his repository \footnote{\url{https://github.com/aysent/supervised-term-weighting}}, where he implemented a number of supervised weight schemes \cite{maas2011learning}.
+    Last important mention belongs to Aysen Tatarinov, his blog and his repository \footnote{\url{https://github.com/aysent/supervised-term-weighting}}, where he implemented a number of supervised weight schemes~\cite{maas2011learning}.
     \* % TODO coppyright v kode
     
     
