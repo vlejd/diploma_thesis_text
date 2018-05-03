@@ -1,5 +1,9 @@
 
 
+prosim ta checkni si vsade > v anglictine zoznam poloziek musi mat vzdy! and pred poslednym aj s ciarkou: A, B, and C
+podobne nemozes mat A,C ale A or C / A and C > toto je ok v slovencine ale v aj to tak nema byt
+vela som ti opravila po ceste
+ale nemam na to kapacitu checkovat to 100pero vsade
 
 
 CHECK:

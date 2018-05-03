@@ -219,20 +219,24 @@ We describe our motivations, the design of eLSA and some implementation details.
     
     \subsubsection{Weighting schemes}
     
-    Importan properly of eLSA algorithm is, that we do not need to start from basic co-occurrence matrix $M$. 
+    Important properly of eLSA algorithm is, that we do not need to start from basic co-occurrence matrix $M$. 
     We can apply some weighted scheme, such as TF-IDF on this matrix first and then run eLSA.
     What weighting scheme we starts from is actually one of the important hyperparameters.
     
     Afterwards, we can examine the found $w'$ and see, which words had high value $w'_i$.
     This means, they were underweighted by the weighting scheme.
 
-    \subsubsection{Other hyperparameters}
+    \subsubsection{Hyperparameters} \label{sec:hyperparams}
     
-    We consider only two hyperparameters: $w'$-learning rate $\beta$ and starting weighting scheme.
-    However, parts $S$ and $C$ have a lot of hyperparameters on their own. 
+    eLSA on its own has only three hyperparameters and that is the $w'$-learning rate $\beta$ and the initial weighting scheme. 
+    Second hyperparameter is the dimensionality of the embedding. 
+    This hyperparameter is not specific to eLSA.
+    However eLSA can be viewed as a tool for analyzing weighting schemes so it is actually no a hyperparameter.
     
+    In fact the SVD decomposition (part $S$) and the classifier ($C$) may have a lot of hyperparameters on their own.
     Exploring the space of those hyperparameters would be extremely computationally demanding and could be subject to further research.
     Instead we leave this parameters to reasonable defaults suggested by implementations we use.
+    We can do this, because we are not interested in pushing the state of the art in document classification problem, we just want to see a relative improvement over the LSA baseline.
 
 
 \section{Implementation}

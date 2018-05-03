@@ -1,10 +1,10 @@
 \section{Weights analysis} \label{chap:weight:analysis}
 
-    Most machine learning algorithm are black box approaches \cite{ribeiro2016should}. % explainability
+    Most machine learning algorithm primarily used as black box approaches \cite{ribeiro2016should}. % explainability
     It is hard, to justify their predictions or to extract some insight from them. 
     
-    However, we designed our approach with interpretability in mind.
-    Because eLSA just re-weights words, we argue that it is explainable and we can extract important insight about our data from it.
+    We designed our approach with interpretability in mind.
+    Because eLSA just re-weights words, we argue that it is more easily interpretable and we can extract important insight about our data from it.
     In this section, we present such insight.
     
     \subsection{Effect of reweighting}
@@ -12,16 +12,16 @@
     These weights effectively change importance of some words with regards to the classification task.
     We can directly examine them and see, what words were boosted and what words were inhibited.
     
-    Note, that high word importance does not tell us anything about the label. 
-    We do not know (at least not from $w'$ alone), if the word is important for label $0$ or $1$.
+    Note, that high word importance still does not tell us anything about the label. 
+    We do not know (at least not from $w'$ alone), if the word is important for positive ($1$, positive sentiment) or negative label ($0$, negative sentiment).
     
-    This tell us, which words were underweighted by the original weighting schemes and which were overweighted.
-    We examine mostly CR dataset and TREC-DESC dataset, as eLSA shows some interesting insights to these two datasets.
+    Values in $w'$ tell us, which words were underweighted by the original weighting schemes and which were overweighted.
+    We examine mostly the CR dataset and the TREC-DESC dataset, as eLSA shows some interesting insights particularly to these two datasets.
 
     \subsubsection{Most reweighted words}
     
-    First we examine the words, that our approach reweighted the most (most extreme $w'$).
-    We present the $10$ most originally underweighted and the $10$ most originally overweighted words for combinations of CR and TREC-DESC datasets and weighting schemes \textt{None} (no scheme was used), \textt{tfidf} (basic unsuperwised scheme) and \textt{tfig} (supervised scheme).
+    First, we examine the words, that our approach reweighted the most (most extreme $w'$).
+    We present the $10$ most originally underweighted and the $10$ most originally overweighted words for combinations of CR and TREC-DESC datasets and weighting schemes \texttt{None} (no scheme was used), \texttt{tfidf} (basic unsupervised scheme) and \texttt{tfig} (supervised scheme).
     
 
 \begin{table}[H]
@@ -73,9 +73,9 @@
 \end{table}
 
     In table \ref{tab:words:CR:None} we see, that if we use weighting scheme \texttt{None} (term vector), 
-    we underweight some words that are obviously important: \texttt{good}, \texttt{bad}.
+    we underweight some words that are obviously important such as \texttt{good} and \texttt{bad}.
     Our approach can correctly identify these words and boost their weights.
-    In the same time, our approach can inhibit unrelated words like: \texttt{is}, \texttt{am}, \texttt{that}.
+    In the same time, our approach can inhibit unrelated words like: \texttt{is}, \texttt{am}, or \texttt{that}.
     We see, that using this weighting scheme (not using weighting scheme at all) is definitely not locally optimal.
     
     
@@ -126,12 +126,12 @@
     \label{tab:words:CR:tfidf}
 \end{table}
 
-    In table \ref{tab:words:CR:tfidf} we see results for \textt{tfidf}. 
-    Recall from section \ref{sec:term:weights}, that \textt{tfidf} decreases importance of words, that are common in the dataset.
-    However we see (and already know), that such words may be very important for the classification task.
+    In table \ref{tab:words:CR:tfidf} we see results for \texttt{tfidf}. 
+    Recall from section \ref{sec:term:weights}, that \texttt{tfidf} decreases importance of words, that are common in the dataset.
+    However, we see (and already know), that such words may be very important for the classification task.
     This is exactly what eLSA finds. 
     Our approach boosted words like \texttt{good} and \texttt{worst}, that are very common and very discriminative.
-    Moreover our approach boosted word \texttt{not}, that is usually completely removed from datasets, because it is considered to be a stop word. 
+    Moreover, our approach boosted the word \texttt{not}, that is usually completely removed from the datasets, because it is considered to be a stop word. 
     On the other hand, eLSA almost completely inhibited the preposition \texttt{a}, that almost certainly does not hold any importance for any classification task.
 
 
@@ -187,9 +187,9 @@
     When we look at the table b, we see, that only a few fords were really overweighted by the scheme. 
     For some reason, words: \texttt{this}, \texttt{,}, \texttt{and} had high weights and our approach identified them as not important.
     We see that other words were not penalized very much ($0.8$ or $0.9$).
-    On the other hand, it looks like this scheme undervalued some rather interesting words like \texttt{awesome}, \texttt{slow}.
+    On the other hand, it looks like this scheme undervalued some rather interesting words like \texttt{awesome} or \texttt{slow}.
     Interesting is a word \texttt{the}, what is always considered to be a stop word and is usually removed. 
-    However according to our approach, it was underweighted. 
+    However, according to our approach, it was underweighted. 
     We think, that it is because it can signify some form of superlative and hence sentiment polarity.
     
 
@@ -247,10 +247,10 @@
     \label{tab:words:TREC:none}
 \end{table}
 
-    If we use just the term vectors (scheme \textt{None}), there are again obvious words that we underweight.
-    The answer obviously depends on the interrogative pronoun such as: \texttt{who}, \texttt{what}.
-    Also words like \texttt{origin}, \texttt{mean} and \texttt{reason} probably associate with some desired explanation.
-    On the other hand, words like \texttt{does}, \texttt{of} and \texttt{and} were identified like not important.
+    If we use just the term vectors (scheme \texttt{None}), there are again obvious words that we underweight.
+    The answer obviously depends on the interrogative pronoun such as: \texttt{who} or \texttt{what}.
+    Also words like \texttt{origin}, \texttt{mean}, and \texttt{reason} probably associate with some desired explanation.
+    On the other hand, words like \texttt{does}, \texttt{of}, and \texttt{and} were identified like not important.
     We also see interesting decrease for words like \texttt{when} and \texttt{where}.
     We hypothesize, that even though these words are interrogative pronouns, they are usually used to form dependent clauses, that do not tell anything about the type of the desired answer.
     Our approach even correctly inhibited the token \texttt{,}.
@@ -305,7 +305,7 @@ words &  $w'$ \\
 \end{table}
 
     Because we know, that interrogative pronouns are important and abundant, we know that \texttt{tfidf} will underweight them.
-    eLSA correctly compensated it.
+    On the other hand, eLSA correctly compensated it.
     
     
 
@@ -357,7 +357,7 @@ words &  $w'$ \\
     \label{tab:words:TREC:tfig}
 \end{table}
 
-    In table \ref{tab:words:TREC:tfig} we see, that even supervised scheme \textt{tfig} underweighted some interrogative pronouns like \texttt{what}.
+    In table \ref{tab:words:TREC:tfig} we see, that even supervised scheme \texttt{tfig} underweighted some interrogative pronouns like \texttt{what}.
     We see, that it had almost never overweighted any word as only $5$ words have $w'$ lover than $0.9$ and only $9$ words have $w'$ less than $1$.
 
     \subsubsection{Weight histograms}
@@ -365,7 +365,7 @@ words &  $w'$ \\
     We can look on the overall distribution of weights $w'$ for given dataset and weighting scheme.
     This gives us an idea, if the scheme generally underweights or overweights words.
     If the mass of the histogram is around $1$, we know that parameters $w'$ not changed the matrix $M$ very much.
-    If the mass is on the right of the $1$, it means the scheme is underweighting and $w'$ needs to compensate that. On the other hand if the histogram is skewed to the left, it means the scheme is overweighting.
+    If the mass is on the right of the $1$, it means the scheme is underweighting and $w'$ needs to compensate that. On the other hand, if the histogram is skewed to the left, it means the scheme is overweighting.
     
     We present histograms with logarithmic $y$ axis.
     
@@ -381,8 +381,8 @@ words &  $w'$ \\
     \label{obr:hist:desc}
     \end{figure}
 
-    On graph \ref{obr:hist:cr} we see, that \textt{tfidf} and \textt{None} schemes generally overweight on the CR dataset.
-    We see \textt{tfig} produced low values of $w'$ less times, than \textt{None} and \textt{tfidf}.
+    On graph \ref{obr:hist:cr} we see, that \texttt{tfidf} and \texttt{None} schemes generally overweight on the CR dataset.
+    We see \texttt{tfig} produced low values of $w'$ less times than \texttt{None} and \texttt{tfidf}.
     
     \subsubsection{Possible further directions for analysis}
     
