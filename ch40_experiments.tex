@@ -4,7 +4,7 @@ In this chapter we present our experimental results and compare them to baseline
 The most important baseline that we would like to improve upon is the standard LSA.
 Further, we present the bag of words baseline and a baseline based on neural embeddings.
 
-To make our evaluation more robust, we perform it on multiple classification datasets and multiple classification tasks.
+To make our evaluation more robust, we evaluate all baselines and approaches on multiple classification datasets and multiple classification tasks.
 
 \section{Classification datasets}
     
@@ -54,13 +54,13 @@ To make our evaluation more robust, we perform it on multiple classification dat
     \end{table}
 
 
-    In table \ref{tab:datasets:stats} we present a few basic statistics for each dataset.
+    In table~\ref{tab:datasets:stats} we present a few basic statistics for each dataset.
     Column \emph{bias} denotes percentage of the majority class in the dataset.
     It also presents a baseline accuracy which a naive algorithm could achieve by making constant predictions. 
-    Bias for TREC dataset is not applicable because this dataset is not binary and we address this in section \ref{sec:TREC}.
+    Bias for TREC dataset is not applicable because this dataset is not binary and we address this in section~\ref{sec:TREC}.
     
     We introduce each of these datasets in more details and we provide some example sentences from these datasets.
-    Note, that these examples are displayed in a very genuine way. 
+    Note that these examples are displayed in a very genuine way. 
     We see these examples as they really are and as they are presented to our algorithms.
     The actual preprocessing will be discussed later in this section.
     
@@ -191,18 +191,18 @@ To make our evaluation more robust, we perform it on multiple classification dat
 \section{Baselines} \label{sec:baseline}
 
     There is a number of baselines that we consider.
-    These are commonly used approaches, such as pretrained neural embeddings, or very naive baselines, such as a constant classifier.
+    They are a commonly used approaches, such as pretrained neural embeddings, or very naive baselines, such as a constant classifier.
     
     To  address the problems of accuracy as a metric, we report relative improvements over the bias of each dataset.
     This can be viewed as an improvement over the precision of the constant classifier.
-    For absolute accuracies refer to the appendix \ref{appendix:detailed}. 
+    For absolute accuracies refer to the appendix~\ref{appendix:detailed}. 
 
-    The most important baseline we want to improve upon is in section \ref{sec:lsa:baseline}, 
+    The most important baseline we want to improve upon is in section~\ref{sec:lsa:baseline}, 
     and it is the standard LSA.
 
     \subsection{Constant baselines}
     
-    As discussed in section \ref{sec:data:overview}, some of our datasets are biased. 
+    As discussed in section~\ref{sec:data:overview}, some of our datasets are biased. 
     They may contain substantially more examples belonging to one label that belonging to the other.
     We can exploit this property and ``train'' a very simple constant classifier. 
     This classifier counts the number of samples in each class in the training set and then always outputs the majority class.
@@ -212,7 +212,7 @@ To make our evaluation more robust, we perform it on multiple classification dat
 
     \subsection{Bag of word baselines}
     
-    First we evaluate baselines that work with local word representation (section \ref{sec:local:representation}).
+    First we evaluate baselines that work with local word representation (section~\ref{sec:local:representation}).
     These baselines have no knowledge about semantic properties of words and usually only captures some basic word statistic.
     They are usually the first pick for any task, because they are simple and easy to use. 
     
@@ -304,7 +304,7 @@ tfrf & test & 0.005 & 0.074 & 0.062 &0.125 &0.084 &0.113 \\
     In this baseline we construct the term matrix $M$, reweigh it with weighting scheme, train the LSA embedding and train the classifier.
     We tried multiple weighting schemes and multiple classifiers.
     
-    See tables \ref{tab:lsa:resuts:300} and \ref{tab:lsa:resuts:400} (and others) in appendix B for results for dimensions $300$ and $400$.
+    See tables~\ref{tab:lsa:resuts:300} and~\ref{tab:lsa:resuts:400} (and others) in appendix B for results for dimensions $300$ and $400$.
     
 \begin{table}[H]
 \begin{center}
@@ -372,7 +372,7 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
 
     \subsection{Neural embedding baselines}
     
-    Thanks to results of Levy et al.\cite{levy2014neural} discussed in section \ref{sec:count:vs:predict} we know, that LSA is to some extend equivalent to neural embeddings.
+    Thanks to results of Levy et al.\cite{levy2014neural} discussed in section~\ref{sec:count:vs:predict} we know, that LSA is to some extend equivalent to neural embeddings.
     Because of that, we consider neural embeddings as one of our baselines.
     There are two possible setups.
     We can train our own word vectors on each dataset, or we can use pretrained embeddings that were trained on huge volumes of data.
@@ -386,7 +386,7 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
     Than we compute embedding for each word and sum them into an sentence embedding.
     Finally we train the classifier (SVM or logistic) regression and present the accuracy.
     We refer to SVM as SVC (support vector classifier).
-    Note, that we train embeddings for each dataset separately.
+    Note that we train embeddings for each dataset separately.
 
     \begin{table}[H]
     \begin{center}
@@ -444,7 +444,7 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
     \end{table}
 
 
-    Tables \ref{tab:res:trainedwordvec} and \ref{tab:res:trainedwordvec:trec} contain our results.
+    Tables~\ref{tab:res:trainedwordvec} and~\ref{tab:res:trainedwordvec:trec} contain our results.
     We see zero improvement of SVM classifier for TREC datasets for all embedding sizes.
     TREC dataset seems to be overall very challenging dataset.
     Interesting observation is, that accuracy on this dataset decreases as we increase the embedding dimensions.
@@ -466,7 +466,7 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
     We use \texttt{spacy.load('en\_vectors\_web\_lg')}.
     This command returns a pretrained model that we can query with words. 
     Embedding obtained in this way have $300$ dimensions and were trained on a large web corpus (large collection of websites). 
-    Note, that because these vectors were trained on much bigger datasets, it is not a very fair comparison to other methods presented here.
+    Note that because these vectors were trained on much bigger datasets, it is not a very fair comparison to other methods presented here.
 
     \begin{table}[h]
     \begin{center}

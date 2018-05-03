@@ -3,7 +3,7 @@
     Most machine learning algorithm primarily used as black box approaches~\cite{ribeiro2016should}. % explainability
     It is hard, to justify their predictions or to extract some insight from them. 
     
-    We designed our approach with interpretability in mind.
+    We designed eLSA with interpretability in mind.
     Because eLSA just re-weights words, we argue that it is more easily interpretable and we can extract important insight about our data from it.
     In this section, we present such insight.
     
@@ -12,8 +12,8 @@
     These weights effectively change importance of some words with regards to the classification task.
     We can directly examine them and see, what words were boosted and what words were inhibited.
     
-    Note, that high word importance still does not tell us anything about the label. 
-    We do not know (at least not from $w'$ alone), if the word is important for positive ($1$, positive sentiment) or negative label ($0$, negative sentiment).
+    Note that high word importance still does not tell us anything about the label. 
+    We do not know (at least not from $w'$ alone), if the word is important for positive ($1$,~positive sentiment) or negative label ($0$, negative sentiment).
     
     Values in $w'$ tell us, which words were underweighted by the original weighting schemes and which were overweighted.
     We examine mostly the CR dataset and the TREC-DESC dataset, as eLSA shows some interesting insights particularly to these two datasets.
@@ -72,7 +72,7 @@
     \label{tab:words:CR:None}
 \end{table}
 
-    In table \ref{tab:words:CR:None} we see, that if we use weighting scheme \texttt{None} (term vector), 
+    In table~\ref{tab:words:CR:None} we see, that if we use weighting scheme \texttt{None} (term vector), 
     we underweight some words that are obviously important such as \texttt{good} and \texttt{bad}.
     Our approach can correctly identify these words and boost their weights.
     In the same time, our approach can inhibit unrelated words like: \texttt{is}, \texttt{am}, or \texttt{that}.
@@ -126,8 +126,8 @@
     \label{tab:words:CR:tfidf}
 \end{table}
 
-    In table \ref{tab:words:CR:tfidf} we display results for \texttt{tfidf}. 
-    Recall from section \ref{sec:term:weights}, that \texttt{tfidf} decreases importance of words, that are common in the dataset.
+    In table~\ref{tab:words:CR:tfidf} we display results for \texttt{tfidf}. 
+    Recall from section~\ref{sec:term:weights}, that \texttt{tfidf} decreases importance of words, that are common in the dataset.
     However, we see (and already know), that such words may be very important for the classification task.
     This is exactly what eLSA can find out. 
     Our approach boosted words like \texttt{good} and \texttt{worst}, that are very common and very discriminative.
@@ -183,7 +183,7 @@
     \label{tab:words:CR:tfig}
 \end{table}
 
-    In table \ref{tab:words:CR:tfig} we see results for a supervised weighting scheme \texttt{tfig}.
+    In table~\ref{tab:words:CR:tfig} we see results for a supervised weighting scheme \texttt{tfig}.
     When we look at the table b, we see, that only a few fords were really overweighted by the scheme. 
     For some reason, words: \texttt{this}, \texttt{,}, \texttt{and} had high weights and our approach identified them as not important.
     We see that other words were not penalized very much ($0.8$ or $0.9$).
@@ -194,7 +194,7 @@
     
 
     Now we look at the TREC-DESC dataset. 
-    Recall from section \ref{sec:data:overview} that in this task we have some question, and we need to predict, whether the answer to this question is a some form of a description (in contrary to some numerical answer for example).
+    Recall from section~\ref{sec:data:overview} that in this task we have some question, and we need to predict, whether the answer to this question is a some form of a description (in contrary to some numerical answer for example).
     
     
     
@@ -305,7 +305,7 @@ words &  $w'$ \\
 \end{table}
 
     Because we know, that interrogative pronouns are important and abundant, we know that \texttt{tfidf} will underweight them.
-    On the other hand, eLSA correctly compensated it.
+    eLSA correctly compensated weight of these words.
     
     
 
@@ -357,7 +357,7 @@ words &  $w'$ \\
     \label{tab:words:TREC:tfig}
 \end{table}
 
-    In table \ref{tab:words:TREC:tfig} we see, that even supervised scheme \texttt{tfig} underweighted some interrogative pronouns like \texttt{what}.
+    In table~\ref{tab:words:TREC:tfig} we see, that even supervised weighting scheme \texttt{tfig} underweights some interrogative pronouns like \texttt{what}.
     We see, that it had almost never overweighted any word as only $5$ words have $w'$ lover than $0.9$ and only $9$ words have $w'$ less than $1$.
 
     \newpage
@@ -384,7 +384,7 @@ words &  $w'$ \\
     \label{obr:hist:desc}
     \end{figure}
 
-    On graph \ref{obr:hist:cr} we see, that \texttt{tfidf} and \texttt{None} schemes generally overweight on the CR dataset.
+    On graph~\ref{obr:hist:cr} we see, that \texttt{tfidf} and \texttt{None} schemes generally overweight on the CR dataset.
     We see \texttt{tfig} produced low values of $w'$ less times than \texttt{None} and \texttt{tfidf}.
     
     \subsubsection{Possible further directions for analysis}

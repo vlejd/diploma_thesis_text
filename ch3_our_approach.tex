@@ -10,7 +10,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     However, this information may be vital to the classification task. 
     It is clear, that we need to address this problem and introduce some form of supervision, that precedes the SVD.
     
-    To some extend, this can be done by the supervised word weights described in section \ref{sec:supervised:weights}.
+    To some extend, this can be done by the supervised word weights described in section~\ref{sec:supervised:weights}.
     However, we consider this supervision to be rather weak, as it only computes simple statistics over the words and labels.
     
     In the end, we want to train some classifier $C$ on top of the document embeddings.
@@ -25,8 +25,8 @@ We describe our motivations, the design of eLSA and some implementation details.
         \item Extract new insights about the dataset.
     \end{itemize}
     
-    As a side goal, we would like to introduce only a minimal amount of new hyperparameters
-    as they may cause a ``false improvement'' of our approach over the baseline.
+    As a side goal, we would like to introduce as few new hyperparameters as possible,
+    because they may cause a ``false improvement'' of our approach over the baseline.
     We also would like our approach to be at least slightly interpretable.
     It would be nice, if it could produce some insight to the dataset.
     
@@ -62,52 +62,60 @@ We describe our motivations, the design of eLSA and some implementation details.
     
     \subsection{Gradient computation}
     
-    To compute the gradient efficiently, we use the backpropagation trick mentioned in section \ref{sec:backprop}.
+    To compute the gradient efficiently, we use the backpropagation trick mentioned in section~\ref{sec:backprop}.
     We can compute the derivation $\frac{\partial E_y(\hat{y})}{\partial w'}$ thanks to the chain rule
     
     \begin{equation} \label{eq:derivation}
     \frac{\partial E_y(\hat{y})}{\partial w'} = \frac{\partial E_y(\hat{y})}{\partial \hat{y}} \frac{\partial c(x)}{\partial x} \frac{\partial x}{\partial w'}
     \end{equation}
     
-    The first part of expression \ref{eq:derivation} is dependent on the chosen error function. 
+    The first part of expression~\ref{eq:derivation} is dependent on the chosen error function. 
     For L2 error we get 
-    $\frac{\partial E_y(\hat{y})}{\partial \hat{y}} = \frac{\partial \frac{1}{2}(\hat{y}-y)^2}{\partial \hat{y}} = \hat{y}-y$
-    
+    \begin{equation}
+    \frac{\partial E_y(\hat{y})}{\partial \hat{y}} = \frac{\partial \frac{1}{2}(\hat{y}-y)^2}{\partial \hat{y}} = \hat{y}-y
+    \end{equation}
     The second part is dependent on the classifier that we use. 
     In case we use logistic regression $\hat{y} = \sigma(x \Theta + b)$, the expression becomes
-    $\frac{\partial c(x)}{\partial x} = \hat{y} (1-\hat{y}) \Theta$.
-    Note, that it is possible to compute this expression even for more complicated classifiers. 
+    \begin{equation}
+    \frac{\partial c(x)}{\partial x} = \hat{y} (1-\hat{y}) \Theta
+    \end{equation}
+    Note that it is possible to compute this expression even for more complicated classifiers. 
     Some libraries can even compute this automatically~\cite{tensorflow2015-whitepaper}.
     However we need the classifier to be differentiable so we cannot easily use SVM as the classifier. 
     
     The third and last part is tied to the computation of the LSA embedding.
     Because $x = d \circ w' U$, we can compute 
-    $\frac{\partial x_j}{\partial 'w_i} = d_i U_{i,j}$
+    \begin{equation}
+    \frac{\partial x_j}{\partial 'w_i} = d_i U_{i,j}
+    \end{equation}
     
     This can be rewritten in more concise notation as 
-    
-    $$\frac{\partial x}{\partial 'w} = U \circ d^T$$
-    
-    Note that we again employ the convention that the $\circ$ operation is broadcasted across all columns of the matrix.
+    \begin{equation}
+        \frac{\partial x}{\partial 'w} = U \circ d^T
+    \end{equation}
+    We again employ the convention that the $\circ$ operation is broadcasted across all columns of the matrix.
 
-    Once we know how to compute the gradient, we need to decide on the the optimization routine we will employ.
+    Once we know how to compute the gradient, we need to decide on what optimization routine we will employ.
 
 \section{Optimization routines}
     
-    Inspired by gradient descent algorithm, we perform the gradient step $w' = w' - \beta \frac{\partial E_y(\hat{y})}{\partial w'}$. 
+    Inspired by gradient descent algorithm, we perform the gradient step 
+    \begin{equation}
+        w' = w' - \beta \frac{\partial E_y(\hat{y})}{\partial w'}
+    \end{equation}
     The parameter $\beta$ determines the size of the gradient step that we will perform.
     We will call this parameter $w'$-learning rate. 
-    Note, that the classifier $C$ may have its of learning rate $\alpha$, and these two learning rates are completely independent.
+    Note that the classifier $C$ may have its of learning rate $\alpha$, and these two learning rates are completely independent.
     
-    The problem is, that equation \ref{eq:derivation} holds only for stationary classifier $C$ and decomposition $S$. 
+    The problem is, that equation~\ref{eq:derivation} holds only for fixed classifier $C$ and for fixed decomposition $S$. 
     We ignore the fact, that $S$ is actually a function of reweighted matrix and hence it is a function of $w'$.
-    It is probably possible to compute the exact gradient (refer to section \ref{sec:nn:svd}), but we will not do that.
+    It is probably possible to compute the exact gradient (refer to section~\ref{sec:nn:svd}), but we will not do that.
     
     It is not clear, how often we want to recompute the SVD and how often (and how much) we want to retrain the classifier.
     We propose two main approaches inspired by neural network training and by 
     expectation minimization algorithm.
     
-    We use the notation introduced in section \ref{sec:lsa}.
+    We use the notation introduced in section~\ref{sec:lsa}.
     However, our parts $W$, $S$ and $C$ are going to be updated through the time. We denote them with superscripts, e.g.~$W^t$, referring to weighting part $W$ at time $t$.
     
     \subsection{Batch gradient descent}
@@ -116,7 +124,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     such that the decomposition $S$ captures the most information and hence the classifier $C$ has access to all the important features of the document.
     However, the decomposition $S$ is dependent on the reweighted matrix produced by $W$. 
     Because of this, after each update of $w'$ we need to fully recompute the decomposition $S$ and retrain the classifier $C$.
-    The first optimization routine is described in the algorithm \ref{algo:batch}.
+    The first optimization routine is described in the algorithm~\ref{algo:batch}.
     
     \medskip
     
@@ -134,9 +142,9 @@ We describe our motivations, the design of eLSA and some implementation details.
     \end{algorithm}
     
     We took inspiration from expectation maximization algorithm.  
-    Note, that it is not essential in any way for the reader to know this algorithm for further reading.
+    Note that it is not essential in any way for the reader to know this algorithm for further reading.
     
-    We name the algorithm \ref{algo:batch} eLSA, because it uses error of the classifier to produce boosted (improved) weight $w'$.
+    We name the algorithm~\ref{algo:batch} eLSA, because it uses error of the classifier to produce boosted (improved) weight $w'$.
     
     This algorithm needs to do a lot of computations for one update of the weights $w'$.
     To address this, we can increase the number of gradient steps performed on $w'$ in each step of the while loop.
@@ -145,20 +153,23 @@ We describe our motivations, the design of eLSA and some implementation details.
     
     \subsection{Stochastic gradient descent}
     
-    We take the inspiration from stochastic gradient descent for neural networks.
-    Instead of computing the full gradient, we just compute the gradient related to one example $\frac{\partial E_{y_i}(\hat{y_i})}{\partial w'}$.
+    We take the inspiration from stochastic gradient descent step from neural networks.
+    Instead of computing the full gradient, we just compute the gradient related to one example 
+    $$\frac{\partial E_{y_i}(\hat{y_i})}{\partial w'}$$
     Because the document vector $d_i$ is sparse, we will only update a few values from $w'$, hence we can easily update part $W$.
     
     Because we updated $w'$, the entry in matrix $M$ corresponding to the document $d_i$ has changed.
     We know, that SVD can be build incrementally and that we can add new documents to the matrix $M$~\cite{brand2006fast}.
     We just use the adding routine and add the new representation $d_i \circ w'^{t}$ to the decomposition.
     Because we changed the reweighted document and the decomposition matrices,
-    the embedding of this document also changed to 
-    $x_i^{t} = v_i^{t} = d_i w'^{t} U^{t}$
+    the embedding of this document should also change to 
+    \begin{equation}
+    x_i^{t} = v_i^{t} = d_i w'^{t} U^{t}
+    \end{equation}
     
     We update $C$ in the similar manner.
     We perform the stochastic gradient step for example $x_i^{t+1}$ and threat it as a new example in the dataset.
-    Pseudocode is available in algorithm \ref{algo:stochastic}.
+    Pseudocode is available in algorithm~\ref{algo:stochastic}.
     
     \begin{algorithm}[H]
         \KwData{$M$}
@@ -179,8 +190,9 @@ We describe our motivations, the design of eLSA and some implementation details.
         \caption{Batch training of $w'$} \label{algo:stochastic}
     \end{algorithm}
     
-    This optimization routine showed to be very unstable in our preliminary experiments and we do not explore it further.
+    We done a few preliminary experiments and this optimization routine showed to be very unstable.
     It also introduced a lot of new decisions that would have had been made and a lot of new hyperparameters.
+    We do not explore it further.
     
     
     \subsection{eLSA explanation}
@@ -194,8 +206,8 @@ We describe our motivations, the design of eLSA and some implementation details.
     Train set is $80\%$ of our samples, validation and test are both $10\%$.
     We make sure that all those sets have percentage of positive and negative labels that is similar to the whole dataset.
     
-    We use the train set for gradient evaluations and overall training. 
-    We use the validation set to keep track of our performance on unseen data.
+    We use the train dataset for gradient evaluations and overall training. 
+    We use the validation dataset to keep track of our performance on unseen data.
     Based on this performance, we decide if the model is still improving, or if it started to overfit.
     Finally we report the performance on the test set, that was never seen by the model.
     
@@ -207,7 +219,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     In both optimization routines we iteratively update parameters $w'$ and we do so while our performance on validation set is increasing.
     This needs more clarification.
     
-    Each time step $t$ we evaluate our loss $E_{valid}^t$ on the validation dataset.
+    In each time step $t$ we evaluate the loss $E_{valid}^t$ on the validation dataset.
     By convergence we mean, that the $E_{valid}$ stopped improving.
     In the final solution we track the mean of this errors in last few time steps.
     When this mean does not increase for long enough, we stop the training. 
@@ -219,7 +231,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     
     \subsubsection{Weighting schemes}
     
-    Important properly of eLSA algorithm is, that we do not need to start from basic co-occurrence matrix $M$. 
+    An important properly of eLSA algorithm is, that we do not need to start from basic co-occurrence matrix $M$. 
     We can apply some weighted scheme, such as TF-IDF on this matrix first and then run eLSA.
     What weighting scheme we starts from is actually one of the important hyperparameters.
     
@@ -243,7 +255,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     
     In this section we go through some implementation details and decisions.
     The whole thesis, including experiment evaluations, is implemented in Python3.
-    For code, please refer to appendix \ref{appendix:code}
+    For code, please refer to appendix~\ref{appendix:code}
 
     \subsection{Libraries} 
 
@@ -267,7 +279,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     \subsubsection{Gensim}
     
     Gensim is a robust open-source vector space modeling and topic modeling toolkit implemented in Python~\cite{rehurek_lrec}. 
-    It is efficient and hassle-free software to realize unsupervised semantic modelling from plain text~\cite{bird2009natural}. % nlp in python 
+    It is an efficient and hassle-free software to realize unsupervised semantic modelling from plain text~\cite{bird2009natural}. % nlp in python 
     It is specifically designed to handle large text collections, using data streaming and efficient incremental algorithms. 
     
     We made use of multiple tools from this library. 
@@ -288,10 +300,10 @@ We describe our motivations, the design of eLSA and some implementation details.
     It provides simple interface to matrix computations on GPUs and CPUs.
     
     One of the most important capabilities of this library is automatic differentiation.
-    We can create symbolic expression representing the desired computation $\hat{y}=g(X\Theta)$ and this library can automatically compute the gradient $\frac{\partial \hat{y}}{\Theta}$.
+    We can create symbolic expression representing the desired computation $\hat{y}=g(X\Theta)$ and this library can automatically compute the gradient $$\frac{\partial \hat{y}}{\Theta}$$
     Because of this, TensorFlow is very popular among  machine learning researchers.
     
-    In theory, we could (and we wanted to) implement our whole approach in TensorFlow.
+    We wanted to implement our whole approach in TensorFlow.
     It even contains implementation of SVD, however that implementation does not have all the properties that we require.
     
     \subsection{Other tools}
@@ -303,7 +315,6 @@ We describe our motivations, the design of eLSA and some implementation details.
     Finally, for data manipulation and presentation we used the Pandas~\cite{mckinney2010data}. %pandas
     
     Last important mention belongs to Aysen Tatarinov, his blog and his repository \footnote{\url{https://github.com/aysent/supervised-term-weighting}}, where he implemented a number of supervised weight schemes~\cite{maas2011learning}.
-    \* % TODO coppyright v kode
     
     
     \subsubsection{Cloud} 

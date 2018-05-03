@@ -5,7 +5,7 @@ We can modify the term matrix $M$ so that weight of each word represents how imp
 This is a contrast to the classical approach, where the weight of the word represents, how important is it for the document reconstruction.
 
 Besides that, we can introduce some form of supervision directly into the matrix decomposition process.
-Sun et al.~\cite{sun2004supervised} propose sLSI (supervised latent semantic indexing) and they employ the supervision while choosing the most relevant dimensions of the embedding.
+Sun et al.~\cite{sun2004supervised} propose supervised latent semantic indexing (sLSI) and they employ the supervision while choosing the most relevant dimensions of the embedding.
 Chakraborti et al.~\cite{chakraborti2006sprinkling} propose to add class dependent terms (supervised terms) into the term matrix and proceed with standard factorization.
 
 Finally, we can fully employ advances made in artificial neural networks and use LSA just as a module into these networks.
@@ -15,11 +15,11 @@ In this chapter, we introduce each of these approaches in more details.
 
 \section{LSA with class knowledge} \label{sec:superwisedlsa}
     \subsection{Supervised LSI}
-        Recall (from section \ref{sec:lsa}) that we consider LSI and LSA to refer to the same method. 
+        Recall (from section~\ref{sec:lsa}) that we consider LSI and LSA to refer to the same method. 
     
         Sun et al.~\cite{sun2004supervised} %supervised lsi, discriminative basis
         also recognized that LSI is not optimal for document categorization tasks because it finds the most representative features and not the most discriminative ones. 
-        To address this problem, they incorporate the available classification of documents into $c$ categories and propose supervised latent semantic indexing (SLSI).
+        To address this problem, they incorporate the available information about the classification of documents into $c$ categories and propose supervised latent semantic indexing (sLSI).
         
         To introduce their approach we will recapitulate the classical LSI first. 
         LSI selects the eigenvector of the term matrix $M$ with the biggest eigenvalues.
@@ -30,12 +30,19 @@ In this chapter, we introduce each of these approaches in more details.
         Then they collect eigenvectors with the highest eigenvalues into a collection of candidate vectors.
         
         For each of these candidate vectors $g_s$ they project all documents onto this vector.
-        They compute centroids of each class $v_s^p = \frac{1}{|C_p|}\sum_{d\in C_p} g_s d^T$ (average position of documents from given class). 
-        Where $C_p$ denotes all documents belonging to class $p$.
+        They compute centroids (average position of documents from given class) of each class 
+        \begin{equation}
+        v_s^p = \frac{1}{|C_p|}\sum_{d\in C_p} g_s d^T
+        \end{equation}
+        where $C_p$ denotes all documents belonging to class $p$.
         Note that because they project onto one vector, this centroid is a scalar. 
         Then they compute distances between such centroids for each pair of classes $f_s^{pq} = |v_s^p - v_s^q|$.
         
-        Finally, they select the most discriminative vector as $b=arg_{g_i \in G} \{\max_{p q} f_i^{p q} \}$ (vector that separates some pair of classes the best) and proceed to select the next one.
+        Finally, they select the most discriminative vector as vector that separates some pair of classes the best 
+        \begin{equation}
+        b=arg_{g_i \in G} \{\max_{p q} f_i^{p q} \}
+        \end{equation}
+        and proceed to select the next one.
         
         They report that this algorithm generates better representations than standard LSI and can achieve higher dimensionality reduction without reducing the classification accuracy.
         
@@ -86,8 +93,8 @@ y_{1,k} &\dots&  y_{N,k} \\
 
     Label related terms $y_{i,k}$, the sprinkled terms, have value $1$ if the document $d_i$ belongs to the class $k$ and $0$ otherwise.
     These terms are added as normal words into each document.
-    Note, that Chakraborti et al. use transposed form of $M$ (documents are rows of $M$).
-    We decided to use this variant to be consistent with the rest of the thesis (section \ref{sec:design}.
+    Note that Chakraborti et al. use transposed form of $M$ (documents are rows of $M$).
+    We decided to use this variant to be consistent with the rest of the thesis (section~\ref{sec:design}.
     
     After obtaining the matrix $M'$, they perform standard SVD. 
     Then they ``unspringle'' the matrix by removing word vectors associated with sprinkled terms.
@@ -101,44 +108,24 @@ y_{1,k} &\dots&  y_{N,k} \\
     Kontostathis et al. provide experimental evidence to show that LSI boosts similarity between terms sharing higher order associations. 
     Sprinkled terms create such higher order associations between terms related to  the same class/category.
         
-\section{Supervised weights} \label{sec:supervised:weights}
+\section{Supervised weights}
     
-    Term weighting is a strategy that assigns weights to terms to improve the performance of sentiment analysis or other text mining tasks.
+    Term weighting is a strategy that tries to improve the performance of sentiment analysis or text mining tasks by assigning weights to words.
     If the reweighted vectors are used for some form of classification,
     we can enhance the weighting scheme by the class information.
     
     There is a number of ways, how to design such supervised term weights.
-    In this thesis, we will build on top of some of those schemes,
-    because we believe that supervised weights are a good approach to combat the shortcomings of LSA for document classification.
+    In this thesis, we will build on upon of some of those schemes,
+    because we believe that supervised weighting schemes are a good approach to combat the shortcomings of LSA for document classification.
     
     In this chapter we introduce some of the interesting results in this field and some of the weighting schemes we will use.
 
 
     \subsection{Supervised weights for sentiment classification}
-    Deng et al.~\cite{deng2014study} % supervised weights
-    proposed a number of superwised weighting schemes.
-    \* % TODO write more about superwised weights
-    IDT:
-    ITS:
-    
-        'tfidf'
-'tfchi2'
-'tfig'
-'tfgr'
-'tfor'
-'tfrf'
-'None'
-
-    
-    
-    A number of supervised weighting schemes was also studies by Wu et al.~\cite{wu2017balancing} % word weights, TODO read
-    and Lan et al.~\cite{lan2009supervised}. % supervised weights for text categorization
-
 
     \subsection{TF-KLD}
         Ji and Eisenstein~\cite{ji2013discriminative} % TF KLD
         studied the performance of LSA for semantic relatedness task.
-        
         In semantic relatedness task we have two documents $d_i^1, d_i^2$ and we want to determine, whether they are semantically related or not. 
         Example of semantic relatedness task can be to determine, if two questions asked on some forum are the same (and should be deduplicated) or not \footnote{\url{https://www.kaggle.com/c/quora-question-pairs}}.
         
@@ -146,14 +133,24 @@ y_{1,k} &\dots&  y_{N,k} \\
         In the paper they used $[v_1 + v_2, \| v_1- v_2 \|]$.
         
         They recognized, that LSA with term matrix $M$, containing term frequencies, performs poorly. 
-        They designed novel weighting scheme called TF-KLD (term frequency Kullback-Leibler divergence). 
+        They designed novel supervised weighting scheme called TF-KLD (term frequency, Kullback-Leibler divergence). 
         This weighting scheme has classical term frequency part and second novel KLD part.
         
         KLD part describes, how important is given word for the task.
-        They compute probabilities $p_j = P(s_{ij}^1| s_{ij}^2, y_i=1)$ and $q_j = P(s_{ij}^1| s_{ij}^2, y_i=0)$.
+        They compute probabilities 
+        \begin{equation}
+        \begin{split}
+        p_j = P(s_{ij}^1| s_{ij}^2, y_i=1) \\
+        q_j = P(s_{ij}^1| s_{ij}^2, y_i=0)   
+        \end{split}
+        \end{equation}
         In other words, what is the probability that word $w_j$ is in the first sentence if it is the second one and the sentences are (not) related.
         
-        KLD for word $j$ is $KL(p_j || q_j) = \sum_x p_j(x) \log \frac{p_j(x)}{q_j(x)}$, where $KL$ denotes the \hyphenation{Kullback-Leibler} divergence.
+        KLD for word $j$ is 
+        \begin{equation}
+        KL(p_j || q_j) = \sum_x p_j(x) \log \frac{p_j(x)}{q_j(x)}
+        \end{equation},
+         where $KL$ denotes the \hyphenation{Kullback-Leibler} divergence.
         This can be seen as an amount of information that presence of the word tells us about similarity of this pair of sentences. 
     
         This approach with TF-KLD weights can perform even better, than recurrent neural networks~\cite{conneau2017supervised}.

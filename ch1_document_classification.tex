@@ -1,6 +1,6 @@
 \chapter{Document Classification}
 
-    In this chapter we introduce a problem of document (text) classification and commonly used approaches that are used to solve this problem.
+    In this chapter we introduce a problem of document classification and commonly used approaches that are used to solve this problem.
     
     In this thesis discuss one of the unsupervised approaches for this problem.
     Then, we enhance this approach by incorporating a few trick from supervised machine learning.
@@ -13,7 +13,7 @@
     Websites, blogs, facebook posts, tweets, G+ posts contain wast amounts of information that can be very valuable.
     Moreover, companies customer centers usually receive large amounts of questions and requests from customers that could be automatically processed.
     
-    Automating text categorization and classification is therefore becoming an increasingly important and fundamental task. 
+    Automating text categorization and classification is therefore an very important and fundamental task. 
     A major objective of text classification system is to semantically assign one or more predefined categories to documents.
     
     Is this document a positive review? 
@@ -21,7 +21,7 @@
     Is this customer ticket related to a software bug?
     All of the questions above are instances of the text classification problem.
     
-    Usually, machine learning, statistical pattern recognition, or neural network approaches are used to construct classifiers automatically.
+    Usually, machine learning, statistical pattern recognition, or neural networks are used to construct classifiers automatically.
     This problem has significantly attracted attention from many researchers.
 
     \subsection{Sentiment analysis}
@@ -37,11 +37,10 @@
     
     There is a lot of ways how to approach document classification problem. 
     The most important things, that we consider about those approaches are accuracy and interpretability.
-    Further we can consider also the speed of required preprocessing, the speed of actual classification, the amount of required data and the memory requirements. 
+    Further we can consider also the speed of required preprocessing, the speed of actual classification, the amount of required data, and other memory requirements. 
     
     In this thesis we revisit one of the older approaches called LSA and try to address some of its shortcomings.
     
-    \* % popis aj ostatne datasety a veci ktore spominas: semantic relatedness, subjectivity/objectivity, question type, polarity
 
 \section{Notation}
 
@@ -98,7 +97,7 @@
 \section{Machine learning}
     
     Machine learning explores the study and construction of algorithms that can learn from and make predictions on data.
-    More pragmatic description of machine learning is, that it is a magic process of fiddling with some numbers, until results look fine. \*% Cite usama.
+    More pragmatic description of machine learning is, that it is a magic process of fiddling with some numbers, until results look fine~\cite{boza2018}. 
     Being able to let algorithms automatically learn from data proved to be extremely important.
     Nowadays, almost any task can be improved or automatized thanks to such algorithms. 
     However, to use machine learning for some task, we usually need to specify the task in machine learning friendly way.    
@@ -107,7 +106,7 @@
 
     \subsection{Supervised machine learning}
     
-    Supervised learning is a standard approach in machine learning. 
+    Supervised learning is the most common approach in machine learning. 
     Supervised algorithms learn to predict the best outputs for a given input.
     We denote the collection of input data, features, as $X$ and the corresponding expected outputs, labels, as $Y$.
     $X$ is usually a matrix of real values where rows of this matrix are individual samples.
@@ -115,7 +114,7 @@
     Inside mathematical expression we usually denote labels as $y$,
     We refer to the pair of features and labels $(X, Y)$ as a dataset.
     In practice we usually have three such datasets: train, validation and test. 
-    For the sake of this introduction we ignore this fact and we explain it in section \ref{sec:train:test:split}.
+    For the sake of this introduction we ignore this fact and we explain it in section~\ref{sec:train:test:split}.
     
     In machine learning, we want to find a function $f$ such that for given sample $x_i$
     the functions output $\hat{y_i} = f(x_i)$ if very close to the the real label $y_i$.
@@ -135,7 +134,7 @@
     This is a well suited approach to use in context of supervised machine learning. 
     
     We use an observation, that if we follow the opposite direction of the gradient in a given point, 
-    we arrive in a local minima. Example is on the picture \ref{obr:gradient}.
+    we arrive in a local minima. Example is on the picture~\ref{obr:gradient}.
     
     In the context of machine learning, we optimize a cost function $Q$ of parameters $\Theta$, 
     $$Q(\Theta) = E_y(f_\Theta(x))$$
@@ -182,7 +181,7 @@
     
     \subsection{Feed forward neural network}
     There is a lot of ways how to construct function $f_\theta$ that we want to optimize. 
-    One of the most popular ones is roughly inspired by the human brain and is called a \textit{feed forward neural network}. \* %citacia na Feed forward
+    One of the most popular ones is roughly inspired by the human brain and is called a \textit{feed forward neural network}.
     
     Neural network consists of small interconnected computational units (neurons) that are usually organized into a layers.
     Each unit takes some inputs, based on them produces an output and sends it to other units. 
@@ -231,7 +230,7 @@
     
     $W_1$ are weight of hidden neurons (first layer) and $W_2$ are weight of output neurons (second layer). Note that $g_2$ (usually sigmoid) can be a different function than $g_1$ (usually relu).
     There is no consensus in the community about how to count the layers. 
-    For example the simple network on picture \ref{obr:siet} could be seen as a $3$ layer neural network,
+    For example the simple network on picture~\ref{obr:siet} could be seen as a $3$ layer neural network,
     because it has input units, hidden units and output units.
     In this thesis we will use the number of matrices $W$ that are in the model.
     
@@ -249,7 +248,7 @@
     In the forward pass we feed to input to the network, compute activations of each layer and compute the final output.
     In the second pass, we make use of the chain rule and incrementally compute gradient with respect to each layer of the network.
     
-    Then we use the gradient descent according to equation \ref{eq:gradient:descent} and optimize the parameters~\cite{rumelhart1986david}.
+    Then we use the gradient descent according to equation~\ref{eq:gradient:descent} and optimize the parameters~\cite{rumelhart1986david}.
     
     
     
@@ -271,7 +270,7 @@
     The simplest vector space is based on a local representation.
     In this representation, we use a vector space with $|D|$ dimensions, one for each word in the vocabulary.
     Value $v_i$ at the $i$-th position of the vector $v$ corresponds to a presence or an absence of the $i$-th words $D_i$ from the vocabulary $D$.
-    Note, that $|D|$ in real applications easily exceeds $100\,000$ or even $1\,000\,000$.
+    Note that $|D|$ in real applications easily exceeds $100\,000$ or even $1\,000\,000$.
     This may make this representation unusable for some applications (classification with SVM).
     
     One of the simplest local representations is a \textit{bag of words} (BOW) representation. 
@@ -315,11 +314,11 @@
     
     However words, that appear multiple times in a sentence are probably important for this sentence and should have higher weights.
     
-    Based on these two observations, a number of term-weighting schemes was proposed~\cite{salton1988term}.
+    Based on these observations, a number of term-weighting schemes was proposed~\cite{salton1988term}.
     A term-weighting scheme assign a weight to a word $w$ in a sentence $s$ as term weight $t_{w,s}$.
     These weights usually consists of two parts, \emph{term frequency} and \emph{inverse document frequency}. 
     
-    \emph{Term frequency} part $\mathrm{TF}_{w,s}$ reflects how important is word $w$ for sentence $s$.
+    \emph{Term frequency} part $\mathrm{TF}_{w,s}$ reflects how important is a given word $w$ for sentence $s$.
     Common choices are:
     \begin{itemize}
         \item $\mathrm{sign}(\mathrm{tf}_{w,s})$, binary presence of the word in sentence. Also known as BOW.
@@ -339,7 +338,7 @@
     \end{itemize}
 
     Combination of such parts is called TF-IDF.
-    Note, that these choices for $\mathrm{TF}_{w,s}$ and $\mathrm{IDF}_{w,s}$ are probabilistically grounded~\cite{aizawa2003information}. %information perspective on TF-IDF
+    Note that these choices for $\mathrm{TF}_{w,s}$ and $\mathrm{IDF}_{w,s}$ are probabilistically grounded~\cite{aizawa2003information}. %information perspective on TF-IDF
     
     Another popular weighting scheme that is usually used in document retrieval is $\mathrm{BM_{25}}$. 
     
@@ -350,23 +349,36 @@
     Term weights can help to describe that different words, have different importance.
     However, they still cannot take into account, that two different words should have similar representation.
     
+    \subsubsection{Supervised weighting schemes} \label{sec:supervised:weights}
+    \* % READ MORE + FIX
+    Number of researchers recognized supervised weighting schemes as an elegant form of feature engineering for document classification problem.
+    We try to build upon these results and interesting schemes they proposed and studied.
+    
+    Or work is mainly based on schemes described by Wu et al.\cite{wu2017balancing}, % word weights,
+    Lan et al.~\cite{lan2009supervised}, % supervised weights for text categorization
+    and Deng et al.~\cite{deng2014study}. % supervised weights
+    
+    We will use schemes \texttt{tfchi2}, \texttt{tfig}, \texttt{tfgr}, \texttt{tfor}, and \texttt{tfrf}.
+    The exact formulas for these weights is not important and we refer the reader to cited articles.
+    The important part is, that these weighs consider how much the given word appeared in each category as a contrast to unsuperwised weights. 
+    
     
     \subsection{Distributed representation}
     
     To address the problem of high dimensionality and to allow different words to have high cosine similarity, we employ distributed representation.
     In this representation, dimensions do not correspond directly to words, but rather to some features of these words.
-    In this representation the ''meaning`` of the word is split across multiple dimensions.
+    In this representation the ''meaning`` of a word is split across multiple different dimensions.
     We can view each dimension as if it holds some form of an abstract meaning~\cite{le2014distributed}. 
     
-    Simple but unrelated example of distributed representation is a binary representation of a number.
+    Simple example of distributed representation is a binary representation of a number.
     
-    To acquire a distributed representation, algorithms often make use of the distributional hypothesis.
+    To acquire a distributed representation, algorithms commonly make use of the distributional hypothesis.
 
     \subsubsection{Distributional hypothesis}
     
     Distributional hypothesis states, that words that appear in similar contexts tend to have similar meaning,
     even though they do not appear directly together~\cite{harris1954distributional}~\cite{Rubenstein:1965:CCS:365628.365657}. % distributional hypothesis 
-    For example we can exchange words \texttt{dog} and \texttt{cat} in each sentence in our example corpus \ref{tab:example:dataset}
+    For example we can exchange words \texttt{dog} and \texttt{cat} in each sentence in our example corpus~\ref{tab:example:dataset}
     and all sentences will still make sense. 
     The positive correlation between the words appearing in similar contexts and words having similar meaning was in fact empirically confirmed.
     
@@ -404,7 +416,7 @@
     It assumes, that each document is created as a mixture of topics and that each topic is just a distribution over words. 
     
     Second popular class of approaches relies on performing some matrix factorization on the co-occurrence matrix.
-    In this thesis we build on of these factorization approaches.
+    In this thesis we build on one of these factorization approaches.
     
     \subsubsection{Latent semantic analysis} \label{sec:lsa}
     
@@ -460,7 +472,7 @@
     such that $M \simeq U_k \Sigma V_k^T$~\cite{halko2011finding}. %fast svd
     Moreover, we do not even need to have access to the full matrix $M$ and we can compute the decomposition in an incremental manner~\cite{brand2006fast}. % incremental svd
     
-    Not only we can incrementally adjust the decomposition when adding a new document into the corpus, we can remove a document as well.
+    We can incrementally adjust the decomposition when adding a new document into the corpus, moreover  can remove a document as well.
     Incremental SVD could in theory be used in the stochastic gradient descent setting.
     
     From now on, we drop the subscript $k$ and matrices $U$, $\Sigma$ and $V$ in the later text are assumed to have only $k$ dimensions.
@@ -489,13 +501,12 @@
 
     $$v_i = d_i U \Sigma^{-1} $$
     
-    Note, that $\Sigma^{-1}$ is easy to compute, because $\Sigma$ is a diagonal. 
+    Note that $\Sigma^{-1}$ is easy to compute, because $\Sigma$ is a diagonal. 
     We just need to invert each number on the diagonal.  
     
-    As was experimentally shown in my bachelor thesis~\cite{macko2016} 
-    and by other researchers~\cite{levy2015improving}, $\Sigma$ may not reflect the importance of each feature very well.
-    
-    Because of that, a simpler relationship is usually employed
+    It was experimentally shown in my bachelor thesis~\cite{macko2016} 
+    and by other researchers~\cite{levy2015improving} that $\Sigma$ may not reflect the importance of each feature very well.
+    Because of that, a~simpler relationship is usually employed
     
     $$v_i = d_i U $$
     
@@ -505,7 +516,7 @@
     
     Important part is, that we can compute such embedding even for unseen documents.
     The problem is, that we have to filter all words that are not present in $D$. 
-    However, because this method is fully unsupervised, we can make use of any unlabeled data (documents, that do no have known label). 
+    However, because this method is fully unsupervised, we can make use of any unlabeled data. 
     Factorized matrix $M$ can contain documents, that we do not have the label for.
     
     Finally, we perform the classification.
@@ -527,10 +538,10 @@
     In other words, it finds embedding that is the best for reconstructing the documents.
     Because of that, infrequent words that have high discriminatory power (are important for the task), may be filtered out.
     
-    For example, LSA computed on our example corpus \ref{tab:example:dataset} would focus on capturing the words \texttt{a}, \texttt{is}, \texttt{dog} and \texttt{cat},
+    For example, LSA computed on our example corpus~\ref{tab:example:dataset} would focus on capturing the words \texttt{a}, \texttt{is}, \texttt{dog} and \texttt{cat},
     event though they are completely irrelevant to our prediction task.
     
-    \subsection{Relationship of prediction and count based representations} \label{sec:count:vs:predict}
+    \subsection{Prediction vs count based representations} \label{sec:count:vs:predict}
         
     LSA and other count based techniques used to be very popular alternative to local representations.
     However after the raise of neural networks, they were soon overshadowed by neural word embeddings.
@@ -541,7 +552,7 @@
     Then they used a prepared pairs of related words (synonyms or words from the same category) and tested,
     how similar are the vector representations of related words. 
     They measured how well the word vector similarity correlates with the actual relatedness. 
-    Count based methods achieved Pearson correlation coefficient $0.74$ and were outperformed by prediction based methods which achieved $0.84$~\cite{baroni2014don}.
+    They report that count based methods achieved Pearson correlation coefficient $0.74$ and were outperformed by prediction based methods which achieved $0.84$~\cite{baroni2014don}.
     
     This and the hype around neural networks led to recent extreme popularity of prediction based embeddings,
     even though they were much less understood and less ''mathematically grounded``.
@@ -567,7 +578,7 @@
     After incorporating these insights into the count based methods, 
     they observed mostly local or insignificant performance differences between quality of count based embeddings and prediction based embeddings.
     
-    Note, that these experiments were done on a large bodies of text like English Wikipedia.   
+    Note that these experiments were done on a large bodies of text like English Wikipedia.   
     On small datasets it was empirically shown, that count based methods actually outperform the neural networks\cite{altszyler2016comparative}. % lsa vs word2vec on samall corpora
     
     

@@ -2,19 +2,30 @@
     
     In this section we present accuracy achieved by our approach.
     
-    Note, that because we test on multiple datasets and we test multiple parameters, we witness a small combinatorial explosion.
+    Note that because we test on multiple datasets and we test multiple parameters, we witness a small combinatorial explosion.
 
     \subsection{Parameters}
     
     As mentioned in section \ref{sec:hyperparams}, there is a number of potential hyperparameters. 
     However we consider only the $w'$-learning rate $\beta$ and the number of dimensions.
-    Instead of performing an exhaustive hyperparameter search, we test multiple combinations of weighting schemes on multiple datasets. 
+    Instead of performing an exhaustive hyperparameter search, we test multiple combinations of weighting schemes described in sections \ref{sec:supervised:weights} and \ref{sec:term:weights} on multiple datasets. 
+
+    \begin{table}[H]
+\begin{center}
+\begin{tabular}{l|l}
+\toprule
+\midrule
+weighting schemes & \texttt{tfidf}, \texttt{tfchi2}, \texttt{tfig}, \texttt{tfgr}, \texttt{tfor}, \texttt{tfrf}, \texttt{None} \\
+embedding size & $200$, $300$, $400$ \\
+$w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
+\bottomrule
+\end{tabular}
+\caption[Table of experiment parameters]{Table of experiment parameters}
+\label{tab:exp:params}
+\end{center}
+\end{table}
     
-    \* % describe those weights and add ref
-    We test number of different weighting schemes: \texttt{tfidf}, \texttt{tfchi2}, \texttt{tfig}, \texttt{tfgr}, \texttt{tfor}, \texttt{tfrf}, \texttt{None};
-    different embedding sizes: $200$, $300$, $400$;
-    and different $w'$-learning rates $\beta$: $0.1$, $0.01$, $0.001$.
-    We perform all of these tests on all of the $10$ datasets described in section \ref{sec:data:overview}.
+    We perform experiments with all combinations of parameters from table \ref{tab:exp:params} on all of the $10$ datasets described in section \ref{sec:data:overview}.
     Together we need to perform and evaluate around $630$ experiments.
     
     We compare our results against LSA baseline (LSA with given weights, but without training) and report relative improvements.
@@ -39,7 +50,7 @@
     that may manifest on some specific tasks.  
     We try to explain this effect in section \ref{chap:weight:analysis}.
     
-    During the training we observed an rather interesting behaviour for \texttt{tfchi2} weighting scheme on TREC datasets.
+    During the training we observed an interesting behaviour for \texttt{tfchi2} weighting scheme on TREC datasets.
     When we computed the $400$ dimensional LSA embedding, it produced only $398$ dimensions. 
     This means, that the original matrix was in fact just $398$ dimensional, 
     which means that the weighting scheme already filtered out a lot of information (hopefully noise) from the data. 
