@@ -1,11 +1,8 @@
 \section{Our approach}
     
     In this section we present accuracy achieved by our approach.
-    To address the problems of accuracy as a metric, we report relative improvements over the bias of given dataset.
-    This can be viewed as an improvement over the precision of the constant classifier, but it is slightly more stable in this way. 
-    For absolute accuracies refer to the appendix \ref{appendix:detailed}. 
-
-    Note, that because we have multiple testing datasets and multiple methods, we witness a small combinatorial explosion.
+    
+    Note, that because we test on multiple datasets and we test multiple parameters, we witness a small combinatorial explosion.
 
     \subsection{Parameters}
     \* % describe those weights and add ref
@@ -13,7 +10,6 @@
     different embedding sizes: $200$, $300$, $400$;
     and different learning rates: $0.1$, $0.01$, $0.001$.
     We perform all of these tests on all of the $10$ datasets described in section \ref{sec:data:overview}.
-    
     Together we need to perform and evaluate around $630$ experiments for one optimization routine.
     
     We compare our results against LSA baseline (LSA with given weights, but without training).
@@ -24,7 +20,7 @@
     We perform experiments for different weighting schemes, different sizes of embeddings and different learning rates on all datasets.
 
     Our results are in the table \ref{tab:batch:results} and table \ref{tab:batch:results:trec}.
-    We present only results for $\alpha=0.1$, as this learning rate showed to be the best. \* % appendix other alphas
+    We present only results for $\alpha=0.1$, as this learning rate showed to be the best. 
         
     \input{tables/batch_results.tex}
 
@@ -33,11 +29,14 @@
     We see consistent improvements on CR dataset and on TREC-DESC datasets.
 
     This means, that all those weighting schemes have some common shortcomings, 
-    that are manifested only on some specific tasks.  \* % todo ref to the weight analysis part
+    that are manifested only on some specific tasks.  
+    We try to explain this effect in section\* % todo ref to the weight analysis part
     
-    During the training w encountered 
-    tfchi2 generated $M$ with less than 400 dimensions. 
-    
+    During the training we observed an rather interesting behaviour for \texttt{tfchi2} weights on TREC dataset.
+    When we computed the $400$ dimensional LSA embedding, it produced less than $398$ dimensions. 
+    This means, that the original matrix was in fact just $398$ dimensional, 
+    which means that the weighting scheme already filtered out a lot of information (hopefully noice) form the data. 
+
     \subsubsection{Multiple gradient steps}
     
     We perform an experiment, where we do multiple gradient steps on $w'$ for each loop. 
@@ -70,8 +69,6 @@
 
     We conclude, that making multiple gradient steps on $w'$ does not significantly nor consistently improve the accuracy and only makes the training process slower.
     The intuition, that multiple gradient steps on $w'$ may decrease the convergence time showed to be wrong.
-
-
 
 
 \begin{table}[H]
@@ -117,8 +114,6 @@
 \end{center}
 \end{table}
 
-The only promising decrease in number of required learning steps can be seen for \texttt{TREC-HUM}
-    
-    \* %TODO, get learning times
-    
+    The only decrease in the number of required learning steps can be seen for \texttt{TREC-HUM}.
+    However this direction does not look very promising and we do not explore it further.
     

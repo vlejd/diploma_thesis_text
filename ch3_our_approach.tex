@@ -1,6 +1,7 @@
-\chapter{Our approach}
+\chapter{eLSA}
 
-In this chapter we describe our motivations, the design of our approach and some implementation details.
+In this chapter we introduce our novel approach eLSA: error boosted LSA.
+We describe our motivations, the design of eLSA and some implementation details.
 
 \section{Goals and motivation}
 
@@ -65,7 +66,7 @@ In this chapter we describe our motivations, the design of our approach and some
     We can compute the derivation $\frac{\partial E_y(\hat{y})}{\partial w'}$ thanks to the chain rule
     
     \begin{equation} \label{eq:derivation}
-    \frac{\partial E_y(\hat{y})}{\partial w'} = \frac{\partial E_y(\hat{y})}{\partial \hat{y}} \frac{\partial c(x)}{\partial x} \frac{\partial x}{\partial d}
+    \frac{\partial E_y(\hat{y})}{\partial w'} = \frac{\partial E_y(\hat{y})}{\partial \hat{y}} \frac{\partial c(x)}{\partial x} \frac{\partial x}{\partial w'}
     \end{equation}
     
     The first part of expression \ref{eq:derivation} is dependent on the chosen error function. 
@@ -81,17 +82,25 @@ In this chapter we describe our motivations, the design of our approach and some
     
     The third and last part is tied to the computation of the LSA embedding.
     Because $x = d \circ w' U$, we can compute 
-    $\frac{\partial x}{\partial d} = d U$ 
-    \* % TODO fix this math stuff
-    \* % IMPORTANT
+    $\frac{\partial x_j}{\partial 'w_i} = d_i U_{i,j}$
     
+    This can be rewritten in more concise notation as 
+    
+    $$\frac{\partial x}{\partial 'w} = U \circ d^T$$
+    
+    Note that we again employ the convention that the $\circ$ operation is broadcasted across all columns of the matrix.
+
     Once we know how to compute the gradient, we need to decide on the the optimization routine we will employ.
 
 \section{Optimization routines}
     
-    Inspired by gradient descent algorithm, we perform the gradient step $w' = w' - \frac{\partial E_y(\hat{y})}{\partial w'}$. 
+    Inspired by gradient descent algorithm, we perform the gradient step $w' = w' - \beta \frac{\partial E_y(\hat{y})}{\partial w'}$. 
+    The parameter $\beta$ determines the size of the gradient step that we will perform.
+    We will call this parameter $w'$-learning rate. 
+    Note, that the classifier $C$ may have its of learning rate $\alpha$, and these two learning rates are completely independent.
+    
     The problem is, that equation \ref{eq:derivation} holds only for stationary classifier $C$ and decomposition $S$. 
-    We ignore that fact, that $S$ is actually a function of reweighted matrix and hence it is a function of $w'$.
+    We ignore the fact, that $S$ is actually a function of reweighted matrix and hence it is a function of $w'$.
     It is probably possible to compute the exact gradient (refer to section \ref{sec:nn:svd}), but we will not do that.
     
     It is not clear, how often we want to recompute the SVD and how often (and how much) we want to retrain the classifier.
@@ -99,7 +108,7 @@ In this chapter we describe our motivations, the design of our approach and some
     expectation minimization algorithm.
     
     We use the notation introduced in section \ref{sec:lsa}.
-    However, our parts $W$, $S$, $C$ are going to be updated through the time. We denote them with superscripts, e.g.~$W^t$, referring to weighting part $W$ at time $t$.
+    However, our parts $W$, $S$ and $C$ are going to be updated through the time. We denote them with superscripts, e.g.~$W^t$, referring to weighting part $W$ at time $t$.
     
     \subsection{Batch gradient descent}
     
@@ -115,17 +124,19 @@ In this chapter we describe our motivations, the design of our approach and some
         \KwData{$M$}
         \KwResult{trained $W$, $S$, $C$ }
         $w'^0 = 1$, $t=1$\;
-        \While{performance is improving on validation dataset, $t$++}{
+        \While{performance is improving on validation dataset, $t++$}{
             recompute $S^t$ from $M \circ w'^{t-1}$\;
             compute embeddings $v^t$ from $M \circ w'^{t-1}$ with $S^t$\;
             fully train $C^t$ on $v^t$ and labels $y$\;
-            update $W^t$: $w'^t = w'^{t-1} - \alpha \frac{\partial E(C(S(M w'^{t-1}))}{\partial w'^{t-1}} $\;
+            update $W^t$: $w'^t = w'^{t-1} - \beta \frac{\partial E(C(S(M w'^{t-1}))}{\partial w'^{t-1}} $\;
         }
         \caption{stochastic training of $w'$} \label{algo:batch}
     \end{algorithm}
     
     We took inspiration from expectation maximization algorithm.  
     Note, that it is not essential in any way for the reader to know this algorithm for further reading.
+    
+    We name the algorithm \ref{algo:batch} eLSA, because it uses error of the classifier to produce boosted (improved) weight $w'$.
     
     This algorithm needs to do a lot of computations for one update of the weights $w'$.
     To address this, we can increase the number of gradient steps performed on $w'$ in each step of the while loop.
@@ -162,20 +173,21 @@ In this chapter we describe our motivations, the design of our approach and some
                 add $d_i$ to $S^{t-1}$ and get $S^t$\;
                 compute embedding $v_i^{t}$ from $d_i \circ w'^{t-1}$ with $S^t$\;
                 perform gradient step on $C^{t-1}$ with $v_i^t$ to get $C^t$\;
-                update $W^t$, $w'^t = w'^{t-1} - \alpha \frac{\partial E(C(S(d_i \circ w'^{t-1}))}{\partial w'^{t-1}} $\;    
+                update $W^t$, $w'^t = w'^{t-1} - \beta \frac{\partial E(C(S(d_i \circ w'^{t-1}))}{\partial w'^{t-1}} $\;    
             }
         }
         \caption{Batch training of $w'$} \label{algo:stochastic}
     \end{algorithm}
     
-    \* %TODO note that this is unstable and we do not evaluate it in more details.
+    This optimization routine showed to be very unstable in our preliminary experiments and we do not explore it further.
+    It also introduced a lot of new decisions that would have had been made and a lot of new hyperparameters.
     
     
-    \subsection{Algorithm explanation}
+    \subsection{eLSA explanation}
     We need to address a few things that are no apparent from the description provided above.
     We do it here to not clutter the notation and so that the previous sections are a bit cleaner. 
     
-    \subsubsection{Train test split} 
+    \subsubsection{Train test split} \label{sec:train:test:split}
     
     Motivated by good practice from neural network training,
     we split our dataset into $3$ parts: train, validation, and test.
@@ -190,7 +202,7 @@ In this chapter we describe our motivations, the design of our approach and some
     Because our datasets are not very big, we stabilize our results by employing the crossvalidation technique.  
     However because we need to run a lot of experiments, we only use $3$ fold crossvalidation.
     
-    \subsubsection{Stopping conditions} 
+    \subsubsection{Stopping conditions} \label{sec:elsa:stopping}
     
     In both optimization routines we iteratively update parameters $w'$ and we do so while our performance on validation set is increasing.
     This needs more clarification.
@@ -205,6 +217,23 @@ In this chapter we describe our motivations, the design of our approach and some
     
     We stop the training in time $t$ if $ME_{10}^t > ME_{10,20}^t$, which means our validation error started to increase and we need to stop.
     
+    \subsubsection{Weighting schemes}
+    
+    Importan properly of eLSA algorithm is, that we do not need to start from basic co-occurrence matrix $M$. 
+    We can apply some weighted scheme, such as TF-IDF on this matrix first and then run eLSA.
+    What weighting scheme we starts from is actually one of the important hyperparameters.
+    
+    Afterwards, we can examine the found $w'$ and see, which words had high value $w'_i$.
+    This means, they were underweighted by the weighting scheme.
+
+    \subsubsection{Other hyperparameters}
+    
+    We consider only two hyperparameters: $w'$-learning rate $\beta$ and starting weighting scheme.
+    However, parts $S$ and $C$ have a lot of hyperparameters on their own. 
+    
+    Exploring the space of those hyperparameters would be extremely computationally demanding and could be subject to further research.
+    Instead we leave this parameters to reasonable defaults suggested by implementations we use.
+
 
 \section{Implementation}
     
@@ -261,7 +290,7 @@ In this chapter we describe our motivations, the design of our approach and some
     In theory, we could (and we wanted to) implement our whole approach in TensorFlow.
     It even contains implementation of SVD, however that implementation does not have all the properties that we require.
     
-    \subsection{Other tools used}
+    \subsection{Other tools}
     
     During the development of required code we worked in Jupyter Notebook. 
     It is an interactive environment the offers very easy prototyping and
@@ -285,12 +314,5 @@ In this chapter we describe our motivations, the design of our approach and some
     we were able to run experiments on $10$ machines at parallel.
     
     
-    \* %TODO experiments cost
-    In the end, our experiments costed approximately $70\$$ worth of computation time.
-    
-    \subsection{Code design} 
-    
-    \* % TODO Something about used objects, classifiers, SVD, experiments, Two appraches
-    
-
+    In the end, our experiments costed approximately $40\$$ worth of computation time.
     

@@ -1,11 +1,15 @@
 \chapter{Experiments}
 
 In this chapter we present our experimental results and compare them to baseline solutions.
-We perform the evaluation on multiple classification tasks. 
+The most important baseline that we would like to improve upon is the standard LSA.
+Further we present bag of words baseline and baseline based on neural embeddings.
+
+To make our evaluation more robust, we perform it on multiple classification datasets and multiple classification tasks.
 
 \section{Classification datasets}
     
     To evaluate the performance of different approaches, we make use of multiple popular datasets.
+    
     In this section we describe these datasets in more details.
     
     \subsection{Overview} \label{sec:data:overview}
@@ -148,7 +152,7 @@ We perform the evaluation on multiple classification tasks.
         
     Pang and Lee were able to mine the Web and create a large, automatically labeled sentence corpus. 
     To gather subjective sentences they collected movie review snippets from website  \url{www.rottentomatoes.com}.
-    To obtain objective data, they took sentences from plot summaries available from the Internet Movie Database (\url{www.imdb.com}) \cite{pang2004sentimental} \footnote{We personally think, that this technique is rather questionable at best.}.
+    To obtain objective data, they took sentences from plot summaries available from the Internet Movie Database \url{www.imdb.com}\footnote{We personally think, that this technique is rather questionable at best, because the labels are probably very noisy.} \cite{pang2004sentimental}.
     
     Example of a objective review:
     \emph{the movie begins in the past where a young boy named sam attempts to save celebi from a hunter .}
@@ -169,7 +173,7 @@ We perform the evaluation on multiple classification tasks.
     Our rational behind minimal filtering is, that we would like the weighting scheme to understand, which words are important.
     Hence we hope, that if the stop word is really not important, its weight will be reduced.
     
-    \subsection{Metrics}
+    \subsection{Evaluation metrics}
     
     Because we deal with binary classification tasks, our metric of choice is an accuracy.
     
@@ -181,7 +185,7 @@ We perform the evaluation on multiple classification tasks.
     For example accuracy $0.69$ on MPQA dataset is really bad, because it can be achieved by constant classifier.
     To address this issue, we usually subtract this baseline from our results and look only on the relative improvement. 
     
-    We will compute accuracy on tree subsets of the dataset. 
+    We will compute accuracy on three subsets of the dataset. 
     $\mathrm{acc}_{train}$ on the train set, $\mathrm{acc}_{valid}$ on the validation set and $\mathrm{acc}_{test}$ on the test set.
     Note that $\mathrm{acc}_{train}$ is not very interesting on its own, but if we compare it with $\mathrm{acc}_{valid}$ and $\mathrm{acc}_{test}$ we can get an insight about whether our model is overfitting or underfitting.
 
@@ -191,15 +195,14 @@ We perform the evaluation on multiple classification tasks.
     There is a number of baselines that we consider.
     These are commonly used approaches such as pretrained neural embeddings, or very naive baselines such as constant classifier.
     
+    To  address the problems of accuracy as a metric, we report relative improvements over the bias of each dataset.
+    This can be viewed as an improvement over the precision of the constant classifier, but it is slightly more stable in this way. 
+    For absolute accuracies refer to the appendix \ref{appendix:detailed}. 
+
     The most important baseline we want to improve upon is in section \ref{sec:lsa:baseline}, 
     and it is the standard LSA.
 
-    \subsection{BOW baselines}
-    
-    First we evaluate baselines 
-    \* % TODO Rewrite
-    
-    \subsubsection{Constant baselines}
+    \subsection{Constant baselines}
     
     As discussed in section \ref{sec:data:overview}, some of our datasets are biased. 
     They may contain substantially more examples belonging to one label that belonging to the other.
@@ -210,6 +213,12 @@ We perform the evaluation on multiple classification tasks.
     There are minor differences because of the random data split. 
 
     \* %TODO add table
+
+    \subsection{Bag of word baselines}
+    
+    First we evaluate baselines that work with local word representation (section \ref{sec:local:representation}).
+    These baselines have no knowledge about semantic properties of words and usually only captures some basic word statistic.
+    They are usually the first pick for any task, because they are simple and easy to use. 
     
     \subsubsection{Logistic regression}
     
@@ -228,65 +237,7 @@ We perform the evaluation on multiple classification tasks.
     Because of that we may employ more strict regularization techniques without significant decrees in the performance.
     
     
-    \begin{table}[H]
-    \begin{center}
-    
-    \begin{tabular}{llrrrr}
-    \toprule
-    {} &      &  CR &  MPQA &  MR &  SUBJ \\
-    scheme &  &            &              &            &              \\
-    \midrule
-    None & test &      0.143 &        0.159 &      0.270 &        0.419 \\
-    {} & train &      0.335 &        0.223 &      0.479 &        0.494 \\
-    tfchi2 & test &      0.111 &        0.125 &      0.176 &        0.349 \\
-    {} & train &      0.147 &        0.166 &      0.206 &        0.343 \\
-    tfgr & test &      0.116 &        0.126 &      0.176 &        0.349 \\
-    {} & train &      0.150 &        0.167 &      0.211 &        0.346 \\
-    tfidf & test &      0.124 &        0.160 &      0.258 &        0.416 \\
-    {} & train &      0.361 &        0.291 &      0.500 &        0.500 \\
-    tfig & test &      0.116 &        0.126 &      0.176 &        0.349 \\
-    {} & train &      0.150 &        0.167 &      0.211 &        0.346 \\
-    tfor & test &      0.135 &        0.151 &      0.273 &        0.404 \\
-    {} & train &      0.253 &        0.198 &      0.407 &        0.436 \\
-    tfrf & test &      0.106 &        0.147 &      0.239 &        0.386 \\
-    {} & train &      0.194 &        0.179 &      0.322 &        0.418 \\
-    \bottomrule
-    \end{tabular}
-    
-    \caption[Accuracy improvements for BOW baseline]{Accuracy improvements for BOW baseline}
-    \label{tab:}
-    \end{center}
-    \end{table}
-    
-    \begin{table}[H]
-    \begin{center}
-    
-    \begin{tabular}{llrrrrrr}
-    \toprule
-    {} &&  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
-    scheme &  & & & &&&\\
-    \midrule
-    None & test & 0.011 & 0.148 & 0.108 &0.138 &0.117 &0.129 \\
-    {} & train & 0.010 & 0.202 & 0.209 &0.202 &0.142 &0.158 \\
-    tfchi2 & test & 0.009 & 0.083 & 0.006 &0.102 &0.104 &0.097 \\
-    {} & train & 0.009 & 0.098 & 0.015 &0.113 &0.103 &0.092 \\
-    tfgr & test & 0.006 & 0.081 & 0.006 &0.104 &0.104 &0.106 \\
-    {} & train & 0.007 & 0.097 & 0.014 &0.112 &0.103 &0.103 \\
-    tfidf & test & 0.011 & 0.148 & 0.108 &0.134 &0.127 &0.139 \\
-    {} & train & 0.016 & 0.218 & 0.226 &0.216 &0.154 &0.170 \\
-    tfig & test & 0.006 & 0.081 & 0.006 &0.104 &0.104 &0.106 \\
-    {} & train & 0.007 & 0.097 & 0.014 &0.112 &0.103 &0.103 \\
-    tfor & test & 0.006 & 0.066 & 0.063 &0.139 &0.107 &0.129 \\
-    {} & train & 0.006 & 0.170 & 0.166 &0.183 &0.123 &0.140 \\
-    tfrf & test & 0.006 & 0.061 & 0.060 &0.124 &0.102 &0.118 \\
-    {} & train & 0.007 & 0.136 & 0.135 &0.158 &0.104 &0.125 \\
-    \bottomrule
-    \end{tabular}
-    
-    \caption[Accuracy improvements for BOW baseline on TREC datasets]{Accuracy improvements for BOW baseline on TREC datasets}
-    \label{tab:}
-    \end{center}
-    \end{table}
+    \* % paste tables
 
     \* % describe results
 
@@ -295,37 +246,9 @@ We perform the evaluation on multiple classification tasks.
     In this baseline we construct the term matrix $M$, reweigh it with weighting scheme, train the LSA embedding and train the classifier.
     We try multiple weighting schemes and multiple classifiers.
     
-    Refer to tables \ref{tab:lsa:resuts:300} and \ref{tab:lsa:resuts:400} in appendix B for results for dimensions $300$ and $400$.
+    See tables \ref{tab:lsa:resuts:300} and \ref{tab:lsa:resuts:400} in appendix B for results for dimensions $300$ and $400$.
     
-    \begin{table}[H]
-    \begin{center}
-    
-    \begin{tabular}{llrrrr}
-    \toprule
-    {} &      &  CR &  MPQA &  MR &  SUBJ \\
-    scheme &  &            &              &            &              \\
-    \midrule
-    None & test &      0.093 &        0.095 &      0.198 &        0.360 \\
-    {} & train &      0.162 &        0.103 &      0.216 &        0.390 \\
-    tfchi2 & test &      0.093 &        0.095 &      0.198 &        0.360 \\
-    {} & train &      0.162 &        0.103 &      0.215 &        0.390 \\
-    tfgr & test &      0.093 &        0.094 &      0.198 &        0.359 \\
-    {} & train &      0.162 &        0.103 &      0.215 &        0.390 \\
-    tfidf & test &      0.093 &        0.095 &      0.197 &        0.360 \\
-    {} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
-    tfig & test &      0.093 &        0.094 &      0.197 &        0.360 \\
-    {} & train &      0.162 &        0.103 &      0.216 &        0.390 \\
-    tfor & test &      0.093 &        0.094 &      0.197 &        0.360 \\
-    {} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
-    tfrf & test &      0.093 &        0.094 &      0.197 &        0.359 \\
-    {} & train &      0.162 &        0.103 &      0.215 &        0.389 \\
-    \bottomrule
-    \end{tabular}
-    
-    \caption[Accuracy improvements for LSA baseline with 200 dimensions]{Accuracy improvements for LSA baseline with 200 dimensions}
-    \label{tab:}
-    \end{center}
-    \end{table}
+    \* % add tables !!!!
 
     %comapre to word vectos, compare to logistic regression, discuss overfitting.
     
