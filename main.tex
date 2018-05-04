@@ -13,8 +13,8 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{float}
-\usepackage[final]{pdfpages} % kill final
-\usepackage[none]{hyphenat}
+\usepackage[final]{pdfpages}
+%\usepackage[none]{hyphenat}
 \usepackage{algorithm2e}
 \usepackage{hyperref}
 \usepackage{booktabs}
@@ -72,7 +72,7 @@
 \def\mfmiesto{Bratislava, \mfrok}
 
 %aj cislo odboru je povinne a je podla studijneho odboru autora prace
-\def\mfodbor{ 2508 Informatics } 
+\def\mfodbor{ Informatics } 
 \def\program{ Informatics }
 \def\mfpracovisko{ Department of Computer Science }
 
@@ -175,13 +175,12 @@ Consultant: & \mfkonzultant \\
 ~
 
 \vfill
-{\bf Acknowledgment:} \*
-% I would like to thank Kika, 
-% gf: 
-% fellas from CEAI without skill acquired there i would not ba able to write this shit
-% Radim rehured, who responded to email of a random guy that asked him for mentoring/advice
-% Guido van Rossum-> Python tool that caused more joy and suffering at the same time
-% A samozrejme, Basi, rodine a kamarátom za to, že to so mnou v poslednej dobe prežili a dokonca ma aj podporovali
+{\bf Acknowledgment:} 
+I would like to thank my supervisor Kristina Malinovská, for complementing my writing weaknesses. 
+Also, I would like to thank my colleagues from CEAI, where I learned tons of invaluable research and programming skills, without which I would not be able to properly finish this thesis.
+Special thanks go to Radim Řehůřek, who responded to an email of a random guy (me), who asked him for mentoring and advice.
+Next, I want to thank Guido van Rossum, for creating a tool, which inflicted to me the most pain and caused the most professional joy in my life. 
+Last, but not least, huge thanks goes to Baša, my family, and my friends for supporting me in this funny period of time. 
 % --- Koniec poďakovania
 
 
@@ -193,10 +192,10 @@ Consultant: & \mfkonzultant \\
 \newpage 
 \section*{Abstrakt}
 
-Latentná sémantická analýza môže zlyhávať pri klasifikačných úlohách, lebo vyberá črty dokumentov, ktoré sú najreprezentatívnejšie ale nie najdiskriminatívnejšie. 
-V práci predstavujeme novú metódu eLSA, ktorá prináša ďalšiu vrstvu váh $w'$, ktoré sú trénované pomocou metódy najväčšieho vzostupu.
-Experimentálne sme ukázali, že proces učenia eLSA konverguje a že eLSA dosahuje väčšiu presnosť ako LSA.
-Taktiež využívame eLSA na anylzovanie bežne používaných váhových schém a identifikujeme slová, ktoré tieto schémy podhodnocujú alebo nadhodnocujú.
+Latentná sémantická analýza môže zlyhávať pri klasifikačných úlohách, lebo vyberá črty dokumentov, ktoré sú najreprezentatívnejšie, ale nie najdiskriminatívnejšie. 
+V~tejto práci predstavujeme novú metódu eLSA, ktorá prináša ďalšiu vrstvu váh $w'$, ktoré sú trénované pomocou metódy najväčšieho vzostupu.
+Experimentálne sme ukázali, že proces učenia eLSA konverguje, a že eLSA dosahuje väčšiu presnosť ako LSA.
+Taktiež využívame eLSA na analyzovanie bežne používaných váhových schém a identifikujeme slová, ktoré tieto schémy podhodnocujú alebo nadhodnocujú.
 
 \paragraph*{Kľúčové slová:} spracovanie prirodzeného jazyka, klasifikácia dokumentov, gradient descent, LSA
 % --- Koniec Abstrakt - Slovensky
@@ -208,10 +207,10 @@ Taktiež využívame eLSA na anylzovanie bežne používaných váhových schém
 \newpage 
 \section*{Abstract}
 
-Latent semantic analysis may perform poorly on document classification tasks, because it selects the most representative but not the most discriminative features.
-We propose a new method, eLSA, that introduces another layer or weights $w'$, that are trained with gradient descent.
+Latent semantic analysis may perform poorly on document classification tasks, because it selects the most representative, but not the most discriminative features.
+We propose a new method eLSA, which introduces another layer of weights $w'$, that are trained with gradient descent.
 We experimentally show, that learning of eLSA converges, and that it achieves higher accuracy than LSA. 
-We also use eLSA to analyze common weighting schemes and identify words, that these schemes underweight or overweight.
+We also use eLSA to analyze common weighting schemes and identify words, which are underweight or overweight in these schemes.
 
 \paragraph*{Keywords:} natural language processing, document classification, gradient descent, LSA
 

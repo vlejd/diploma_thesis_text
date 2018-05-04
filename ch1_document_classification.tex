@@ -1,19 +1,19 @@
 \chapter{Document Classification}
 
-    In this chapter we introduce a problem of document classification and commonly used approaches that are used to solve this problem.
+    In this chapter, we introduce a problem of document classification and commonly used approaches that are used to solve this problem.
     
-    In this thesis discuss one of the unsupervised approaches for this problem.
-    Then, we enhance this approach by incorporating a few trick from supervised machine learning.
+    In this thesis we discuss one of the unsupervised approaches for this problem.
+    Later, we enhance this approach by incorporating a few tricks from supervised machine learning.
 
 \section{Problem description and motivation} \label{sec:problem}
 
     Thanks to digitalizaion of books and texts, almost all human knowledge is now easily accessible to algorithms. 
-    With rapid growth of social media platforms and electronic communication we see a new type of documents.
+    With rapid growth of social media platforms and electronic communication, we see a new type of documents.
     These documents are not traditional books, but user generated content.
     Websites, blogs, facebook posts, tweets, G+ posts contain wast amounts of information that can be very valuable.
     Moreover, companies customer centers usually receive large amounts of questions and requests from customers that could be automatically processed.
     
-    Automating text categorization and classification is therefore an very important and fundamental task. 
+    Automatic text categorization and classification is therefore a very important and fundamental task. 
     A major objective of text classification system is to semantically assign one or more predefined categories to documents.
     
     Is this document a positive review? 
@@ -22,24 +22,21 @@
     All of the questions above are instances of the text classification problem.
     
     Usually, machine learning, statistical pattern recognition, or neural networks are used to construct classifiers automatically.
-    This problem has significantly attracted attention from many researchers.
 
     \subsection{Sentiment analysis}
     
-    \* % Cite something?
-    
-    One of the most popular instances of document classification is a sentiment analysis, \emph{SA}.
-    SA is a process of determining whether a piece of writing is positive, negative or neutral.
-    It is also known as opinion mining, deriving the opinion or attitude of a speaker. 
+    One of the most popular instances of document classification is a sentiment analysis -- \emph{SA}.
+    SA is a process of determining whether a piece of writing is positive, negative or neutral \cite{jurafsky2000speech}.
+    It is also known as \emph{opinion mining}, deriving the opinion or attitude of a speaker. 
     A common use case for this technology is to discover how people feel about a particular topic.
     SA is widely applied to customer materials such as reviews or online and social media.
     It can answer questions like: ``Does this review suggests, that Eat\&Meet is a good place to eat (and meet)?'', ``Does the person like his dog?''.
     
     There is a lot of ways how to approach document classification problem. 
-    The most important things, that we consider about those approaches are accuracy and interpretability.
-    Further we can consider also the speed of required preprocessing, the speed of actual classification, the amount of required data, and other memory requirements. 
+    The most important things that we consider about those approaches are accuracy and interpretability.
+    Further, we consider also the speed of required preprocessing, the speed of actual classification, the amount of required data, and other memory requirements. 
     
-    In this thesis we revisit one of the older approaches called LSA and try to address some of its shortcomings.
+    In this thesis, we revisit one of the older approaches called LSA and try to address some of its shortcomings.
     
 
 \section{Notation}
@@ -194,7 +191,7 @@
     
     \begin{figure}[h]
     \centerline{\includegraphics[width=0.4\textwidth]{images/neural_network}}
-    \caption[Simple neural network with 2 layers, 3 inputs, 4 neurons and 2 outputs]{Simple neural network with 2 layers, 3 inputs, 4 hidden neurons and 2 outputs}
+    \caption[Simple neural network]{Simple neural network with 2 layers, 3 inputs, 4 hidden neurons and 2 outputs}
     \label{obr:siet}
     \end{figure}
     
@@ -350,9 +347,8 @@
     However, they still cannot take into account, that two different words should have similar representation.
     
     \subsubsection{Supervised weighting schemes} \label{sec:supervised:weights}
-    \* % READ MORE + FIX
     Number of researchers recognized supervised weighting schemes as an elegant form of feature engineering for document classification problem.
-    We try to build upon these results and interesting schemes they proposed and studied.
+    We try to build upon these results and upon interesting schemes they proposed.
     
     Or work is mainly based on schemes described by Wu et al.\cite{wu2017balancing}, % word weights,
     Lan et al.~\cite{lan2009supervised}, % supervised weights for text categorization
@@ -360,7 +356,7 @@
     
     We will use schemes \texttt{tfchi2}, \texttt{tfig}, \texttt{tfgr}, \texttt{tfor}, and \texttt{tfrf}.
     The exact formulas for these weights is not important and we refer the reader to cited articles.
-    The important part is, that these weighs consider how much the given word appeared in each category as a contrast to unsuperwised weights. 
+    The important part is, that these weighs consider how many times the given word appeared in each category as a contrast to unsupervised weights. 
     
     
     \subsection{Distributed representation}
@@ -541,7 +537,7 @@
     For example, LSA computed on our example corpus~\ref{tab:example:dataset} would focus on capturing the words \texttt{a}, \texttt{is}, \texttt{dog} and \texttt{cat},
     event though they are completely irrelevant to our prediction task.
     
-    \subsection{Prediction vs count based representations} \label{sec:count:vs:predict}
+    \subsection{Prediction vs. count based representations} \label{sec:count:vs:predict}
         
     LSA and other count based techniques used to be very popular alternative to local representations.
     However after the raise of neural networks, they were soon overshadowed by neural word embeddings.

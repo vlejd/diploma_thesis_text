@@ -2,25 +2,26 @@
 \addcontentsline{toc}{chapter}{Conclusion}
 \* %make longer
 
-In this thesis we revisited a famous co-occurrence-based approach LSA.
-First we experimentally confirmed that using LSA yields higher accuracy than using
+In this thesis, we revisited a famous co-occurrence-based approach LSA.
+First, we experimentally confirmed that using LSA yields higher accuracy than using
 word vectors trained on the same corpus.
 
 To improve the LSA even further, we described a novel way of how to incorporate the supervised information into the LSA.
 We designed eLSA, an approach that incorporates knowledge of the classifiers error directly to the weighting scheme.
 eLSA introduces a new layer of reweighting that happens before the SVD decomposition.
-This layer lets the unsupervised SVD process to be supervised.
+This layer allows the unsupervised SVD process to become supervised.
 We experimentally showed, that it is possible to train eLSA with batch gradient descent and that the training error nicely converges.
 
-We evaluate eLSA for combinations of $10$  classification datasets and $7$ weighting schemes.
-In most of these experiments eLSA consistently achieved higher accuracy than LSA baseline.
-We showed that none of the used schemes is optimal on all datasets and hence that their design can be further improved.
-eLSA was able to improve the accuracy achieved by these schemes by to $7\%$.
+We evaluated eLSA for combinations of $10$  classification datasets and $7$ weighting schemes.
+In most of these experiments, eLSA consistently achieved higher accuracy than LSA baseline.
+We showed that none of the used schemes is optimal on all datasets and hence their design can be further improved.
+eLSA was able to improve the accuracy achieved by these schemes by up to $7\%$.
 
 Very important and nice property of eLSA is its interpretability.
 We analyzed parameters $w'$ learned by eLSA and showed that they can be used to gain insight into the dataset.
-We identified multiple groups of words, that are commonly underweighted by the weighting schemes.
-Words such as interrogative pronoun showed to be usually underweighted in the question classification task (TREC-DESC) even by supervised weighting schemes. 
-To our surprise, word, that are considered to be stop words (like \texttt{the} or \texttt{not)} and usually entirely removed from the dataset, also showed to be underweighted. 
+We identified multiple groups of words that are commonly underweighted by the weighting schemes.
+Words such as interrogative pronoun showed to be usually underweighted in the question classification task (TREC-DESC), even by supervised weighting schemes. 
+To our surprise, words that are considered to be stop words (like \texttt{the} or \texttt{not)} and are usually entirely removed from the dataset, also showed to be underweighted. 
 
+In the end, we fulfilled all our goals and even pushed them a bit further.
 

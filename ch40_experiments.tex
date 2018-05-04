@@ -1,6 +1,6 @@
 \chapter{Experiments}
 
-In this chapter we present our experimental results and compare them to baseline solutions.
+In this chapter, we present our experimental results and compare them to baseline solutions.
 The most important baseline that we would like to improve upon is the standard LSA.
 Further, we present the bag of words baseline and a baseline based on neural embeddings.
 
@@ -9,25 +9,25 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
 \section{Classification datasets}
     
     To evaluate the performance of different approaches, we make use of multiple popular datasets.
-    In this section we describe these datasets in more details.
+    In this section, we describe these datasets in more detail.
     
     \subsection{Overview} \label{sec:data:overview}
     
     We use datasets from  SentEval\footnote{\url{https://github.com/facebookresearch/SentEval}} repository.
     SentEval is a library for evaluating the quality of unsupervised sentence embeddings~\cite{conneau2017supervised}.
-    We have not directly used  any code from this library, because we were not able to modify its API in a maintainable way to fit our needs. 
-    In the end, we just used it as a guideline for dataset acquisition.
-    Specifically, we only used the \texttt{get\_transfer\_data.bash} script.
+    We do not directly use any code from this library, because we were not able to modify its API in a maintainable way to fit our needs. 
+    In the end, we just use it as a guideline for dataset acquisition.
+    Specifically, we only use the \texttt{get\_transfer\_data.bash} script.
     
-    This repository contains multiple a lot of different datasets, 
+    This repository contains multiple different datasets, 
     but we only use those related to binary classification tasks.
-    Namely we use:
+    Namely, we use:
     \begin{itemize}
-        \item Movie review sentiment analysis dataset MR.
-        \item Product review dataset CR.
-        \item Subjectivity/objectivity dataset SUBJ.
-        \item Question-type dataset TREC.
-        \item Opinion polarity dataset MPQA.
+        \item Movie review sentiment analysis dataset -- MR.
+        \item Product review dataset -- CR.
+        \item Subjectivity/objectivity dataset -- SUBJ.
+        \item Question-type dataset -- TREC.
+        \item Opinion polarity dataset -- MPQA.
     \end{itemize}
     
     \begin{table}[h]
@@ -54,17 +54,17 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     \end{table}
 
 
-    In table~\ref{tab:datasets:stats} we present a few basic statistics for each dataset.
+    In table~\ref{tab:datasets:stats}, we present a few basic statistics for each dataset.
     Column \emph{bias} denotes percentage of the majority class in the dataset.
     It also presents a baseline accuracy which a naive algorithm could achieve by making constant predictions. 
-    Bias for TREC dataset is not applicable because this dataset is not binary and we address this in section~\ref{sec:TREC}.
+    Bias for TREC dataset is not applicable because this dataset is not binary and we address this in the section~\ref{sec:TREC}.
     
-    We introduce each of these datasets in more details and we provide some example sentences from these datasets.
-    Note that these examples are displayed in a very genuine way. 
+    We introduce each of these datasets in more detail and we provide some example sentences from these datasets.
+    Note that these examples are displayed in a very genuine way (they do not contain mistakes!). 
     We see these examples as they really are and as they are presented to our algorithms.
     The actual preprocessing will be discussed later in this section.
     
-    \subsubsection{Movie review, MR}
+    \subsubsection{Movie review -- MR}
     
     The rise of internet forums and critique websites gave birth to the problem of sentiment classification.
     
@@ -76,7 +76,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
 
     An example of a negative review is: \emph{simplistic , silly and tedious .}
     
-    \subsubsection{Product review, CR}
+    \subsubsection{Product review -- CR}
     
     This dataset was introduced by Hu and Liu~\cite{hu2004mining} as a part of a customer review summarization task. 
     They created a summarization pipeline with multiple steps and addressed a lot of different problems. 
@@ -89,12 +89,12 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     Example of a negative review:
     \emph{weaknesses are minor : the feel and layout of the remote control are only so-so ; . it does n 't show the complete file names of mp3s with really long names ; . you must cycle through every zoom setting ( 2x , 3x , 4x , 1/2x , etc . ) before getting back to normal size [ sorry if i 'm just ignorant of a way to get back to 1x quickly ] .}
 
-    \subsubsection{Opinion polarity MPQA}
+    \subsubsection{Opinion polarity -- MPQA}
 
-    Another sentiment dataset collected by Wiebe~\cite{wiebe2005annotating}.
-    Its focus is to capture not only the overall tone of the document but also strength of the tone.
+    Another sentiment dataset was collected by Wiebe~\cite{wiebe2005annotating}.
+    Its focus is to capture not only the overall tone of the document, but also strength of the tone.
     However, we will use only the binary positive-negative classification.
-    Wiebe designed a fine grained annotation scheme and employed it on sentence corpus of articles from the world press.
+    Wiebe designed a fine grained annotation scheme and employed it on the sentence corpus of articles from the world press.
     
     Example of a positive sentence:
     \emph{are also being encouraged}.
@@ -103,7 +103,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     \emph{failing to support}. 
 
     
-    \subsubsection{Question-type, TREC}\label{sec:TREC}
+    \subsubsection{Question-type -- TREC}\label{sec:TREC}
     
     An important step in question answering and other dialog systems is to classify the question to the anticipated type of the answer. 
     For example, the question of \emph{Who is a good boy?} should be classified into the type of animal (entity), because the question probably refers to some dog.  
@@ -121,11 +121,12 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
         \item numeric (NUM): \emph{when was ozzy osbourne born?}
     \end{itemize}
     
-    As can be seen, this dataset is not binary. 
-    For our purposes, we create $6$ different binary datasets out of this one by employing \emph{one-vs-all} strategy (one-vs-the-rest) used while training prediction models.
-    This strategy consists in fitting one classifier per class. 
+    As you can see, this dataset is not binary. 
+    For our purposes, we create $6$ different binary datasets out of this one.
+    To do so we employ \emph{one-vs-all} strategy (one-vs-the-rest) used mainly to train prediction models.
+    This strategy consists on fitting one classifier per class. 
     For each classifier, the class is fitted against all the other classes. 
-    Hence new dataset TREC-ABBR will contain the same samples, but labels will be binary, $1$ if the sentence was originally in class ABBR and $0$ otherwise.
+    Hence, new dataset TREC-ABBR will contain the same samples, but labels will be binary -- $1$ if the sentence was originally in class ABBR and $0$ otherwise.
     
     \begin{table}[h]
     \begin{center}
@@ -149,7 +150,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     One such task is to decide whether the text was subjective or objective.
         
     Pang and Lee were able to mine the Web and create a large, automatically labeled sentence corpus. 
-    To gather subjective sentences they collected movie review snippets from website  \url{www.rottentomatoes.com}.
+    To gather subjective sentences, they collected movie review snippets from website  \url{www.rottentomatoes.com}.
     To obtain objective data, they took sentences from plot summaries available from the Internet Movie Database \url{www.imdb.com}\footnote{We personally think, that this technique is rather questionable at best, because the labels are probably very noisy.}~\cite{pang2004sentimental}.
     
     Example of a objective review:
@@ -162,24 +163,24 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     \subsubsection{Preprocessing} \label{sec:preprocessing}
     
     Examples provided for each dataset could be slightly strange at the first glance.
-    We deliberately did only minimal processing in terms of word filtering and normalization.
-    The datasets are already tokenized, we only lower-case the text.
+    We deliberately do only minimal processing in terms of word filtering and normalization.
+    The datasets are already tokenized, we only set text to lower-case.
     We do not filter any stop words (\texttt{the}) or non token characters (like question marks \texttt{?}). 
-    Not filtering words that are generally filtered showed to be an important decision that allowed us to get a new insight from the data.
+    Not filtering words that are generally filtered showed to be an important decision that allowed us to get a new insight about data.
     
-    LSA is commonly accompanied by heavy filtering and it is known, that stop words removal helps the performance.
-    Our rational behind minimal filtering is, that we would like the weighting scheme to understand, which words are important.
-    Hence we hope, that if the stop word is really not important, its weight will be reduced.
+    LSA is commonly accompanied by heavy filtering and it is known that stop words removal helps the performance.
+    Our rational behind minimal filtering is that we would like the weighting scheme to understand which words are important.
+    Hence, we hope that if the stop word is really not important, its weight will be reduced.
     
     \subsection{Evaluation metrics}
     
     Because we deal with binary classification tasks, our metric of choice is the accuracy.
     
-    Accuracy of our $p$ predictions $\hat{y}$ given the true labels $y$ can be computed as
+    Accuracy of $p$ predictions in a vector $\hat{y}$, given the true labels in a vector $y$ is computed as:
     $$acc_y(\hat{y}) = \frac{1}{p}\sum_{i=1}^py_i =\hat{y}_i$$
     
     Note that this metric can have problems with unbalanced datasets. 
-    We just need to remember, that what is a good accuracy depends on the dataset.
+    We just need to remember that what is a good accuracy depends on the dataset.
     For example accuracy $0.69$ on MPQA dataset is really bad, because it can be achieved by constant classifier.
     To address this issue, we usually subtract this baseline from our results and look only on the relative improvement. 
     
@@ -191,7 +192,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
 \section{Baselines} \label{sec:baseline}
 
     There is a number of baselines that we consider.
-    They are a commonly used approaches, such as pretrained neural embeddings, or very naive baselines, such as a constant classifier.
+    They are commonly used approaches, such as pretrained neural embeddings, or very naive baselines, such as a constant classifier.
     
     To  address the problems of accuracy as a metric, we report relative improvements over the bias of each dataset.
     This can be viewed as an improvement over the precision of the constant classifier.
@@ -202,18 +203,18 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
 
     \subsection{Constant baseline}
     
-    As discussed in section~\ref{sec:data:overview}, some of our datasets are biased. 
-    They may contain substantially more examples belonging to one label that belonging to the other.
+    As discussed in the section~\ref{sec:data:overview}, some of our datasets are biased. 
+    They may contain substantially more examples belonging to one label than belonging to the other.
     We can exploit this property and ``train'' a very simple constant classifier. 
     This classifier counts the number of samples in each class in the training set and then always outputs the majority class.
     
-    We do not include the result table for this classifier it is almost identical to the bias of given dataset.
+    We do not include the result table for this classifier, it is almost identical to the bias of given dataset.
     There are minor differences (on 3rd or 4th decimal place) because of the random data split. 
 
     \subsection{Bag of word baselines}
     
-    First we evaluate baselines that work with local word representation (section~\ref{sec:local:representation}).
-    These baselines have no knowledge about semantic properties of words and usually only captures some basic word statistic.
+    First, we evaluate baselines that work with local word representation (section~\ref{sec:local:representation}).
+    These baselines have no knowledge about semantic properties of words and usually only capture some basic word statistic.
     They are usually the first pick for any task, because they are simple and easy to use. 
     
     \subsubsection{Logistic regression}
@@ -221,16 +222,16 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     First commonly used baseline is a BOW representation with logistic regression as a classifier. 
     We test multiple different supervised and unsupervised word weighting schemes.
     
-    It could be argued, that using term weights is not necessary when using logistic regression as the classifier.
-    The argument is, that the term weighs could in theory be absorbed into the weights of the classifier. 
-    This argument is actually true if we only consider the TF part of the weighting scheme.
+    It could be argued that using term weights is not necessary when using logistic regression as a classifier.
+    The argument is that the term weighs could in theory be absorbed into the weights of the classifier. 
+    This argument is actually true, if we only consider the TF part of the weighting scheme.
     
     However, this argument only holds for the optimal solution. 
-    The problem is, that even though an equivalent solution exists, it may not be found by the learning algorithm. 
+    The problem is that even though an equivalent solution exists, it may not be found by the learning algorithm. 
     In practice, it is useful to add the weighting scheme, 
     as it introduces some form of knowledge (a bias), 
     because then we can tell the algorithm which words are (probably) more important.
-    Because of that we may employ more strict regularization techniques without significant decrease in the performance.
+    Because of that, we may employ more strict regularization techniques without significant decrease in the performance.
     
 
 
@@ -294,17 +295,18 @@ tfrf & test & 0.005 & 0.074 & 0.062 &0.125 &0.084 &0.113 \\
 \label{tab:results:bow:trec}
 \end{center}
 \end{table}
+\pagebreak
 
     
     According to tables \ref{tab:results:bow} and \ref{tab:results:bow:trec}, 
     the best weighting schemes are \texttt{None}, \texttt{tfidf}, and \texttt{tfor}.
-    We expected the other supervised schemes to perform much better.
+    We expect the other supervised schemes to perform much better.
     It is interesting, that TREC dataset is dominated by the unsupervised schemes.
     
     \subsection{LSA baselines} \label{sec:lsa:baseline}
     The most important baseline that we need to consider is the standard LSA.
-    In this baseline we construct the term matrix $M$, reweigh it with weighting scheme, train the LSA embedding and train the classifier.
-    We tried multiple weighting schemes and multiple classifiers.
+    In this baseline we construct the term matrix $M$, reweight it with weighting scheme, train the LSA embedding and train the classifier.
+    We try multiple weighting schemes and multiple classifiers.
     
     See tables~\ref{tab:lsa:resuts:300} and~\ref{tab:lsa:resuts:400} (and others) in appendix B for results for dimensions $300$ and $400$.
     
@@ -368,25 +370,24 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
 \end{center}
 \end{table}
     
-    Slightly sad observation is that LSA performs worse than the BOW baseline. 
-    The problem is, that we do not in fact use the the full potential of LSA in this baseline.
+    Slightly unfortunate observation is that LSA performs worse than the BOW baseline. 
+    The problem is that in fact, we do not use the full potential of LSA in this baseline.
     The power of LSA comes from the fact that it can be trained on documents that we do not have labels for.
 
     \subsection{Neural embedding baselines}
     
-    Thanks to results of Levy et al.\cite{levy2014neural} discussed in section~\ref{sec:count:vs:predict} we know, that LSA is to some extend equivalent to neural embeddings.
+    Thanks to results of Levy et al.\cite{levy2014neural} discussed in the section~\ref{sec:count:vs:predict} we know that LSA is, to some extent, equivalent to neural embeddings.
     Because of that, we consider neural embeddings as one of our baselines.
-    There are two possible setups.
-    We can train our own word vectors on each dataset, or we can use pretrained embeddings that were trained on huge volumes of data.
+    There are two possible setups: we can train our own word vectors on each dataset, or we can use pretrained embeddings that were trained on huge volumes of data.
     
     We expect the trained embeddings to perform worse than pretrained and worst than LSA.
     
     \subsubsection{Trained neural embeddings}
-    In this baseline we train word2vec neural embeddings on the dataset we want to classify on. 
-    We use implementation \inlinecode{Python}{gensim.models.Word2Vec} from gensim.
+    In this baseline, we train word2vec neural embeddings on the dataset we want to classify on. 
+    We use implementation \texttt{gensim.models.Word2Vec} from gensim.
     We train embeddings with dimensions $200$, $300$ and $400$. 
-    Than we compute embedding for each word and sum them into an sentence embedding.
-    Finally we train the classifier (SVM or logistic) regression and present the accuracy.
+    Than we compute embedding for each word and sum them into a sentence embedding.
+    Finally, we train the classifier (SVM or logistic regression) and present the accuracy.
     We refer to SVM as SVC (support vector classifier).
     Note that we train embeddings for each dataset separately.
 
@@ -449,7 +450,7 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
     Tables~\ref{tab:res:trainedwordvec} and~\ref{tab:res:trainedwordvec:trec} contain our results.
     We see zero improvement of SVM classifier for TREC datasets for all embedding sizes.
     TREC dataset seems to be overall very challenging dataset.
-    Interesting observation is, that accuracy on this dataset decreases as we increase the embedding dimensions.
+    Interesting observation is that accuracy on this dataset decreases as we increase the embedding dimensions.
     The highest accuracy increase ($0.05$) on TREC dataset is achieved by logistic regression and embeddings size $200$. 
     
     We see the biggest improvement on the SUBJ dataset ($0.31$), with no notable dependency on embedding dimension size.  
@@ -462,13 +463,12 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
 
     \subsubsection{Pretrained neural embeddings}    
     
-    In this experiment we use pretrained word embeddings. 
-    We use python library \texttt{spacy} which provides easy interface for obtaining such embeddings.
+    In this experiment, we use pretrained word embeddings. 
+    We use Python library \texttt{spacy} which provides easy interface for obtaining such embeddings.
     
-    We use \texttt{spacy.load('en\_vectors\_web\_lg')}.
-    This command returns a pretrained model that we can query with words. 
-    Embedding obtained in this way have $300$ dimensions and were trained on a large web corpus (large collection of websites). 
-    Note that because these vectors were trained on much bigger datasets, it is not a very fair comparison to other methods presented here.
+    We use \texttt{spacy.load('en\_vectors\_web\_lg')} command, which returns a pretrained model that we can query with words. 
+    Embedding obtained in this way have $300$ dimensions and is trained on a large web corpus (large collection of websites). 
+    Note that because these vectors are trained on much bigger datasets, it is not a very fair comparison to other methods presented here.
 
     \begin{table}[h]
     \begin{center}
@@ -512,11 +512,11 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
     
     We see, that these embeddings perform much better than the trained ones. 
     We even see a significant improvements on the TREC dataset (absolute accuracy over $0.90$).
-    Interesting observation is, that logistic regression performs much better than SVM.
-    Because we we are more interested in comparative and qualitative results than quantitative results we do not spend much time on fine tuning hyperparameters. We think that such fine tuning could increase the accuracy of each approach, but it should not change which one is better. 
+    Interesting observation is that logistic regression performs much better than SVM.
+    Because we are more interested in comparative and qualitative results than quantitative results, we do not spend much time on fine tuning of hyperparameters. We think that such fine tuning could increase the accuracy of each approach, but it should not change which one is better. 
     
-    We also see, that pretrained word vectors perform better than LSA. 
-    However keep in mind, that these representations were pretrained on huge volumes of documents.
-    Even though LSA achieved better results than pretrained embeddings on TREC-DESC and TREC-NUM datasets.
+    We also see that pretrained word vectors perform better than LSA. 
+    However, keep in mind that these representations were pretrained on huge volumes of documents.
+    Even though LSA achieves better results than pretrained embeddings on TREC-DESC and TREC-NUM datasets.
     We think, that it is because these datasets are sparse and may contain a lot of words for what we do not have the pretrained embeddings.
     

@@ -1,13 +1,13 @@
 \section{eLSA}
     
-    In this section we present accuracy achieved by our approach.
+    In this section, we present accuracy achieved by our approach.
     
     Note that because we test on multiple datasets and we test multiple parameters, we witness a small combinatorial explosion.
 
     \subsection{Parameters}
     
-    As mentioned in section \ref{sec:hyperparams}, there is a number of potential hyperparameters. 
-    However we consider only the $w'$-learning rate $\beta$ and the number of dimensions.
+    As mentioned in the section \ref{sec:hyperparams}, there is a number of potential hyperparameters. 
+    However, we consider only the $w'$-learning rate $\beta$ and the number of dimensions.
     Instead of performing an exhaustive hyperparameter search, we test multiple combinations of weighting schemes described in sections \ref{sec:supervised:weights} and \ref{sec:term:weights} on multiple datasets. 
 
     \begin{table}[H]
@@ -35,24 +35,24 @@ $w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
     We evaluate the performance of batch gradient descent optimization routine.
     We perform experiments for different weighting schemes, different sizes of embeddings and different learning rates on all datasets.
 
-    Our results are in the table \ref{tab:batch:results} and table \ref{tab:batch:results:trec}.
-    We present only results for $\beta=0.1$, as this learning rate showed to be the best. 
+    Our results are in the table \ref{tab:batch:results} and \ref{tab:batch:results:trec}.
+    We present only results for $\beta=0.1$, as this learning rate shows to be the best. 
     Experiments for other learning rates can be found in appendix \ref{appendix:detailed}.
     
     \input{tables/batch_results.tex}
 
     In tables \ref{tab:batch:results:trec} and \ref{tab:batch:results} we see consistent improvements of eLSA over LSA.
-    Moreover we see, that no scheme is actually locally optimal, and each scheme can be improved by performing the eLSA.
+    Moreover, we see that no scheme is actually locally optimal, and each scheme can be improved by performing the eLSA.
     There is only one dataset that we do not improve on and that is TREC-ABBR.
-    We explain it by the fact, that this dataset is extremely hard and very biased. 
+    We explain it by the fact that this dataset is extremely hard and very biased. 
     
-    These results mean, that all weighting schemes have some shortcomings 
+    These results mean that all weighting schemes have some shortcomings 
     that may manifest on some specific tasks.  
-    We try to explain this effect in section \ref{chap:weight:analysis}.
+    We try to explain this effect in the section \ref{chap:weight:analysis}.
     
-    During the training we observed an interesting behaviour for \texttt{tfchi2} weighting scheme on TREC datasets.
+    During the training, we observed an interesting behaviour for \texttt{tfchi2} weighting scheme on TREC datasets.
     When we computed the $400$ dimensional LSA embedding, it produced only $398$ dimensions. 
-    This means, that the original matrix was in fact just $398$ dimensional, 
+    This means that the original matrix was in fact just $398$ dimensional, 
     which means that the weighting scheme already filtered out a lot of information (hopefully noise) from the data. 
 
     \subsubsection{Learning curves}
@@ -66,7 +66,7 @@ $w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
     \end{figure}
 
     On figure \ref{img:learning:curve} we see a standard progress of accuracy through epochs. 
-    We observe, that these curves are not entirely smooth as in batch gradient descent in neural networks.
+    We observe that these curves are not entirely smooth as in batch gradient descent in neural networks.
     This is because we are not performing the exact gradient descent.
     The SVD part of eLSA is not deterministic and can be influenced by the weight $w'$.
     
@@ -92,9 +92,9 @@ $w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
         \caption{stochastic training of $w'$} \label{algo:batch:multiw}
     \end{algorithm}
     
-    However this introduces another hyperparameter: number of performed $w'$ steps.
+    However, this introduces another hyperparameter: number of performed $w'$ steps.
     We would like to to avoid new hyperparameters, so we do not spend too much resources on this experiment.
-    Second problem with this approach is, that if we perform $m$ steps, the algorithm may be $m$ times slower. 
+    Second problem with this approach is that if we perform $m$ steps, the algorithm may be $m$ times slower. 
     This is a serious issue for $m>5$. 
     We perform experiments only for weighting scheme \texttt{None} with $200$ dimensional embedding and learning rate $0.1$.
     We perform $m=2$ and $m=5$ gradient steps and we present results in tables \ref{tab:multiw:notrec:2},
@@ -102,8 +102,8 @@ $w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
     
     \input{tables/batch_results_multiw}
 
-    We conclude, that making multiple gradient steps on $w'$ does not significantly nor consistently improve the accuracy and only makes the training process slower.
-    The intuition, that multiple gradient steps on $w'$ may decrease the convergence time also showed to be wrong.
+    We conclude that making multiple gradient steps on $w'$ does not significantly nor consistently improve the accuracy and only makes the training process slower.
+    The intuition that multiple gradient steps on $w'$ may decrease the convergence time also showes to be wrong.
 
 
 \begin{table}[H]
@@ -122,7 +122,7 @@ $w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
 \bottomrule
 \end{tabular}
 
-\caption[Number of needed training steps for different $w'$]{Number of needed training steps for different $w'$}
+\caption[Number of needed training steps for different $m$]{Number of needed training steps for different $m$}
 \label{tab:multyw:steps}
 \end{center}
 \end{table}
@@ -144,7 +144,7 @@ $w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
 \bottomrule
 \end{tabular}
 
-\caption[Number of needed training steps for different $w'$ on TREC dataset]{Number of needed training steps for different $w'$ on TREC dataset}
+\caption[Number of needed training steps for different $m$ on TREC dataset]{Number of needed training steps for different $m$ on TREC dataset}
 \label{tab:multyw:steps:trec}
 \end{center}
 \end{table}
