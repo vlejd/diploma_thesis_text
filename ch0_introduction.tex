@@ -1,26 +1,27 @@
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
 
-Recently the problem of document classification attracted a lot of attention. 
+The problem of document classification attracted a lot of attention recently. 
 The most popular approaches are based on neural networks and neural word embeddings.
 We revisit famous co-occurrence-based approach, the Latent Semantic Analysis.
 This approach may perform poorly on document classification tasks, because it selects the most representative features and not the most discriminative ones. 
 There was a number of attempts to add the supervised information into LSA and into its SVD part.
-We build on top of one of these approaches -- supervised weighting schemes.
+We build on the top of one of these approaches -- supervised weighting schemes.
 
 \bigskip
 Our goals are to propose a novel approach for learning task-specific word weights, explore performance of this approach and compare it with commonly used weighting schemes.
 \bigskip
 
-The main part of this thesis deals with the design of eLSA, approach that employs gradient descent technique to learn task specific supervised weights.
-Further, we present performance evaluation of eLSA and we use it to gain valuable insight about the classification tasks we want to solve and about commonly used weighting schemes.
+The main part of this thesis introduces the design of eLSA, approach that employs gradient descent technique to learn task specific supervised weights.
+Further, we present thorough performance evaluation of eLSA on multiple datasets.
+Finally, we use eLSA to gain a valuable insight about the classification tasks we want to solve and about commonly used weighting schemes.
 
 \bigskip
 
-In the first chapter, we introduce the problem of document classification and we describe some of the commonly used approaches for this problem.
-In the second chapter, we present an overview of published literature that deals with introducing supervision to LSA.
-In the third chapter, we introduce our novel approach eLSA, which builds on top of supervised weights and LSA.
-In the fourth chapter, we present results achieved by eLSA and possible ways how to extract insight from its parameters. 
+In the first chapter, we introduce the problem of document classification and we describe some of the commonly used approaches to this problem.
+In the second chapter, we present an overview of published literature about introducing supervision into the LSA.
+In the third chapter, we introduce our novel approach eLSA, which builds on the top of supervised weights and LSA.
+In the fourth chapter, we present results achieved by the eLSA and possible ways how to extract insight from its parameters. 
 
 
 

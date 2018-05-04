@@ -1,7 +1,6 @@
 \chapter{Detailed results}
 \label{appendix:detailed}
 
-\section{BOW baselines}
 \begin{table}[h]
 \begin{center}
 
@@ -33,13 +32,12 @@ tfrf & test &      0.762 &        0.827 &      0.728 &        0.884 \\
 \end{table}
 
 
-\begin{table}[h]
+\begin{table}[H]
 \begin{center}
 
 \begin{tabular}{llrrrrrr}
 \toprule
-{} &&  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
-scheme &  & & & &&&\\
+scheme &&  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
 \midrule
 None & test & 0.995 & 0.925 & 0.874 &0.920 &0.960 &0.959 \\
 {} & train & 0.995 & 0.981 & 0.983 &0.986 &0.987 &0.990 \\
@@ -62,9 +60,6 @@ tfrf & test & 0.989 & 0.855 & 0.837 &0.908 &0.930 &0.943 \\
 \label{results:bow:abs:trec}
 \end{center}
 \end{table}
-
-\newpage
-\section{LSA baselines}
 
 
 
@@ -380,8 +375,7 @@ tfrf & test &     0.991 &     0.863 &     0.832 &    0.917 &    0.944 &    0.946
 
 \begin{tabular}{llrrrrrr}
 \toprule
-{} &  &  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
-scheme &  &       &       &       &      &      &      \\
+scheme &  &  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
 \midrule
 None & test &     0.008 &     0.119 &     0.067 &    0.129 &    0.100 &    0.119 \\
 {} & train &     0.008 &     0.127 &     0.098 &    0.147 &    0.110 &    0.124 \\
@@ -414,8 +408,7 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
 
 \begin{tabular}{llrrrrrr}
 \toprule
-{} &  &  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
-scheme &  &       &       &       &      &      &      \\
+scheme &  &  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
 \midrule
 None & test &     0.008 &     0.124 &     0.073 &    0.134 &    0.107 &    0.124 \\
 {} & train &     0.009 &     0.140 &     0.110 &    0.160 &    0.113 &    0.132 \\
@@ -443,13 +436,12 @@ tfrf & test &     0.006 &     0.084 &     0.058 &    0.127 &    0.096 &    0.119
 
 
 
-\begin{table}[h]
+\begin{table}[p]
 \begin{center}
 
 \begin{tabular}{llrrrrrr}
 \toprule
-{} &  &  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
-scheme &  &       &       &       &      &      &      \\
+scheme &  &  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
 \midrule
 None & test &     0.008 &     0.132 &     0.091 &    0.136 &    0.097 &    0.125 \\
 {} & train &     0.010 &     0.150 &     0.126 &    0.165 &    0.118 &    0.137 \\
@@ -477,15 +469,12 @@ tfrf & test &     0.007 &     0.082 &     0.058 &    0.134 &    0.098 &    0.115
 
 
 
-\section{eLSA}
-
 \begin{table}[h]
 \begin{center}
 
 \begin{tabular}{ll|rrrr}
 \toprule
-   &   &   CR &  MPQA &   MR &  SUBJ \\
-scheme & lsa &        &        &        &        \\
+scheme   &  lsa &   CR &  MPQA &   MR &  SUBJ \\
 \midrule
 None & 200 &     -0.01 & \textbf{0.01} & \textbf{0.03} & \textbf{0.01} \\
    & 300 & \textbf{0.02} &     -0.0 & \textbf{0.03} &     -0.01 \\

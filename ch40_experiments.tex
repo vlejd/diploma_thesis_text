@@ -22,7 +22,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     This repository contains multiple different datasets, 
     but we only use those related to binary classification tasks.
     Namely, we use:
-    \begin{itemize}
+    \begin{itemize}[noitemsep]
         \item Movie review sentiment analysis dataset -- MR.
         \item Product review dataset -- CR.
         \item Subjectivity/objectivity dataset -- SUBJ.
@@ -195,7 +195,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     They are commonly used approaches, such as pretrained neural embeddings, or very naive baselines, such as a constant classifier.
     
     To  address the problems of accuracy as a metric, we report relative improvements over the bias of each dataset.
-    This can be viewed as an improvement over the precision of the constant classifier.
+    This can be viewed as an improvement over the accuracy of the constant classifier.
     For absolute accuracies refer to the appendix~\ref{appendix:detailed}. 
 
     The most important baseline we want to improve upon is in section~\ref{sec:lsa:baseline}, 
@@ -308,7 +308,7 @@ tfrf & test & 0.005 & 0.074 & 0.062 &0.125 &0.084 &0.113 \\
     In this baseline we construct the term matrix $M$, reweight it with weighting scheme, train the LSA embedding and train the classifier.
     We try multiple weighting schemes and multiple classifiers.
     
-    See tables~\ref{tab:lsa:resuts:300} and~\ref{tab:lsa:resuts:400} (and others) in appendix B for results for dimensions $300$ and $400$.
+    See tables~\ref{tab:lsa:resuts:300} and~\ref{tab:lsa:resuts:400} (and others) in appendix B for results for dimensions $300$~and~$400$.
     
 \begin{table}[H]
 \begin{center}
@@ -340,7 +340,7 @@ tfrf & test &      0.115 &        0.094 &      0.176 &        0.374 \\
 \end{center}
 \end{table}
     
-\begin{table}[H]
+\begin{table}[h]
 \begin{center}
 
 \begin{tabular}{llrrrrrr}
@@ -451,9 +451,9 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
     We see zero improvement of SVM classifier for TREC datasets for all embedding sizes.
     TREC dataset seems to be overall very challenging dataset.
     Interesting observation is that accuracy on this dataset decreases as we increase the embedding dimensions.
-    The highest accuracy increase ($0.05$) on TREC dataset is achieved by logistic regression and embeddings size $200$. 
+    The highest accuracy increase ($5\%$) on TREC dataset is achieved by logistic regression and embeddings size $200$. 
     
-    We see the biggest improvement on the SUBJ dataset ($0.31$), with no notable dependency on embedding dimension size.  
+    We see the biggest improvement on the SUBJ dataset ($31\%$), with no notable dependency on embedding dimension size.  
     
     However, compared to the LSA baseline, these results are significantly worse. 
     This is consistent with findings of Altszyler et al.~\cite{altszyler2016comparative}.

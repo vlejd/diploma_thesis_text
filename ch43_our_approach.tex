@@ -26,6 +26,8 @@ $w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
 \end{table}
     
     We perform experiments with all combinations of parameters from table \ref{tab:exp:params} on all of the $10$ datasets described in section \ref{sec:data:overview}.
+    We chose these values for $\beta$ and embedding size, because they they are reasonable defaults commonly used in literature.
+    
     Together we need to perform and evaluate around $630$ experiments.
     
     We compare our results against LSA baseline (LSA with given weights, but without training) and report relative improvements.
@@ -71,7 +73,11 @@ $w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
     The SVD part of eLSA is not deterministic and can be influenced by the weight $w'$.
     
     Recall from section \ref{sec:elsa:stopping} that we monitor the validation accuracy and stop the learning process when it plateaus. 
-
+    
+    In general we observe, the number of required epochs to be between $30$ and $70$. 
+    The number of epochs looks to be more dependant on the dataset then on the initially weighting scheme.
+    
+    
     \subsubsection{Multiple gradient steps}
     
     We perform an experiment, where we do multiple gradient steps on $w'$ for each loop. 
@@ -93,7 +99,7 @@ $w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
     \end{algorithm}
     
     However, this introduces another hyperparameter: number of performed $w'$ steps.
-    We would like to to avoid new hyperparameters, so we do not spend too much resources on this experiment.
+    We would like to avoid new hyperparameters, so we do not spend too much resources on this experiment.
     Second problem with this approach is that if we perform $m$ steps, the algorithm may be $m$ times slower. 
     This is a serious issue for $m>5$. 
     We perform experiments only for weighting scheme \texttt{None} with $200$ dimensional embedding and learning rate $0.1$.
@@ -103,7 +109,7 @@ $w'$-learning rates $\beta$ & $0.1$, $0.01$, $0.001$\\
     \input{tables/batch_results_multiw}
 
     We conclude that making multiple gradient steps on $w'$ does not significantly nor consistently improve the accuracy and only makes the training process slower.
-    The intuition that multiple gradient steps on $w'$ may decrease the convergence time also showes to be wrong.
+    The intuition that multiple gradient steps on $w'$ may decrease the convergence time also shows to be wrong.
 
 
 \begin{table}[H]

@@ -1,27 +1,11 @@
 discussion
 
 
-
-prosim ta checkni si vsade > v anglictine zoznam poloziek musi mat vzdy! and pred poslednym aj s ciarkou: A, B, and C
-podobne nemozes mat A,C ale A or C / A and C > toto je ok v slovencine ale v aj to tak nema byt
-vela som ti opravila po ceste
-ale nemam na to kapacitu checkovat to 100pero vsade
-
-
 CHECK:
 
-always accuracy
-document classification definicia
-sentiment analysis definicia
-check missing articles everywhere
-refky viac neskvo
-pis ako pre lingvistu
 kolko tlacime/odovzdavame
-coocurence
 
 NICE to have
-examples of word for other schemes
-SVM
 list of abrev
 skratky k datasetom
 

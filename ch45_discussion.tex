@@ -1,3 +1,24 @@
 \section{Discussion}
-We conclude that eLSA 
-\*
+
+
+We conclude that eLSA can improve performance of all tested schemes.
+For some combination of schemes and datasets we saw a major increase (\texttt{tfidf} on MR dataset gained $7\%$),
+and for some (\texttt{ftrf} on CR dataset lost $4\%$) we see a decrease in the achieved accuracy.
+We have to say, that eLSA can overfit the training dataset. 
+This is naturally caused by the number of trainable parameters $w'$ that we introduce. 
+Size of $w'$ is the same as size of the vocabulary $|V|$, and it ranges from $32,000$ to $240,000$ in our datasets.
+
+Because eLSA introduces only one hyperparameter ($w'$-learning rate $\beta$), it is super easy to use. 
+However, running eLSA is much more time consuming compared to standard LSA. 
+The problem is, that we in fact perform one whole LSA for each epoch of eLSA.
+From our observations the number of required epochs ranges from $30$ to  $70$ with some outliers reaching as much as $97$. 
+This can make eLSA unsuitable for some use cases, but we think that it can always be used as a diagnostic tool.
+
+Indeed we successfully used eLSA to diagnose problems of given weighting schemes.
+Words that eLSA boosted seemed to be reasonable and we were able to gain insight into the datasets.
+We found, that the word \texttt{the} may be very important for certain tasks, even though it is almost always removed as a part of the data preprocessing. 
+Furthermore eLSA showed us how important interrogative pronouns can be on TREC dataset.
+
+We need to point out, that we explored only a small subspace of eLSA hyperparameters. 
+Despite that, we achieved significant improvements in accuracy.
+More effort can be put into exploring this hyperparameter space in the future work.

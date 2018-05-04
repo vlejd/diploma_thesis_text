@@ -2,7 +2,7 @@
 From studying the literature, we identified 3 ways how to address shortcomings of LSA for document classification. In this chapter we discuss these approaches in more details.
 
 We can modify the term matrix $M$ so that weight of each word represents how important is this word for the actual classification task and use \emph{supervised term weights}. 
-This is a contrast to the classical approach, where the weight of the word represents, how important is it for the document reconstruction.
+This is a contrast to the classical approach, where the weight of the word represents how important is it for the document reconstruction.
 
 Besides that, we can introduce some form of supervision directly into the matrix decomposition process.
 Sun et al.~\cite{sun2004supervised} propose supervised latent semantic indexing (sLSI) and they employ the supervision while choosing the most relevant dimensions of the embedding.
@@ -97,7 +97,7 @@ y_{1,k} &\dots&  y_{N,k} \\
     We decided to use this variant to be consistent with the rest of the thesis (section~\ref{sec:design}.
     
     After obtaining the matrix $M'$, they perform standard SVD. 
-    Then they ``unspringle'' the matrix by removing word vectors associated with sprinkled terms.
+    Then they ``unsprinkle'' the matrix by removing word vectors associated with sprinkled terms.
     
     This approach reports $1\%$ improvement over LSI without sprinkling.
     
@@ -118,12 +118,12 @@ y_{1,k} &\dots&  y_{N,k} \\
     In this thesis, we will build on upon of some of those schemes,
     because we believe that supervised weighting schemes are a good approach to combat the shortcomings of LSA for document classification.
     
-    In this chapter we introduce an interesting use of LSA with supervised weight for problem of semantic relatedness.
+    In this chapter we introduce an interesting use of LSA with supervised weights for the problem of semantic relatedness.
 
     \subsection{TF-KLD}
         Ji and Eisenstein~\cite{ji2013discriminative} % TF KLD
         studied the performance of LSA for semantic relatedness task.
-        In semantic relatedness task we have two documents $d_i^1, d_i^2$ and we want to determine, whether they are semantically related or not. 
+        In semantic relatedness task we have two documents $d_i^1, d_i^2$ and we want to determine, whether they are semantically similar or not. 
         Example of semantic relatedness task can be to determine, if two questions asked on some forum are the same (and should be deduplicated) or not \footnote{\url{https://www.kaggle.com/c/quora-question-pairs}}.
         
         For this task, Ji and Eisenstein proposed to compute the LSA embeddings of both texts $v_i^1$ and $v_i^2$ and train classifier on features based on these embeddings.
@@ -150,7 +150,7 @@ y_{1,k} &\dots&  y_{N,k} \\
          where $KL$ denotes the \hyphenation{Kullback-Leibler} divergence.
         This can be seen as an amount of information that presence of the word tells us about similarity of this pair of sentences. 
     
-        This approach with TF-KLD weights can perform even better, than recurrent neural networks~\cite{conneau2017supervised}.
+        This approach with TF-KLD weights can perform even better than recurrent neural networks~\cite{conneau2017supervised}.
         This result shows, that with proper supervised weights, we can even outperform complicated neural network approaches.
         
 

@@ -1,27 +1,27 @@
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
-\* %make longer
 
-In this thesis, we revisited a famous co-occurrence-based approach LSA.
+In this thesis, we revisited a famous co-occurrence-based approach called LSA.
 First, we experimentally confirmed that using LSA yields higher accuracy than using
-word vectors trained on the same corpus.
+word vectors (word2vec) trained on the same corpus.
 
 To improve the LSA even further, we described a novel way of how to incorporate the supervised information into the LSA.
-We designed eLSA, an approach that incorporates knowledge of the classifiers error directly to the weighting scheme.
-eLSA introduces a new layer of reweighting that happens before the SVD decomposition.
+We designed eLSA, method that incorporates knowledge of the classifier's error directly to the weighting scheme.
+eLSA introduces a new layer of reweighting that is applied before the SVD decomposition.
 This layer allows the unsupervised SVD process to become supervised.
-We experimentally showed, that it is possible to train eLSA with batch gradient descent and that the training error nicely converges.
+We have experimentally shown, that it is possible to train eLSA with batch gradient descent and that the training error nicely converges to local optima.
 
-We evaluated eLSA for combinations of $10$  classification datasets and $7$ weighting schemes.
-In most of these experiments, eLSA consistently achieved higher accuracy than LSA baseline.
-We showed that none of the used schemes is optimal on all datasets and hence their design can be further improved.
+We evaluated eLSA for combinations of 10 classification datasets and $7$ weighting schemes.
+In the most of these experiments, eLSA consistently achieved higher accuracy than the LSA baseline.
+We have confirmed that none of the used schemes is optimal on all datasets and hence their design can be further improved.
 eLSA was able to improve the accuracy achieved by these schemes by up to $7\%$.
 
-Very important and nice property of eLSA is its interpretability.
+Very important and useful property of eLSA is its interpretability.
 We analyzed parameters $w'$ learned by eLSA and showed that they can be used to gain insight into the dataset.
-We identified multiple groups of words that are commonly underweighted by the weighting schemes.
+Based on that we identified multiple groups of words that are commonly underweighted by the weighting schemes.
 Words such as interrogative pronoun showed to be usually underweighted in the question classification task (TREC-DESC), even by supervised weighting schemes. 
+We do not want to underweight such important words, because we do not want the SVD to filer them as a noise.
 To our surprise, words that are considered to be stop words (like \texttt{the} or \texttt{not)} and are usually entirely removed from the dataset, also showed to be underweighted. 
+We hypothesize that this word is actually really important, because it may signal superlatives and hence opinion polarity. 
 
-In the end, we fulfilled all our goals and even pushed them a bit further.
-
+To conclude, we fulfilled all our goals.
