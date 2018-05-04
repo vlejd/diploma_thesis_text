@@ -1,20 +1,26 @@
 \chapter*{Conclusion}
 \addcontentsline{toc}{chapter}{Conclusion}
+\* %make longer
 
-\* Do not review!
+In this thesis we revisited a famous co-occurrence-based approach LSA.
+First we experimentally confirmed that using LSA yields higher accuracy than using
+word vectors trained on the same corpus.
 
-In this thesis we played with LSA
-we designed a novel way how to incorporate the superwised information to LSA
+To improve the LSA even further, we described a novel way of how to incorporate the supervised information into the LSA.
+We designed eLSA, an approach that incorporates knowledge of the classifiers error directly to the weighting scheme.
+eLSA introduces a new layer of reweighting that happens before the SVD decomposition.
+This layer lets the unsupervised SVD process to be supervised.
+We experimentally showed, that it is possible to train eLSA with batch gradient descent and that the training error nicely converges.
 
-first we reproduced some shit -> traind word2vec < LSA <pretrained word2vec.
+We evaluate eLSA for combinations of $10$  classification datasets and $7$ weighting schemes.
+In most of these experiments eLSA consistently achieved higher accuracy than LSA baseline.
+We showed that none of the used schemes is optimal on all datasets and hence that their design can be further improved.
+eLSA was able to improve the accuracy achieved by these schemes by to $7\%$.
 
-We designed, implemented and evaluated a novel method eLSA 
-that improves LSA accuracy.
+Very important and nice property of eLSA is its interpretability.
+We analyzed parameters $w'$ learned by eLSA and showed that they can be used to gain insight into the dataset.
+We identified multiple groups of words, that are commonly underweighted by the weighting schemes.
+Words such as interrogative pronoun showed to be usually underweighted in the question classification task (TREC-DESC) even by supervised weighting schemes. 
+To our surprise, word, that are considered to be stop words (like \texttt{the} or \texttt{not)} and usually entirely removed from the dataset, also showed to be underweighted. 
 
 
-gradient descent, experimentaly showed that it converges.
-
-we used eLSA to analyze common word weighting schemes and mined some insight from some datasets
-we identifies interesting shit that can be used for further work
-
-\*

@@ -157,9 +157,11 @@ Consultant: & \mfkonzultant \\
 
 \newpage 
 \thispagestyle{empty}
-\* %TODO
-%\hspace{-2cm}\includegraphics[width=1.1\textwidth]{misc/zadanie}
-%\includepdf[pages={1}]{/home/maja/Documents/matfyz/diplomovka/text/zadanie.pdf}
+\includepdf[pages={1}]{misc/vmacko-zadanie-sk.PDF}
+
+\newpage 
+\thispagestyle{empty}
+\includepdf[pages={1}]{misc/vmacko-zadanie-en.PDF}
 
 % --- Koniec zadania
 
@@ -174,20 +176,15 @@ Consultant: & \mfkonzultant \\
 
 \vfill
 {\bf Acknowledgment:} \*
-
+% I would like to thank Kika, 
+% gf: 
+% fellas from CEAI without skill acquired there i would not ba able to write this shit
+% Radim rehured, who responded to email of a random guy that asked him for mentoring/advice
+% Guido van Rossum-> Python tool that caused more joy and suffering at the same time
+% A samozrejme, Basi, rodine a kamarátom za to, že to so mnou v poslednej dobe prežili a dokonca ma aj podporovali
 % --- Koniec poďakovania
 
 
-% -------------------
-% --- Abstrakt - Anglicky 
-% -------------------
-\newpage 
-\section*{Abstract}
-\*
-
-\paragraph*{Keywords:} natural language processing, document classification, LSA, gradient descent
-
-% --- Koniec Abstrakt - Anglicky
 
 
 % -------------------
@@ -195,10 +192,31 @@ Consultant: & \mfkonzultant \\
 % -------------------
 \newpage 
 \section*{Abstrakt}
-\*
 
-\paragraph*{Kľúčové slová:} spracovanie prirodzeného jazyka, klasifikácia dokumentov, LSA, gradient descent
+Latentná sémantická analýza môže zlyhávať pri klasifikačných úlohách, lebo vyberá črty dokumentov, ktoré sú najreprezentatívnejšie ale nie najdiskriminatívnejšie. 
+V práci predstavujeme novú metódu eLSA, ktorá prináša ďalšiu vrstvu váh $w'$, ktoré sú trénované pomocou metódy najväčšieho vzostupu.
+Experimentálne sme ukázali, že proces učenia eLSA konverguje a že eLSA dosahuje väčšiu presnosť ako LSA.
+Taktiež využívame eLSA na anylzovanie bežne používaných váhových schém a identifikujeme slová, ktoré tieto schémy podhodnocujú alebo nadhodnocujú.
+
+\paragraph*{Kľúčové slová:} spracovanie prirodzeného jazyka, klasifikácia dokumentov, gradient descent, LSA
 % --- Koniec Abstrakt - Slovensky
+
+
+% -------------------
+% --- Abstrakt - Anglicky 
+% -------------------
+\newpage 
+\section*{Abstract}
+
+Latent semantic analysis may perform poorly on document classification tasks, because it selects the most representative but not the most discriminative features.
+We propose a new method, eLSA, that introduces another layer or weights $w'$, that are trained with gradient descent.
+We experimentally show, that learning of eLSA converges, and that it achieves higher accuracy than LSA. 
+We also use eLSA to analyze common weighting schemes and identify words, that these schemes underweight or overweight.
+
+\paragraph*{Keywords:} natural language processing, document classification, gradient descent, LSA
+
+% --- Koniec Abstrakt - Anglicky
+
 
 
 % -------------------

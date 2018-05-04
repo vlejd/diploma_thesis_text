@@ -40,7 +40,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     \#examples                                &   3775 &  10606 &   10662 &   10000 &   5952 \\\hline
     \#unique words                            &   5674 &   6238 &   20325 &   22636 &   8968 \\\hline
     \#words                                   &  75932 &  32779 &  230162 &  246015 &  58468 \\\hline
-    \specialcell{\#words with\\$1$ apperance} &   2714 &   3117 &   10160 &   11152 &   5338 \\\hline
+    \specialcell{\#words with\\$1$ appearance} &   2714 &   3117 &   10160 &   11152 &   5338 \\\hline
     \specialcell{avg sentence\\length}       &     20.11 &      3.09 &      21.59 &      24.60 &      9.82 \\\hline
     \specialcell{max sentence\\length}       &    106 &     44 &      62 &     122 &     37 \\\hline
     \specialcell{median sentence\\length}    &     18 &      2 &      21 &      23 &      9 \\\hline
@@ -79,7 +79,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     \subsubsection{Product review, CR}
     
     This dataset was introduced by Hu and Liu~\cite{hu2004mining} as a part of a customer review summarization task. 
-    They created a summarization pipeline with multiple steps and adressed a lot of different problems. 
+    They created a summarization pipeline with multiple steps and addressed a lot of different problems. 
     
     We are only interested in the sentiment prediction part, where they present a novel product review dataset.
     
@@ -113,7 +113,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     There are $6$ labels: 
     
     \begin{itemize}
-        \item abbreviation (ABR): \emph{what is the full form of .com?}
+        \item abbreviation (ABBR): \emph{what is the full form of .com?}
         \item description (DESC): \emph{how did serfdom develop in and then leave russia?}
         \item entity (ENTY): \emph{what films featured the character popeye doyle?}
         \item human (HUM): \emph{what contemptible scoundrel stole the cork from my lunch?}
@@ -125,7 +125,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     For our purposes, we create $6$ different binary datasets out of this one by employing \emph{one-vs-all} strategy (one-vs-the-rest) used while training prediction models.
     This strategy consists in fitting one classifier per class. 
     For each classifier, the class is fitted against all the other classes. 
-    Hence new dataset TREC-ABR will contain the same samples, but labels will be binary, $1$ if the sentence was originally in class ABR and $0$ otherwise.
+    Hence new dataset TREC-ABBR will contain the same samples, but labels will be binary, $1$ if the sentence was originally in class ABBR and $0$ otherwise.
     
     \begin{table}[h]
     \begin{center}
@@ -138,7 +138,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     \bottomrule
     \end{tabular}
     
-    \caption[TREC subtasks characteristics]{TREC subtasks characteristics}
+    \caption[TREC tasks characteristics]{TREC tasks characteristics}
     \label{tab:trec:stats}
     \end{center}
     \end{table}
@@ -200,7 +200,7 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
     The most important baseline we want to improve upon is in section~\ref{sec:lsa:baseline}, 
     and it is the standard LSA.
 
-    \subsection{Constant baselines}
+    \subsection{Constant baseline}
     
     As discussed in section~\ref{sec:data:overview}, some of our datasets are biased. 
     They may contain substantially more examples belonging to one label that belonging to the other.
@@ -239,20 +239,19 @@ To make our evaluation more robust, we evaluate all baselines and approaches on 
 
 \begin{tabular}{llrrrr}
 \toprule
-{} &      &  CR &  MPQA &  MR &  SUBJ \\
-scheme &  &            &              &            &              \\
+scheme &      &  CR &  MPQA &  MR &  SUBJ \\
 \midrule
-None & test &      0.150 &        0.150 &      0.261 &        0.407 \\
+None & test &      0.150 &\textbf{0.150} &      0.261 &        0.407 \\
 {} & train &      0.333 &        0.224 &      0.477 &        0.495 \\
 tfchi2 & test &      0.114 &        0.119 &      0.184 &        0.336 \\
 {} & train &      0.151 &        0.167 &      0.206 &        0.345 \\
 tfgr & test &      0.109 &        0.125 &      0.168 &        0.340 \\
 {} & train &      0.151 &        0.168 &      0.209 &        0.345 \\
-tfidf & test &      0.134 &        0.150 &      0.247 &        0.404 \\
+tfidf & test &      0.134 &\textbf{0.150} &      0.247 &        0.404 \\
 {} & train &      0.362 &        0.291 &      0.500 &        0.500 \\
 tfig & test &      0.131 &        0.127 &      0.175 &        0.339 \\
 {} & train &      0.152 &        0.167 &      0.212 &        0.347 \\
-tfor & test &      0.154 &        0.150 &      0.269 &        0.408 \\
+tfor & test & \textbf{0.154} &\textbf{0.150} & \textbf{0.269} & \textbf{0.408} \\
 {} & train &      0.255 &        0.198 &      0.403 &        0.436 \\
 tfrf & test &      0.125 &        0.139 &      0.228 &        0.384 \\
 {} & train &      0.200 &        0.181 &      0.323 &        0.419 \\
@@ -260,7 +259,7 @@ tfrf & test &      0.125 &        0.139 &      0.228 &        0.384 \\
 \end{tabular}
 
 \caption[Accuracy improvements for BOW baseline]{Accuracy improvements for BOW baseline}
-\label{}
+\label{tab:results:bow}
 \end{center}
 \end{table}
 
@@ -271,20 +270,20 @@ tfrf & test &      0.125 &        0.139 &      0.228 &        0.384 \\
 
 \begin{tabular}{llrrrrrr}
 \toprule
-{} &&  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
-scheme &  & & & &&&\\
+scheme &&  ABBR &  DESC &  ENTY &  HUM &  LOC &  NUM \\
+
 \midrule
-None & test & 0.011 & 0.144 & 0.100 &0.137 &0.114 &0.128 \\
+None & test & \textbf{0.011} & \textbf{0.144} & 0.100 &0.137 &0.114 &0.128 \\
 {} & train & 0.011 & 0.199 & 0.209 &0.203 &0.141 &0.159 \\
 tfchi2 & test & 0.009 & 0.097 & 0.014 &0.115 &0.099 &0.093 \\
 {} & train & 0.009 & 0.091 & 0.013 &0.112 &0.103 &0.088 \\
 tfgr & test & 0.007 & 0.085 & 0.009 &0.105 &0.096 &0.094 \\
 {} & train & 0.007 & 0.096 & 0.013 &0.112 &0.100 &0.095 \\
-tfidf & test & 0.007 & 0.144 & 0.110 &0.146 &0.120 &0.138 \\
+tfidf & test & 0.007 & \textbf{0.144} & \textbf{0.110} &\textbf{0.146} &\textbf{0.120} &\textbf{0.138} \\
 {} & train & 0.016 & 0.218 & 0.226 &0.216 &0.154 &0.170 \\
 tfig & test & 0.007 & 0.091 & 0.009 &0.104 &0.103 &0.092 \\
 {} & train & 0.007 & 0.096 & 0.014 &0.112 &0.101 &0.093 \\
-tfor & test & 0.006 & 0.082 & 0.077 &0.146 &0.106 &0.118 \\
+tfor & test & 0.006 & 0.082 & 0.077 &\textbf{0.146} &0.106 &0.118 \\
 {} & train & 0.007 & 0.172 & 0.166 &0.185 &0.123 &0.141 \\
 tfrf & test & 0.005 & 0.074 & 0.062 &0.125 &0.084 &0.113 \\
 {} & train & 0.007 & 0.144 & 0.132 &0.159 &0.105 &0.126 \\
@@ -292,12 +291,15 @@ tfrf & test & 0.005 & 0.074 & 0.062 &0.125 &0.084 &0.113 \\
 \end{tabular}
 
 \caption[Accuracy improvements for BOW baseline on TREC datasets]{Accuracy improvements for BOW baseline on TREC datasets}
-\label{}
+\label{tab:results:bow:trec}
 \end{center}
 \end{table}
 
     
-    
+    According to tables \ref{tab:results:bow} and \ref{tab:results:bow:trec}, 
+    the best weighting schemes are \texttt{None}, \texttt{tfidf}, and \texttt{tfor}.
+    We expected the other supervised schemes to perform much better.
+    It is interesting, that TREC dataset is dominated by the unsupervised schemes.
     
     \subsection{LSA baselines} \label{sec:lsa:baseline}
     The most important baseline that we need to consider is the standard LSA.
@@ -516,5 +518,5 @@ tfrf & test &     0.006 &     0.074 &     0.057 &    0.120 &    0.095 &    0.113
     We also see, that pretrained word vectors perform better than LSA. 
     However keep in mind, that these representations were pretrained on huge volumes of documents.
     Even though LSA achieved better results than pretrained embeddings on TREC-DESC and TREC-NUM datasets.
-    We think, that it is beacuese these datasets are sparse and may contain a lot of words for what we do not have the pretrained embeddings.
+    We think, that it is because these datasets are sparse and may contain a lot of words for what we do not have the pretrained embeddings.
     

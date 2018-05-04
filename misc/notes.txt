@@ -1,8 +1,6 @@
 
 superwised shit  1h
 introduction 2h
-conclusion 2h
-abstracts 1h
 acknowledgements 1h
 
 discussion
@@ -11,6 +9,9 @@ final checks!
 
 code!
 
+
+
+\* % copyrught in code
 
 
 prosim ta checkni si vsade > v anglictine zoznam poloziek musi mat vzdy! and pred poslednym aj s ciarkou: A, B, and C

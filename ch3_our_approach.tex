@@ -17,14 +17,10 @@ We describe our motivations, the design of eLSA and some implementation details.
     We would like to find a way, how to use the knowledge about the classifiers error and incorporate it before the SVD.
     We achieve it by training our own word weighting scheme. 
     
-    Our goals are to:
-    \begin{itemize}
-        \item Propose a novel approach for learning task-specific word weights.
-        \item Experimentally evaluate the performance of the new approach.
-        \item Compare the new approach with other (commonly used) weighting schemes. 
-        \item Extract new insights about the dataset.
-    \end{itemize}
-    
+    We propose a novel approach for learning task-specific word weights.
+    We experimentally evaluate the performance of this approach and compare it with other (commonly used) weighting schemes. 
+    Finally we use its properties to acquire new insights about the dataset.
+
     As a side goal, we would like to introduce as few new hyperparameters as possible,
     because they may cause a ``false improvement'' of our approach over the baseline.
     We also would like our approach to be at least slightly interpretable.
@@ -34,7 +30,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     The only problem is, how to achieve it. 
     Here we take the inspiration from neural networks, and the insight that we can easily optimize parameters of rather complex system, as long as each part of this system is differentiable. 
 
-\section{Design} \label{sec:design}
+\section{Design overview} \label{sec:design}
 
     First, recall how does the LSA works in the context of document classification.
     We start with a sentence $s_i$ and we represent it as a bag of words vector $d_i'$. 
@@ -62,7 +58,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     
     \subsection{Gradient computation}
     
-    To compute the gradient efficiently, we use the backpropagation trick mentioned in section~\ref{sec:backprop}.
+    To compute the gradient efficiently, we use the backpropagation method mentioned in section~\ref{sec:backprop}.
     We can compute the derivation $\frac{\partial E_y(\hat{y})}{\partial w'}$ thanks to the chain rule
     
     \begin{equation} \label{eq:derivation}
@@ -238,7 +234,7 @@ We describe our motivations, the design of eLSA and some implementation details.
     Afterwards, we can examine the found $w'$ and see, which words had high value $w'_i$.
     This means, they were underweighted by the weighting scheme.
 
-    \subsubsection{Hyperparameters} \label{sec:hyperparams}
+    \subsubsection{Parameters} \label{sec:hyperparams}
     
     eLSA on its own has only three hyperparameters and that is the $w'$-learning rate $\beta$ and the initial weighting scheme. 
     Second hyperparameter is the dimensionality of the embedding. 
